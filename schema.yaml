@@ -1,0 +1,48 @@
+troika-online-default-rtdb:
+  people:
+    email: email
+    username: name
+  skills:
+    person**:
+      [Skills]
+    character*:
+      [Skills]
+    library:
+      [Skills]
+  items:
+    person**:
+      [Items]
+    character*:
+      [Items]
+    library:
+      [Items]
+  spells:
+    person**:
+      [Spells]
+    character*:
+      [Spells]
+    library:
+      [Spells]
+  actions:
+    game*:
+      [Actions]
+  characters:
+    person**:
+      [Characters]
+    game*:
+      [Characters]
+    library:
+      [Characters]
+  games:
+    [Games]
+  tags:
+    [Tags]
+
+---
+
+Skills:
+  skillId*:
+    name: string
+    description: string
+    tags: [tag*]
+
