@@ -4,8 +4,10 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import { firebaseReducer, FirebaseReducer, getFirebase, actionTypes as rrfActionTypes } from 'react-redux-firebase';
-import { Skill } from '../types/troika';
+import { Skill, Item, Weapon, Spell } from '../types/troika';
+import Schema from './Schema';
 
+// noinspection SpellCheckingInspection
 const fbConfig = {
   apiKey: "AIzaSyD8_nUxyjBAvGId93tYDK0O1v88A8Tgm7Q",
   authDomain: "troika-online.firebaseapp.com",
@@ -34,13 +36,7 @@ interface Profile {
   email: string;
 }
 
-interface Schema {
-  skills: {
-    [key:string]: {
-      [key:string]: Skill
-    }
-  }
-}
+
 
 export interface RootState {
   firebase: FirebaseReducer.Reducer<Profile, Schema>

@@ -51,7 +51,7 @@ export interface Weapon extends GenericItem{
   };
 }
 
-export interface Item {
+export interface Item extends GenericItem {
   type: "item"
   charges?: {
     current: number;

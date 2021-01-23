@@ -9,7 +9,7 @@ troika-online-default-rtdb:
       [Skills]
     library:
       [Skills]
-  items:
+  possessions:
     person**:
       [Items]
     character*:
