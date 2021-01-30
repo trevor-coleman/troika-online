@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { useFirebase } from 'react-redux-firebase';
+import { useFirebase, isLoaded } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
 import List from '@material-ui/core/List';
 import ProfileListItem from '../profile/ProfileListItem';
@@ -25,8 +25,8 @@ const FriendRequests: FunctionComponent<FriendRequestsProps> = (props: FriendReq
 
   const requests = useTypedSelector(state => (
       {
-        sent: state.firebase.profile.sentRequests ?? {},
-        received: state.firebase.profile.receivedRequests ?? {},
+        sent: state.firebase.profile.sentRequests,
+        received: state.firebase.profile.receivedRequests,
       }));
 
   const acceptRequest = async (key: string) => {
@@ -63,16 +63,16 @@ const FriendRequests: FunctionComponent<FriendRequestsProps> = (props: FriendReq
               color={"secondary"}
               onClick={() => cancelRequest(profileKey)}>Cancel</Button>;
 
-  const count = Object.keys(requests.sent).length +
-                Object.keys(requests.received).length;
-
+  let showSentRequests: boolean = isLoaded(requests.sent) && Object.keys(requests.sent).length > 0;
+  let showReceivedRequests: boolean = isLoaded(requests.received) &&
+                   Object.keys(requests.received).length > 0;
   return (
       <Paper className={classes.root}>
         <Box p={2}>
           <Typography variant={'h5'}>Friend Requests</Typography>
-          {count > 0
+          {isLoaded(requests.sent) || isLoaded(requests.received)
            ? <React.Fragment>
-             {Object.keys(requests.sent).length > 0
+             {showSentRequests
               ? <React.Fragment>
                 <Typography variant={'subtitle2'}>Sent</Typography>
                 <List>
@@ -85,7 +85,7 @@ const FriendRequests: FunctionComponent<FriendRequestsProps> = (props: FriendReq
                 </List></React.Fragment>
               : ""}
 
-             {Object.keys(requests.received).length > 0
+             {showReceivedRequests
               ? <React.Fragment>
                 <Typography variant={'subtitle2'}>Received</Typography>
                 <List>

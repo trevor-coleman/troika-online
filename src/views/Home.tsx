@@ -15,6 +15,7 @@ import FriendRequests from '../components/friends/FriendRequests';
 import Friends from '../components/friends/Friends';
 import { useTypedSelector } from '../store';
 import Games from '../components/game/Games';
+import GameInvitations from '../components/game/GameInvitations';
 
 interface HomeProps {
 }
@@ -33,6 +34,9 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
           <Grid item xs={12}>
             <CreateGame/>
           </Grid>
+            <Grid item xs={12}>
+              <GameInvitations />
+            </Grid>
           <Grid item xs={12}>
             <Games/>
           </Grid>

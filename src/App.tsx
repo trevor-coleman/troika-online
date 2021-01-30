@@ -1,9 +1,8 @@
 import React, { PropsWithChildren } from 'react';
-import { Container, Backdrop } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { isLoaded, useFirebase } from 'react-redux-firebase';
 import { RootState } from './store';
-import Typography from '@material-ui/core/Typography';
 import SignIn from './components/auth/SignIn';
 import PrivateRoute from './components/auth/PrivateRoute';
 import Home from './views/Home';
@@ -14,6 +13,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import Game from './views/Game';
 import Layout from './layouts/Layout';
+import CharacterEditor from './views/CharacterEditor';
 
 function AuthIsLoaded({children}:PropsWithChildren<any>) {
   const auth = useSelector((state:RootState) => state.firebase.auth)
@@ -33,6 +33,8 @@ function App(props:any) {
             <PrivateRoute path={"/home"}><Home/></PrivateRoute>
             <PrivateRoute path={"/roll"}><RollView /></PrivateRoute>
             <PrivateRoute path={"/game/:gameKey"}><Game /></PrivateRoute>
+            <PrivateRoute path={"/character/:characterKey/edit"}><CharacterEditor /></PrivateRoute>
+            <PrivateRoute path={"/character/:characterKey/new"}><CharacterEditor init /></PrivateRoute>
           <Route path={"/sign-in"}><SignIn/></Route>
           </Switch>
           </Layout>

@@ -6,6 +6,7 @@ import { useFirebaseConnect } from 'react-redux-firebase';
 import { useGame } from '../store/selectors';
 import Grid from '@material-ui/core/Grid';
 import Players from '../components/players/Players';
+import Characters from '../components/characters/Characters';
 
 interface GameProps {
 
@@ -25,9 +26,9 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
       <div className={classes.root}>
         <Typography variant={"h3"}>{ game?.name ?? "No Game"}</Typography>
         <Typography variant={"subtitle1"}>{gameKey}</Typography>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item container direction={"column"} sm={5}><Players gameKey={gameKey}/></Grid>
-          <Grid item container direction={"column"} sm={7}></Grid>
+          <Grid item container direction={"column"} sm={7}><Characters gameKey={gameKey}/></Grid>
         </Grid>
       </div>);
 };
