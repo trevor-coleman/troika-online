@@ -1,21 +1,42 @@
-import React from 'react';
-import SkillsSection from './components/Skills/SkillsSection';
-import ItemsSection from './components/Items/ItemsSection';
-import Grid from '@material-ui/core/Grid';
-import { Container } from '@material-ui/core';
+import React, { PropsWithChildren } from 'react';
+import { Container, Backdrop } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import { isLoaded, useFirebase } from 'react-redux-firebase';
+import { RootState } from './store';
+import Typography from '@material-ui/core/Typography';
+import SignIn from './components/auth/SignIn';
+import PrivateRoute from './components/auth/PrivateRoute';
+import Home from './views/Home';
+import RollView from './views/RollView';
+import { Route, Switch } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import Game from './views/Game';
+import Layout from './layouts/Layout';
+
+function AuthIsLoaded({children}:PropsWithChildren<any>) {
+  const auth = useSelector((state:RootState) => state.firebase.auth)
+  if (!isLoaded(auth)) return <div>splash screen...</div>;
+  return children
+}
+
+function App(props:any) {
+  const auth = useSelector((state:RootState) => state.firebase.auth)
+  const firebase = useFirebase();
+
+  return (<div className="App">
       <Container>
-        <Grid container spacing={2}>
-        <Grid item>
-        <ItemsSection parent={"library"} />
-        </Grid>
-        <Grid item>
-          <SkillsSection parent={"library"}/>
-        </Grid>
-      </Grid>
+        <AuthIsLoaded>
+          <Layout>
+          <Switch>
+            <PrivateRoute path={"/home"}><Home/></PrivateRoute>
+            <PrivateRoute path={"/roll"}><RollView /></PrivateRoute>
+            <PrivateRoute path={"/game/:gameKey"}><Game /></PrivateRoute>
+          <Route path={"/sign-in"}><SignIn/></Route>
+          </Switch>
+          </Layout>
+        </AuthIsLoaded>
       </Container>
     </div>
   );

@@ -8,12 +8,16 @@ import {
   ReactReduxFirebaseProvider,
 } from 'react-redux-firebase';
 import store, { rrfProps } from './store';
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(<Provider store={store}>
-  <ReactReduxFirebaseProvider {...rrfProps}>
-    <App />
-  </ReactReduxFirebaseProvider>
-</Provider>, document.getElementById('root'));
+ReactDOM.render((
+    <BrowserRouter>
+      <Provider store={store}>
+        <ReactReduxFirebaseProvider {...rrfProps}>
+          <App />
+        </ReactReduxFirebaseProvider>
+      </Provider>
+    </BrowserRouter>), document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

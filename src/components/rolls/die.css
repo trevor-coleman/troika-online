@@ -1,0 +1,84 @@
+.die-container {
+    position: relative;
+    perspective: 1000px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+
+}
+
+#die {
+    position: absolute;
+    transition: transform .25s;
+    transform-style: preserve-3d;
+    transform: translateZ(-50px);
+    width: 100%;
+    height: 100%;
+    background-color: #D50000;
+    color: #FFFFFF;
+}
+
+#die.rolling {
+    animation: rotation .75s linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+    to {
+        transform: rotateX(360deg) rotateY(360deg);
+    }
+}
+
+#die .side {
+
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width: 49px;
+    height: 49px;
+    background-color: inherit;
+    border: 2px solid #000000;
+    font-family: sans-serif;
+    font-size: 3em;
+    font-weight: bold;
+
+}
+
+/*
+    Die Optional Styles
+*/
+
+#die.option-translucent {
+    background-color: rgba(213, 0, 0, .80);
+}
+
+/*
+   D6
+*/
+.d6 .side:nth-child(1) {
+    transform: rotateY(0deg) translateZ(25px);
+}
+
+.d6 .side:nth-child(2) {
+    transform: rotateX(180deg) translateZ(25px);
+}
+
+.d6 .side:nth-child(3) {
+    transform: rotateY(90deg) translateZ(25px);
+}
+
+.d6 .side:nth-child(4) {
+    transform: rotateY(-90deg) translateZ(25px);
+}
+
+.d6 .side:nth-child(5) {
+    transform: rotateX(90deg) translateZ(25px);
+}
+
+.d6 .side:nth-child(6) {
+    transform: rotateX(-90deg) translateZ(25px);
+}

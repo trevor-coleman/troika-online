@@ -5,7 +5,7 @@ import 'firebase/auth';
 import 'firebase/database';
 import { firebaseReducer, FirebaseReducer, getFirebase, actionTypes as rrfActionTypes } from 'react-redux-firebase';
 import { Skill, Item, Weapon, Spell } from '../types/troika';
-import Schema from './Schema';
+import Schema, { Profile } from './Schema';
 
 // noinspection SpellCheckingInspection
 const fbConfig = {
@@ -19,7 +19,7 @@ const fbConfig = {
 };
 
 const rrfConfig = {
-  userProfile: 'people',
+  userProfile: 'profiles',
 };
 
 firebase.initializeApp(fbConfig);
@@ -31,10 +31,6 @@ const rootReducer = combineReducers({
   firebase: firebaseReducer,
 });
 
-interface Profile {
-  name: string;
-  email: string;
-}
 
 
 
@@ -76,7 +72,5 @@ export const rrfProps = {
   config: rrfConfig,
   dispatch: store.dispatch,
 };
-
-console.log(firebase.database);
 
 export default store;
