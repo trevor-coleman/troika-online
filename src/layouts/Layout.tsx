@@ -19,6 +19,7 @@ const Layout: FunctionComponent<LayoutProps> = (props:LayoutProps  ) => {
   return (
       <div className={classes.root}>
         <nav><Link to={"/home"}><Button>Home</Button></Link>
+          <Link to={"/roll"}><Button>Roll</Button></Link>
           <Button onClick={firebase.logout}>Sign Out</Button></nav>
         {props.children}
       </div>);
