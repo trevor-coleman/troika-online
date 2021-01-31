@@ -9,22 +9,6 @@ export interface Background {
 
 }
 
-export interface Character {
-  name: string;
-  background: string;
-  special: string;
-  skill: number;
-  stamina: {
-    current: number,
-    max: number,
-  },
-  luck: {
-    current: number,
-    max: number,
-  },
-  skills: { skill: Skill, rank: number, level: number }[],
-  possessions: Possession[],
-}
 
 export type Possession = Weapon | Armour | Item;
 

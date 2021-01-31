@@ -15,6 +15,7 @@ import ProfileListItem from '../profile/ProfileListItem';
 import { useGame, useGameRef } from '../../store/selectors';
 import { Character } from '../../store/Schema';
 import { useHistory } from 'react-router-dom';
+import CharacterListItem from './CharacterListItem';
 
 interface CharactersProps {
   gameKey: string
@@ -52,7 +53,6 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
 
   };
 
-
   return (
       <Paper className={classes.root}>
         <Box p={2}>
@@ -60,8 +60,8 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
           <List>
             {isLoaded(characters) ? Object.keys(characters)
                    .map(item => (
-                       <ProfileListItem key={item}
-                                        profileKey={item} />)) : <ListItem/>}
+                       <CharacterListItem key={item}
+                                        characterKey={item} />)) : <ListItem/>}
           </List>
           <Button color={'primary'} onClick={createCharacter}>Create Character</Button>
         </Box></Paper>);

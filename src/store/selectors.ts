@@ -1,7 +1,8 @@
 import { useTypedSelector, RootState } from './index';
 import { useFirebase } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
-import { Game, Character, KeyList } from './Schema';
+import { Game, KeyList, Character } from './Schema';
+import { blankCharacter } from './templates';
 
 export const useGame = (gameKey: string) => useSelector<RootState, Partial<Game>|undefined>(state => state.firebase.data.games ? state.firebase.data.games[gameKey]: undefined);
 
@@ -27,9 +28,12 @@ export const useOtherProfile = (friendKey: string) => (
 
 export const useInvitations = () => useTypedSelector(state => state.firebase.profile);
 
-export const useCharacter = (characterKey: string) => useSelector<RootState, Partial<Character> | undefined>(
+export const useCharacter = (characterKey: string) => useSelector<RootState, Character | undefined>(
     state => state.firebase.data.characters
-             ? state.firebase.data.characters[characterKey]
+             ? (
+          state
+          .firebase.data.characters[characterKey]
+        )
              : undefined);
 
 

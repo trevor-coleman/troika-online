@@ -3,7 +3,7 @@ import {
   Item,
   Weapon,
   Spell,
-  Character, Possession,
+  Possession,
 } from '../types/troika';
 import { Profile } from './index';
 
@@ -75,6 +75,9 @@ export interface Character {
   stamina_max: number;
   luck_current: number;
   luck_max:number;
-  skills: { skill: Skill, rank: number, level: number }[],
+  monies: number;
+  provisions: number;
+  skills: KeyList,
   possessions: Possession[],
 }
+
