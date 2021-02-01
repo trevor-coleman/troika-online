@@ -30,6 +30,7 @@ function App(props:any) {
         <AuthIsLoaded>
           <Layout>
           <Switch>
+            <PrivateRoute path={"/"}><Home /></PrivateRoute>
             <PrivateRoute path={"/home"}><Home/></PrivateRoute>
             <PrivateRoute path={"/roll"}><RollView /></PrivateRoute>
             <PrivateRoute path={"/game/:gameKey"}><Game /></PrivateRoute>
