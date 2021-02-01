@@ -81,7 +81,9 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
                            align={"center"}>
                   Skill
                 </TableCell>
-                <TableCell className={classes.skillRankCol}>
+                <TableCell className={classes.skillRankCol}
+                           align={"center"}
+                >
                   Total
                 </TableCell>
                 <TableCell className={classes.iconButtonCol}>
@@ -112,34 +114,23 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
 };
 
 const useStyles = makeStyles((theme: Theme) => {
-  const colPadding = {
-    paddingLeft: theme.spacing(1),
-    paddingRight: 0,
-  };
-
   return (
       {
         root: {},
         checkBoxCol: {
-          ...colPadding,
           paddingLeft: theme.spacing(2),
         },
         nameCol: {
-          ...colPadding,
           flexGrow: 1,
         },
         skillRankCol: {
-          width: "3rem", ...colPadding,
-        },
-        skillRankLabel: {
-          display: "block",
-          left: 100,
+          paddingLeft: 0,
+          paddingRight: 0,
         },
         centeredInput: {
           textAlign: "center",
         },
         iconButtonCol: {
-          ...colPadding,
         },
       });
 });

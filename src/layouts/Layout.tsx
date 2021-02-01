@@ -4,6 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { useFirebase } from 'react-redux-firebase';
+import { Container } from '@material-ui/core';
 
 interface ILayoutProps {
 }
@@ -21,7 +22,7 @@ const Layout: FunctionComponent<LayoutProps> = (props:LayoutProps  ) => {
         <nav><Link to={"/home"}><Button>Home</Button></Link>
           <Link to={"/roll"}><Button>Roll</Button></Link>
           <Button onClick={firebase.logout}>Sign Out</Button></nav>
-        {props.children}
+        <Container>{props.children ?? ""}</Container>
       </div>);
 };
 

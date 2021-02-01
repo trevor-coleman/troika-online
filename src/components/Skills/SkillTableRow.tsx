@@ -1,24 +1,23 @@
 import React, {
-  FunctionComponent, useEffect, useState, ChangeEvent, useRef,
+  FunctionComponent, useEffect, useState, ChangeEvent,
 } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
 import { TableCell, Checkbox, TextField, TableRow } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import {
-  useFirebaseConnect,
-  isLoaded, useFirebase,
+  useFirebaseConnect, isLoaded, useFirebase,
 } from 'react-redux-firebase';
 import { SkillValues } from '../../store/Schema';
 import {
   useSkill, useCharacter, useCharacterSkillValues,
 } from '../../store/selectors';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 interface SkillTableRowProps {
   skillKey: string,
   characterKey: string,
-  onEdit: (key:string)=>void,
+  onEdit: (key: string) => void,
 }
 
 //COMPONENT
@@ -26,7 +25,7 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
   const {
     skillKey,
     characterKey,
-      onEdit
+    onEdit,
   } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -36,8 +35,7 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
   const skill = useSkill(skillKey);
   const character = useCharacter(characterKey);
   const skillValues = useCharacterSkillValues(characterKey, skillKey);
-  const firebase=useFirebase();
-
+  const firebase = useFirebase();
 
   const [values, setValues] = useState<SkillValues>({
     used: false,
@@ -50,11 +48,12 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
   {
     const newValues = {
       ...values,
-      used
+      used,
     };
-    setValues(newValues)
+    setValues(newValues);
 
-    await firebase.ref(`/characters/${characterKey}/skillValues/${skillKey}`).set(newValues)
+    await firebase.ref(`/characters/${characterKey}/skillValues/${skillKey}`)
+                  .set(newValues);
   }
 
   async function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
@@ -62,70 +61,76 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
     const newValues = {
       ...values,
       [e.target.id]: parseInt(e.target.value),
-    }
+    };
 
     setValues(newValues);
 
-    await firebase.ref(`/characters/${characterKey}/skillValues`).set(newValues)
+    await firebase.ref(`/characters/${characterKey}/skillValues`)
+                  .set(newValues);
   }
+
+  const [expand, setExpand] = useState(false);
+
+  const toggleExpand = () => {
+    setExpand(!expand);
+  };
 
   useEffect(() => {
     if (isLoaded(skillValues)) {
       setValues(skillValues ?? {
         used: false,
         rank: 0,
-        skill: 0,} );
+        skill: 0,
+      });
     }
 
   }, [skillValues]);
 
   return (
       isLoaded(skill)
-      ? <TableRow key={skillKey}>
-        <TableCell className={classes.checkBoxCol}>
-          <Checkbox id="used" checked={values.used} onChange={handleChecked} />
+      ? <React.Fragment><TableRow key={skillKey}>
+        <TableCell padding={"checkbox"}>
+          <Checkbox id="used"
+                    checked={values.used}
+                    onChange={handleChecked} />
         </TableCell>
         <TableCell>
           {skill.name}
         </TableCell>
-        <TableCell className={classes.skillRankCol}
-                   align={"center"}>
+        <TableCell align={"center"}
+                   padding={"none"}>
           <TextField type={"number"}
+                     classes={{root: classes.rankSkillRoot}}
+                     InputProps={{
+                       classes: {
+                         input: classes.rankSkillInput,
+                       },
+                     }}
                      value={values.rank}
                      id={"rank"}
-                     InputProps={{
-                       classes: {
-                         input: classes.centeredInput,
-                       },
-                     }}
-
                      onChange={handleChange} />
         </TableCell>
-        <TableCell className={classes.skillRankCol}
-                   align={"center"}>
+        <TableCell align={"center"}
+                   padding={"none"}>
           <TextField type={"number"}
-                     InputLabelProps={{shrink: true}}
+                     id={"skill"}
+                     classes={{root: classes.rankSkillRoot}}
                      InputProps={{
                        classes: {
-                         input: classes.centeredInput,
+                         input: classes.rankSkillInput,
                        },
                      }}
-                     id={"skill"}
                      value={values.skill}
                      onChange={handleChange} />
         </TableCell>
-        <TableCell className={classes.skillRankCol}>
-          <TextField InputLabelProps={{
-            shrink: true,
-            classes: {
-              root: classes.skillRankLabel,
-            },
-          }}
+        <TableCell align={'center'}
+                   padding={'none'}>
+          <TextField classes={{root: classes.totalRoot}}
                      InputProps={{
                        disableUnderline: true,
                        readOnly: true,
                        classes: {
-                         input: classes.centeredInput,
+                         input: classes.totalInput,
                        },
                      }}
                      value={(
@@ -133,41 +138,45 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
                                 values?.skill ?? 0)}
                      type={"number"} />
         </TableCell>
-        <TableCell><IconButton onClick={()=>onEdit(skillKey)}><EditIcon /></IconButton>
+        <TableCell>
+          <IconButton onClick={() => onEdit(skillKey)}><EditIcon /></IconButton>
         </TableCell>
       </TableRow>
+      </React.Fragment>
+
       : <TableRow />);
 };
 
 const useStyles = makeStyles((theme: Theme) => {
-  const colPadding = {
-    paddingLeft: theme.spacing(1),
-    paddingRight: 0,
-  };
 
   return (
       {
         root: {},
-        checkBoxCol: {
-          ...colPadding,
+        rankSkillRoot: {
+          width: "3rem",
+          paddingLeft: 0,
+          paddingRight: 0,
         },
-        nameCol: {
-          ...colPadding,
-          flex: 1
+        totalRoot: {
+          width: "4rem",
+          paddingLeft: 0,
+          paddingRight: 0,
         },
-        skillRankCol: {
-          width: "3rem", ...colPadding,
-        },
-        skillRankLabel: {
-          display: "block",
-          left: 100,
-        },
-        centeredInput: {
+        rankSkillInput: {
           textAlign: "center",
+          paddingLeft: "1rem",
         },
-        iconButtonCol: {
-          ...colPadding,
+        totalInput: {
+          textAlign: "center",
+          paddingLeft: "1rem",
+          fontWeight: "bold",
+          marginLeft: theme.spacing(1),
+          background: theme.palette.grey['400'],
+          color: theme.palette.primary.dark,
+          // borderLeft: "1px solid grey",
+          // borderRight: "1px solid grey",
         },
+
       });
 });
 
