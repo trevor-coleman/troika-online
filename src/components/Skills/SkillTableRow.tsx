@@ -58,14 +58,17 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
 
   async function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
 
+    let intValue: number = parseInt(e.target.value);
+    const newValue = intValue > 0 ? intValue : 0;
+
     const newValues = {
       ...values,
-      [e.target.id]: parseInt(e.target.value),
+      [e.target.id]: newValue,
     };
 
     setValues(newValues);
 
-    await firebase.ref(`/characters/${characterKey}/skillValues`)
+    await firebase.ref(`/characters/${characterKey}/skillValues/${skillKey}`)
                   .set(newValues);
   }
 

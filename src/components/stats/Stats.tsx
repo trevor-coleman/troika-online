@@ -1,11 +1,18 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useEffect,
+  useState, ChangeEvent,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import { Paper, TextField } from '@material-ui/core';
-import { useFirebaseConnect, isLoaded } from 'react-redux-firebase';
+import {
+  useFirebaseConnect,
+  isLoaded, useFirebase,
+} from 'react-redux-firebase';
 import { useCharacter } from '../../store/selectors';
 import Grid from '@material-ui/core/Grid';
 
@@ -18,6 +25,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
   const {characterKey} = props;
   const classes = useStyles();
   const dispatch = useDispatch();
+  const firebase=useFirebase();
   useFirebaseConnect(`/characters/${characterKey}`);
   const character = useCharacter(characterKey);
 
@@ -28,6 +36,16 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
     stamina_current: 0,
     skill: 0,
   });
+
+  function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
+    setValues({
+      ...values,
+      [e.target.id]: e.target.value,
+    });
+
+    firebase.ref(`/characters/${characterKey}/${e.target.id}`)
+            .set(e.target.value);
+  }
 
   useEffect(() => {
     if (isLoaded(character)) {
@@ -72,10 +90,12 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                     md={3}
                     className={classes.skillGrid}>
                 <TextField value={values.skill}
+                           id={"skill"}
                            variant={"outlined"}
                            label={"Skill"}
                            type={"number"}
                            className={classes.skillField}
+                           onChange={handleChange}
                            InputLabelProps={{
                              shrink: true,
                            }}
@@ -85,16 +105,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                              },
                            }} />
 
-                <TextField margin={"dense"}
-                           disabled
-                           variant={"outlined"}
-                           value={""}
-                           className={classes.skillMaxField}
-                           InputProps={{
-                             classes: {
-                               input: classes.skillMaxInput,
-                             },
-                           }} />
+               <div className={"dummy"}/>
               </Grid>
               <Grid item
                     xs={3}
@@ -104,6 +115,8 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                              variant={"outlined"}
                              label={"Stamina"}
                              type={"number"}
+                             id={"stamina_current"}
+                             onChange={handleChange}
                              className={classes.skillField}
                              InputLabelProps={{
                                shrink: true,
@@ -117,8 +130,10 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                 <TextField
                     margin={"dense"}
                     variant={"outlined"}
-                    value={values.stamina_current}
+                    value={values.stamina_max}
                            type={"number"}
+                    id={"stamina_max"}
+                    onChange={handleChange}
                     label={"max"}
                            className={classes.skillMaxField}
                     InputLabelProps={{
@@ -146,8 +161,10 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                         className={classes.skillGrid}>
                     <TextField value={values.luck_current}
                                variant={"outlined"}
+                               id={"luck_current"}
                                label={"Luck"}
                                type={"number"}
+                               onChange={handleChange}
                                className={classes.skillField}
                                InputLabelProps={{
                                  shrink: true,
@@ -161,12 +178,14 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                     <TextField margin={"dense"}
                                variant={"outlined"}
                                value={values.luck_max}
+                               id={"luck_max"}
                                type={"number"}
                                label={"max"}
                                className={classes.skillMaxField}
                                InputLabelProps={{
                                  shrink: true,
                                }}
+                               onChange={handleChange}
                                InputProps={{
                                  classes: {
                                    input: classes.skillMaxInput,
@@ -223,8 +242,12 @@ const useStyles = makeStyles((theme: Theme) => (
       skillField: {
         width: "6rem",
       },
+      dummy: {
+        width: "6rem",
+      },
       skillMaxField: {
         width: "6rem",
+        background:theme.palette.grey['200']
       },
       skillInput: {
         margin: "auto",
