@@ -8,10 +8,14 @@ import {
 import { Profile } from './index';
 
 export default interface Schema {
+  queryTest:any
   addFriendResult: any,
   sentRequests: any,
+  characterSkills: {
+    [key:string]: Skill
+  },
   profiles: Profile,
-  skills: { [key: string]: Skill },
+  skills: Skill,
   items: {
     [key: string]: Item
   },
@@ -77,7 +81,20 @@ export interface Character {
   luck_max:number;
   monies: number;
   provisions: number;
-  skills: KeyList,
+  skills: KeyList;
+  skillValues: {[key:string]:SkillValues}
   possessions: Possession[],
 }
 
+export interface SkillValues {
+  skill: number,
+  rank: number,
+  used: boolean
+}
+
+export interface Skill {
+  owner: string,
+  character: string,
+  name: string,
+  description: string,
+}

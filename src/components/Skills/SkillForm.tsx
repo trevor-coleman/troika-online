@@ -7,27 +7,33 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
 interface SkillFormProps {
-  parent: string;
+  owner?: string;
+  character?: string;
 }
 
 //COMPONENT
 const SkillForm: FunctionComponent<SkillFormProps> = (props: SkillFormProps) => {
-  const {parent} = props;
+  const {owner, character} = props;
   const classes = useStyles();
   const firebase = useFirebase();
-  useFirebaseConnect(() => []);
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
   const skill = {
+    owner,
     name,
     description,
+    character
   };
 
-  function createSkill() {
-    return firebase.push(`skills/${parent}`, skill);
+  async function createSkill() {
+    const skillRef = await firebase.ref(`/skills`).push(skill);
+    if(skillRef.key) {
+      console.log(skillRef.key);
+      await firebase.ref(`/characters/${character}/skills`).child(skillRef.key).set(true);
+    }
   }
 
   return (

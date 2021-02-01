@@ -65,11 +65,6 @@ export interface Die {
   sides: "3" | "6"
 }
 
-export interface Skill {
-  name: string,
-  description: string,
-
-}
 
 export interface Spell {
   castingCost: number,

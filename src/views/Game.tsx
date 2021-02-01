@@ -7,6 +7,7 @@ import { useGame } from '../store/selectors';
 import Grid from '@material-ui/core/Grid';
 import Players from '../components/players/Players';
 import Characters from '../components/characters/Characters';
+import { useTypedSelector } from '../store';
 
 interface GameProps {
 

@@ -4,7 +4,6 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import { firebaseReducer, FirebaseReducer, getFirebase, actionTypes as rrfActionTypes } from 'react-redux-firebase';
-import { Skill, Item, Weapon, Spell } from '../types/troika';
 import Schema, { Profile } from './Schema';
 
 // noinspection SpellCheckingInspection

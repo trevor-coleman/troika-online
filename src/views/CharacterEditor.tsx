@@ -14,11 +14,12 @@ import { Character } from '../store/Schema';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import { blankCharacter } from '../store/templates';
+import CharacterSkills from '../components/Skills/CharacterSkills';
+import Button from '@material-ui/core/Button';
 
 interface CharacterEditorProps {
   init?: boolean
 }
-
 
 //COMPONENT
 const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: CharacterEditorProps) => {
@@ -26,7 +27,9 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
   const {characterKey} = useParams<{ characterKey: string }>();
   const classes = useStyles();
   const dispatch = useDispatch();
-  useFirebaseConnect({path: `/characters/${characterKey}`});
+  useFirebaseConnect({
+    path: `/characters/${characterKey}`
+  });
   const character = useCharacter(characterKey);
   const firebase = useFirebase();
 
@@ -46,6 +49,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
             .set(e.target.value);
   }
 
+
   return (
       <div>
         <div>
@@ -58,13 +62,18 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
 
         <Grid container
               direction={'row'}
-              spacing={1}>
+              spacing={2}>
 
           <Grid item
                 container
                 spacing={1}
                 xs={12}
-                sm={6}>
+                sm={4}>
+            <div><Typography variant={"h5"}>
+              Bio & Info </Typography>
+            <Button>Random BG</Button>
+              <Button>Roll Stats</Button></div>
+
             <Paper>
               <Box p={2}>
                 <form noValidate
@@ -155,14 +164,14 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
               </Box>
             </Paper>
           </Grid>
-          <Grid item container xs={12} sm={6} direction={'column'}>
-            <Grid item xs={12}><Paper>
-              <Box p={2} flexGrow={1}>
-                <Typography variant={'h6'}>Advanced Skills and Spells</Typography>
-
-
-              </Box>
-            </Paper>
+          <Grid item
+                container
+                xs={12}
+                sm={8}
+                direction={'column'}>
+            <Grid item
+                  xs={12}>
+              <CharacterSkills characterKey={characterKey} skills={character?.skills}/>
             </Grid>
           </Grid>
         </Grid>

@@ -2,16 +2,20 @@ import { useTypedSelector, RootState } from './index';
 import { useFirebase } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 import { Game, KeyList, Character } from './Schema';
-import { blankCharacter } from './templates';
 
-export const useGame = (gameKey: string) => useSelector<RootState, Partial<Game>|undefined>(state => state.firebase.data.games ? state.firebase.data.games[gameKey]: undefined);
+export const useGame = (gameKey: string) => useSelector<RootState, Partial<Game> | undefined>(
+    state => state.firebase.data.games
+             ? state.firebase.data.games[gameKey]
+             : undefined);
 
-export const useGameRef= (gameKey:string) => useFirebase().ref(`/games/${gameKey}`)
+export const useGameRef = (gameKey: string) => useFirebase()
+    .ref(`/games/${gameKey}`);
 
-export const usePlayers = (gameKey: string) => useSelector<RootState, KeyList|undefined>((state:RootState) => state.firebase.data.games &&
-                                                                         state.firebase.data.games[gameKey]
-                                                                         ? state.firebase.data.games[gameKey].players
-                                                                         : undefined);
+export const usePlayers = (gameKey: string) => useSelector<RootState, KeyList | undefined>(
+    (state: RootState) => state.firebase.data.games &&
+                          state.firebase.data.games[gameKey]
+                          ? state.firebase.data.games[gameKey].players
+                          : undefined);
 
 export const useAuth = () => useTypedSelector(state => state.firebase.auth);
 export const useProfile = () => useTypedSelector(state => state.firebase.profile);
@@ -25,15 +29,17 @@ export const useOtherProfile = (friendKey: string) => (
       ref: useFirebase().ref(`/profiles/${friendKey}`),
     });
 
-
 export const useInvitations = () => useTypedSelector(state => state.firebase.profile);
 
 export const useCharacter = (characterKey: string) => useSelector<RootState, Character | undefined>(
     state => state.firebase.data.characters
              ? (
-          state
-          .firebase.data.characters[characterKey]
-        )
+                 state.firebase.data.characters[characterKey])
              : undefined);
 
+export const useCharacterSkills = (characterKey: string) => useTypedSelector(
+    state => state.firebase.data?.characterSkills?.[characterKey]);
 
+export const useSkill = (skillKey: string) => useTypedSelector(state => state.firebase.data.skills?.[skillKey]);
+export const useCharacterSkillValues = (character: string,
+                                        skill: string) => useTypedSelector(state => state.firebase.data.characters?.[character]?.skillValues?.[skill]);
