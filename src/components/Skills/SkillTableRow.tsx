@@ -12,7 +12,7 @@ import {
 } from 'react-redux-firebase';
 import { SkillValues } from '../../store/Schema';
 import {
-  useSkill, useCharacter, useCharacterSkillValues,
+  useSkill, useCharacter, useCharacterSkillValues, useAuth,
 } from '../../store/selectors';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -48,6 +48,7 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
   const character = useCharacter(characterKey);
   const skillValues = useCharacterSkillValues(characterKey, skillKey);
   const firebase = useFirebase();
+  const auth = useAuth();
 
   const [values, setValues] = useState<SkillValues>({
     used: false,
@@ -121,7 +122,7 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
                     checked={values.used}
                     onChange={handleChecked} />
         </TableCell>
-        <TableCell className={classes.nameCell}>
+        <TableCell className={classes.nameCell} onClick={toggleExpand}>
           <Typography component={"span"}
                       className={classes.nameText}>
             {skill.name}
@@ -178,7 +179,7 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
                      type={"number"} />
         </TableCell>
         <TableCell>
-          <IconButton color="primary" onClick={() => onEdit(skillKey)}><Casino /></IconButton>
+          <IconButton disabled color="primary"><Casino /></IconButton>
         </TableCell>
       </TableRow>
         <TableRow className={classes.collapseRow}>
@@ -193,10 +194,10 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
                 </div>
                 <div>
 
-                  <Button className={classes.descriptionButton}
+                  {skill.owner == auth.uid ? <Button className={classes.descriptionButton}
                           startIcon={<EditOutlined />}
                           onClick={() => onEdit(skillKey)}
-                          >Edit</Button>
+                          >Edit</Button>:""}
                   <Button className={classes.descriptionButton}
                           startIcon={<DeleteOutline />}
                           onClick={()=>onRemove(skillKey)}
