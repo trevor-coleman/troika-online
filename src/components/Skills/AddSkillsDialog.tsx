@@ -5,9 +5,7 @@ import {
   DialogTitle, DialogContent, Dialog, Tabs, Tab, DialogActions, TextField,
 } from '@material-ui/core';
 import {
-  useFirebaseConnect,
-  isLoaded,
-  isEmpty, useFirebase,
+  useFirebaseConnect, isLoaded, isEmpty, useFirebase,
 } from 'react-redux-firebase';
 import { useAuth } from '../../store/selectors';
 import { useTypedSelector } from '../../store';
@@ -18,7 +16,7 @@ import { KeyList } from '../../store/Schema';
 
 interface AddSkillsDialogProps {
   open: boolean,
-  characterKey:string,
+  characterKey: string,
   onClose: () => void
 }
 
@@ -65,7 +63,7 @@ const AddSkillsDialog: FunctionComponent<AddSkillsDialogProps> = (props: AddSkil
   const {
     open,
     onClose,
-      characterKey,
+    characterKey,
   } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -77,8 +75,7 @@ const AddSkillsDialog: FunctionComponent<AddSkillsDialogProps> = (props: AddSkil
   const [selection, setSelection] = useState<{ [key: string]: boolean }>({});
 
   useFirebaseConnect([
-    {path: `/characters/${characterKey}/skills`},
-      {
+    {path: `/characters/${characterKey}/skills`}, {
       path: 'skills',
       storeAs: 'addSkills_mySkills',
       queryParams: ['orderByChild=owner', `equalTo=${auth.uid}`],
@@ -91,7 +88,9 @@ const AddSkillsDialog: FunctionComponent<AddSkillsDialogProps> = (props: AddSkil
 
   const mySkills = useTypedSelector(state => state.firebase.data?.addSkills_mySkills);
   const srdSkills = useTypedSelector(state => state?.firebase?.data?.addSkills_srdSkills);
-  const characterSkillKeys = useTypedSelector(state => state?.firebase?.data?.characters?.[characterKey]?.skills ? Object.keys(state.firebase.data.characters[characterKey].skills) : [])
+  const characterSkillKeys = useTypedSelector(state => state?.firebase?.data?.characters?.[characterKey]?.skills
+                                                       ? Object.keys(state.firebase.data.characters[characterKey].skills)
+                                                       : []);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -99,7 +98,8 @@ const AddSkillsDialog: FunctionComponent<AddSkillsDialogProps> = (props: AddSkil
 
   const mySkillKeys: string[] = isLoaded(mySkills) && !isEmpty(mySkills)
                                 ? Object.keys(mySkills)
-                                        .filter(key=>characterSkillKeys.indexOf(key) === -1)
+                                        .filter(key => characterSkillKeys.indexOf(
+                                            key) === -1)
                                         .filter(key => mySkills[key].name.toLowerCase()
                                                                     .includes(
                                                                         search))
@@ -119,20 +119,25 @@ const AddSkillsDialog: FunctionComponent<AddSkillsDialogProps> = (props: AddSkil
   };
 
   const addToCharacter = async () => {
-    let selectedKeys:string[] = [];
-    const updateObj = Object.keys(selection).reduce<KeyList>((prev:KeyList, curr:string, index)=>{
-      if(selection[curr]) {
-        selectedKeys.push(curr);
-        return {
-          ...prev,
-          [curr]: true,
-        };
-      }
-      return prev;
-    }, {})
+    let selectedKeys: string[] = [];
+    const updateObj = Object.keys(selection)
+                            .reduce<KeyList>((prev: KeyList,
+                                              curr: string,
+                                              index) => {
+                              if (selection[curr]) {
+                                selectedKeys.push(curr);
+                                return {
+                                  ...prev,
+                                  [curr]: true,
+                                };
+                              }
+                              return prev;
+                            }, {});
 
-    const updatePromises = selectedKeys.map(key=>firebase.ref(`/skills/${key}/character/${characterKey}`).set(true));
-    updatePromises.push(firebase.ref(`/characters/${characterKey}/skills`).update(updateObj));
+    const updatePromises = selectedKeys.map(key => firebase.ref(`/skills/${key}/character/${characterKey}`)
+                                                           .set(true));
+    updatePromises.push(firebase.ref(`/characters/${characterKey}/skills`)
+                                .update(updateObj));
     await Promise.all(updatePromises);
 
     setSelection({});
@@ -148,13 +153,15 @@ const AddSkillsDialog: FunctionComponent<AddSkillsDialogProps> = (props: AddSkil
 
         <DialogContent classes={{root: classes.contentRoot}}>
           <div className={classes.container}>
-            <div className={classes.fixed}><Tabs value={value}
-                                                 aria-label="simple tabs example"
-                                                 onChange={handleChange}>
-              <Tab label="My Skills" {...a11yProps(1)} />
-              <Tab label="SRD" {...a11yProps(2)} />
-              <Tab label="Community" {...a11yProps(3)} />
-            </Tabs>
+
+            <div className={classes.tabs}>
+              <Tabs value={value}
+                    aria-label="select-skills-list"
+                    onChange={handleChange}>
+                <Tab label="My Skills" {...a11yProps(1)} />
+                <Tab label="SRD" {...a11yProps(2)} />
+                <Tab label="Community" {...a11yProps(3)} />
+              </Tabs>
               <div className={classes.search}><TextField label={"search"}
                                                          variant={'outlined'}
                                                          size={'small'}
@@ -181,8 +188,9 @@ const AddSkillsDialog: FunctionComponent<AddSkillsDialogProps> = (props: AddSkil
             </div>
           </div>
         </DialogContent>
-        <DialogActions><Button variant={"contained"} onClick={addToCharacter}>Add to
-                                                     Character</Button></DialogActions>
+        <DialogActions><Button variant={"contained"}
+                               onClick={addToCharacter}>Add to
+                                                        Character</Button></DialogActions>
       </Dialog>);
 };
 
@@ -190,7 +198,8 @@ const useStyles = makeStyles((theme: Theme) => (
     {
       root: {},
       dialog: {},
-      fixed: {
+      tabs: {
+        width:"50vw",
         position: "fixed",
         backgroundColor: theme.palette.background.paper,
         zIndex: 100,
@@ -202,6 +211,7 @@ const useStyles = makeStyles((theme: Theme) => (
         paddingTop: theme.spacing(9),
       },
       container: {
+        width: "50vw",
         height: "70vh",
       },
       search: {

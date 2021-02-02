@@ -3,6 +3,7 @@ import { useSelector, TypedUseSelectorHook } from 'react-redux';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import 'firebase/storage';
 import { firebaseReducer, FirebaseReducer, getFirebase, actionTypes as rrfActionTypes } from 'react-redux-firebase';
 import Schema, { Profile } from './Schema';
 

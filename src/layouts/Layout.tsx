@@ -18,12 +18,12 @@ const Layout: FunctionComponent<LayoutProps> = (props:LayoutProps  ) => {
   const firebase = useFirebase();
 
   return (
-      <div className={classes.root}>
+      <Container className={classes.root}>
         <nav><Link to={"/home"}><Button>Home</Button></Link>
           <Link to={"/roll"}><Button>Roll</Button></Link>
           <Button onClick={firebase.logout}>Sign Out</Button></nav>
         <Container>{props.children ?? ""}</Container>
-      </div>);
+      </Container>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (

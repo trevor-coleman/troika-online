@@ -11,6 +11,7 @@ export default interface Schema {
   queryTest:any
   addFriendResult: any,
   sentRequests: any,
+  portraits: any,
   characterSkills: {
     [key:string]: Skill
   },
@@ -69,6 +70,7 @@ export interface Profile {
 
 export interface Character {
   game: string;
+  portrait: string;
   owner: string;
   player: string;
   isTemplate: boolean;
