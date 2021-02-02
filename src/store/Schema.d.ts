@@ -25,6 +25,8 @@ export default interface Schema {
   spells: {
     [key: string]: Spell
   },
+  addSkills_mySkills: Skill,
+  addSkills_srdSkills: Skill,
   games: Game,
   rolls: {[key:string]: FbRoll },
   characters: Character

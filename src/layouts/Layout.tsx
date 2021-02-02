@@ -28,7 +28,7 @@ const Layout: FunctionComponent<LayoutProps> = (props:LayoutProps  ) => {
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root: {},
+      root: {paddingBottom: 150},
     }));
 
 export default Layout;

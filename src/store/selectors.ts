@@ -38,7 +38,7 @@ export const useCharacter = (characterKey: string) => useSelector<RootState, Cha
              : undefined);
 
 export const useCharacterSkills = (characterKey: string) => useTypedSelector(
-    state => state.firebase.data?.characterSkills?.[characterKey]);
+    state => state.firebase.data?.characters?.[characterKey]?.skills);
 
 export const useSkill = (skillKey: string) => useTypedSelector(state => state.firebase.data.skills?.[skillKey]);
 export const useCharacterSkillValues = (character: string,

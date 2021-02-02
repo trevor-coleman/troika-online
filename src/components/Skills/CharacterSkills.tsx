@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
-import { useFirebaseConnect, isEmpty } from 'react-redux-firebase';
+import { useFirebaseConnect, isEmpty, useFirebase } from 'react-redux-firebase';
 import {
   Paper, Table, TableRow, TableCell, TableContainer, TableBody, TableHead,
 } from '@material-ui/core';
@@ -12,11 +12,19 @@ import AddSkillsDialog from './AddSkillsDialog';
 import NewSkillDialog from './NewSkillDialog';
 import SkillTableRow from './SkillTableRow';
 import EditSkillDialog from './EditSkillDialog';
+import RemoveSkillDialog from './RemoveSkillDialog';
 
 interface CharacterSkillsProps {
   characterKey: string,
   skills?: { [key: string]: Skill } | KeyList
 }
+
+const initialState: { add: boolean; new: boolean; edit: boolean; remove: boolean } = {
+  add: false,
+  new: false,
+  edit: false,
+  remove: false
+};
 
 //COMPONENT
 const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: CharacterSkillsProps) => {
@@ -28,33 +36,32 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
   const theme = useTheme();
   const classes = useStyles();
   const auth = useAuth();
-  useFirebaseConnect({
-    path: `/skills/`,
-    storeAs: `/characterSkills/${characterKey}`,
-    queryParams: [`orderByChild=character`, `equalTo=${characterKey}`],
-  });
+  const firebase=useFirebase();
+  useFirebaseConnect([`/character/${characterKey}/skills`]);
   const characterSkills = useCharacterSkills(characterKey);
-
-  const [dialogState, setDialogState] = useState<{ [key: string]: boolean }>({
-    add: false,
-    new: false,
-    edit:false,
-  });
+  const [dialogState, setDialogState] = useState<{ [key: string]: boolean }>(initialState);
 
   const [selectedSkill, setSelectedSkill] = useState("");
 
+
+
   function showDialog(dialog?: string, key?: string): void {
-    const newState = {
-      add: false,
-      new: false,
-      edit:false,
-    };
+    const newState = initialState;
     setDialogState(dialog
                    ? {
           ...newState,
           [dialog]: true,
         }
                    : newState);
+  }
+
+  async function removeSkill(selectedSkill: string) {
+    await Promise.all([
+      firebase.ref(`/skills/${selectedSkill}/characters/${characterKey}`)
+              .set(null),
+      firebase.ref(`/characters/${characterKey}/skills/${selectedSkill}`)
+              .set(null),
+    ])
   }
 
   return (
@@ -86,8 +93,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
                 >
                   Total
                 </TableCell>
-                <TableCell className={classes.iconButtonCol}>
-                </TableCell>
+                <TableCell className={classes.iconButtonCol}/>
               </TableRow>
             </TableHead>
             <TableBody>{!isEmpty(characterSkills)
@@ -95,7 +101,13 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
                                 .map(skillKey => <SkillTableRow key={skillKey}
                                                                 skillKey={skillKey}
                                                                 characterKey={characterKey}
-                                                                onEdit={() => {setSelectedSkill(skillKey); showDialog("edit")}} />)
+                                                                onEdit={() => {setSelectedSkill(skillKey); showDialog("edit")}}
+                                                                onRemove={() => {
+                                                                  setSelectedSkill(
+                                                                      skillKey);
+                                                                  showDialog(
+                                                                      "remove")
+                                                                }}/>)
                         : undefined}
             </TableBody>
           </Table>
@@ -103,11 +115,15 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
 
 
         <AddSkillsDialog open={dialogState.add}
-                         onClose={() => showDialog()} />
+                         onClose={() => showDialog()}
+                        characterKey={characterKey}/>
         <NewSkillDialog open={dialogState.new}
                         character={characterKey}
                         onClose={() => showDialog()} />
         <EditSkillDialog open={dialogState.edit} onClose={()=>showDialog()} skillKey={selectedSkill} character={characterKey}/>
+        <RemoveSkillDialog open={dialogState.remove} onClose={(remove:boolean)=> {
+          if(remove)removeSkill(selectedSkill);
+          showDialog();}} skillKey={selectedSkill} character={characterKey}/>
 
 
       </div>);
@@ -126,11 +142,13 @@ const useStyles = makeStyles((theme: Theme) => {
         skillRankCol: {
           paddingLeft: 0,
           paddingRight: 0,
+          width: "5rem"
         },
         centeredInput: {
           textAlign: "center",
         },
         iconButtonCol: {
+          width: "3rem"
         },
       });
 });

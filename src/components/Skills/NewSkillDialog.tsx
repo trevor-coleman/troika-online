@@ -15,6 +15,7 @@ interface NewSkillDialogProps {
   onClose: () => void;
   skillKey?: string;
   character: string | null;
+  srd?: boolean;
 }
 
 //COMPONENT
@@ -23,6 +24,7 @@ const NewSkillDialog: FunctionComponent<NewSkillDialogProps> = (props: NewSkillD
     open,
     onClose,
     character,
+      srd
   } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -35,7 +37,6 @@ const NewSkillDialog: FunctionComponent<NewSkillDialogProps> = (props: NewSkillD
   });
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
-    console.log(values);
     setValues({
       ...values,
       [e.target.id]: e.target.value,
@@ -43,13 +44,24 @@ const NewSkillDialog: FunctionComponent<NewSkillDialogProps> = (props: NewSkillD
   }
 
   async function saveSkill() {
-    const skillRef = firebase.ref('/skills')
+
+    const characterKeys =  character ? {
+      [character]:true
+    } : null;
+    const skillRef = await firebase.ref('/skills')
                              .push({
                                ...values,
-                               owner: auth.uid,
-                               character,
+                               owner: srd? "srd" : auth.uid,
+                               characters: characterKeys,
                              });
-    if (skillRef.key) onClose();
+    if (skillRef.key && character) {
+      await firebase.ref(`/characters/${character}/skills/${skillRef.key}`).set(true);
+    }
+    setValues({
+      description: '',
+      name: ''})
+
+    onClose();
 
   }
 

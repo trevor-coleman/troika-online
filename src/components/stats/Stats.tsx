@@ -89,7 +89,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                     xs={3}
                     md={3}
                     className={classes.skillGrid}>
-                <TextField value={values.skill}
+                <TextField value={values.skill ?? 0}
                            id={"skill"}
                            variant={"outlined"}
                            label={"Skill"}
@@ -111,7 +111,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                     xs={3}
                     md={3}
                     className={classes.skillGrid}>
-                  <TextField value={values.stamina_current}
+                  <TextField value={values.stamina_current ?? 0}
                              variant={"outlined"}
                              label={"Stamina"}
                              type={"number"}
@@ -130,7 +130,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                 <TextField
                     margin={"dense"}
                     variant={"outlined"}
-                    value={values.stamina_max}
+                    value={values.stamina_max ?? 0}
                            type={"number"}
                     id={"stamina_max"}
                     onChange={handleChange}
@@ -159,7 +159,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                   <Grid item
                         xs={4}
                         className={classes.skillGrid}>
-                    <TextField value={values.luck_current}
+                    <TextField value={values.luck_current ?? 0}
                                variant={"outlined"}
                                id={"luck_current"}
                                label={"Luck"}
@@ -177,7 +177,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
 
                     <TextField margin={"dense"}
                                variant={"outlined"}
-                               value={values.luck_max}
+                               value={values.luck_max ?? 0}
                                id={"luck_max"}
                                type={"number"}
                                label={"max"}
@@ -199,12 +199,12 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                         spacing={1}>
                     <Grid item
                           xs={12}>
-                      <Button fullWidth
+                      <Button fullWidth disabled
                               variant={"contained"}>Test</Button>
                     </Grid>
                     <Grid item
                           xs={12}>
-                      <Button fullWidth
+                      <Button fullWidth disabled
                               variant={"contained"}>Rest</Button>
                     </Grid>
 

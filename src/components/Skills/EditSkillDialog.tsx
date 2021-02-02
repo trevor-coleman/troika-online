@@ -61,7 +61,6 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
   const handleClose = async (undo?:boolean)=> {
     setFirstLoad(true);
     if(undo) {
-      console.log("undoing");
       await firebase.ref(`/skills/${skillKey}`)
                     .update(oldValues);
     }
