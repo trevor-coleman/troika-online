@@ -85,6 +85,7 @@ export interface Character {
   luck_max:number;
   monies: number;
   provisions: number;
+  items: KeyList;
   skills: KeyList;
   skillValues: {[key:string]:SkillValues}
   possessions: Possession[],

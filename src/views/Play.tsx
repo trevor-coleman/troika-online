@@ -25,7 +25,7 @@ import Roll from '../components/rolls/Roll';
 import { FbRoll } from '../store/Schema';
 import Stats from '../components/stats/Stats';
 import Bio from '../components/bio/Bio';
-import CharacterSkills from '../components/Skills/CharacterSkills';
+import CharacterSkills from '../components/skills/CharacterSkills';
 import { rollKey } from '../components/rolls/rollKey';
 
 interface SessionProps {

@@ -4,18 +4,18 @@ troika-online-default-rtdb:
     username: name
   skills:
     person**:
-      [Skills]
+      [skills]
     character*:
-      [Skills]
+      [skills]
     library:
-      [Skills]
+      [skills]
   possessions:
     person**:
-      [Items]
+      [items]
     character*:
-      [Items]
+      [items]
     library:
-      [Items]
+      [items]
   spells:
     person**:
       [Spells]

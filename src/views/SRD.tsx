@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import NewSkillDialog from '../components/Skills/NewSkillDialog';
+import NewSkillDialog from '../components/skills/NewSkillDialog';
 
 interface SRDProps {
 }

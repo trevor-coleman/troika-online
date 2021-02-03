@@ -11,9 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import { Character } from '../store/Schema';
 import Grid from '@material-ui/core/Grid';
 import { blankCharacter } from '../store/templates';
-import CharacterSkills from '../components/Skills/CharacterSkills';
+import CharacterSkills from '../components/skills/CharacterSkills';
 import Stats from '../components/stats/Stats';
 import Bio from '../components/bio/Bio';
+import CharacterItems from '../components/items/CharacterItems';
 
 interface CharacterEditorProps {
   init?: boolean
@@ -82,6 +83,16 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
             <CharacterSkills characterKey={characterKey}
                              skills={character?.skills} />
           </Grid>
+          </Grid>
+          <Grid container
+                spacing={2}
+                item
+                xs={12}>
+            <Grid item
+                  xs={12}>
+              <CharacterItems characterKey={characterKey}
+                               items={character?.items} />
+            </Grid>
           </Grid>
         </Grid>
       </div>);
