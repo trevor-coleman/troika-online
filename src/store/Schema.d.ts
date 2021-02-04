@@ -120,10 +120,12 @@ export interface Possession {
   damage?: number[],
   armourPiercing: boolean,
   hasModifiers: boolean,
+  customSize: boolean,
   modifiers: KeyList,
   hasCharges: boolean,
+  hasModifiers: boolean,
   charges?: {
-    current: number; max: number
+    initial: number; max: number
   };
 }
 

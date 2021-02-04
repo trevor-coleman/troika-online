@@ -1,7 +1,5 @@
 import React, {
-  FunctionComponent,
-  useState,
-  ChangeEvent, PropsWithChildren,
+  FunctionComponent, useState, ChangeEvent, PropsWithChildren,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -15,28 +13,26 @@ import {
   FormControl,
   Select,
   MenuItem,
-  InputLabel,
   Switch,
   ListItem,
-  ListItemSecondaryAction,
   ListItemText,
-  ListItemIcon,
-  Collapse,
-  TableContainer,
-  Paper,
   TableBody,
   Table,
-  TableCell, TableRow,
+  TableCell,
+  TableRow,
+  FormGroup,
+  Chip,
+  Avatar,
+  Fade,
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { useAuth } from '../../store/selectors';
 import { useFirebase } from 'react-redux-firebase';
 import { Possession, Damage } from '../../store/Schema';
-import { CheckBox } from '@material-ui/icons';
-import { type } from 'os';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
+import { Add } from '@material-ui/icons';
+import Box from '@material-ui/core/Box';
 
 interface NewItemDialogProps {
   open: boolean;
@@ -45,8 +41,6 @@ interface NewItemDialogProps {
   character: string | null;
   srd?: boolean;
 }
-
-type PossessionValues = Partial<Possession> & { customSize: boolean }
 
 const weaponDamage: { [key: string]: Damage } = {
   sword: [4, 6, 6, 6, 6, 8, 10],
@@ -72,15 +66,15 @@ const weaponDamage: { [key: string]: Damage } = {
   largeBeast: [4, 6, 8, 10, 12, 14, 16],
   giganticBeast: [4, 8, 12, 12, 16, 18, 24],
 
-}
+};
 
-const initialState: PossessionValues = {
+const initialState: Possession = {
   armourPiercing: false,
   customSize: false,
   characters: {},
   charges: {
-    current: 0,
-    max: 0
+    initial: 0,
+    max: 0,
   },
   damagesAs: "unarmed",
   damage: weaponDamage["unarmed"],
@@ -92,7 +86,7 @@ const initialState: PossessionValues = {
   size: 0,
   description: '',
   name: '',
-  protects: false
+  protects: false,
 };
 
 //COMPONENT
@@ -108,15 +102,14 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
   const auth = useAuth();
   const firebase = useFirebase();
 
-  const [values, setValues] = useState<PossessionValues>(initialState);
+  const [values, setValues] = useState<Possession>(initialState);
 
   const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
       ...values,
-      [event.target.id.slice(5)]: event.target.checked
+      [event.target.id.slice(5)]: event.target.checked,
     });
   };
-
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
     setValues({
@@ -152,16 +145,23 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
 
   const isValid = values.name?.length && values.name.length > 0;
 
-  function handleSelect(e:any): void {
-    console.log(typeof(e), e);
+  function handleSelect(e: any): void {
+    console.log(typeof (
+        e), e);
   }
 
-
-
-
   function handleDamageChoice(e: ChangeEvent<{ name?: string; value: any; }>): any {
-    const {name, value} = e.target;
-    setValues({...values, damagesAs:value, damage:value == "custom" ? values.damage : weaponDamage[value]});
+    const {
+      name,
+      value,
+    } = e.target;
+    setValues({
+      ...values,
+      damagesAs: value,
+      damage: value == "custom"
+              ? values.damage
+              : weaponDamage[value],
+    });
   }
 
   return (
@@ -169,7 +169,9 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
               onClose={onClose}
               maxWidth={"sm"}
               fullWidth>
-        <DialogTitle>New Item</DialogTitle>
+        <DialogTitle>{values.name && values.name.length
+                      ? values.name
+                      : "New Item"}</DialogTitle>
         <DialogContent>
           <Grid container
                 direction={"column"}
@@ -193,30 +195,40 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
                          rows={2}
                          fullWidth />
             </Grid>
-            <Grid item container spacing={2}>
-              <Grid item xs={3}>
-                <FormControlLabel labelPlacement={"start"} control={<Switch checked={values.protects}
-                        onChange={handleChecked}
-                        id={"item-protects"}
-                        name="item-protects" />} label={"Protects"}/>
+            <Grid item
+                  container
+                  spacing={2}>
+              <Grid item
+                    xs={3}>
+                <FormControlLabel labelPlacement={"start"}
+                                  control={<Switch checked={values.protects}
+                                                   onChange={handleChecked}
+                                                   id={"item-protects"}
+                                                   name="item-protects" />}
+                                  label={"Armour"} />
               </Grid>
-              <Grid item xs={6}>
-                  <FormControl fullWidth
-                                         disabled={!values.protects}
-                                         className={classes.selectControl}>
-                    <Select id="protection"
-                            value={values.protection ?? 0}
-                            name={"protection"}
-                            onChange={handleSelect}>
-                      <MenuItem value={0}>Unarmoured (0)</MenuItem>
-                      <MenuItem value={-1}>Light (-1)</MenuItem>
-                      <MenuItem value={-2}>Medium (-2)</MenuItem>
-                      <MenuItem value={-3}>Heavy (-3)</MenuItem>
-                    </Select>
-                  </FormControl>
+              <Grid item
+                    xs={9}>
+                <FormControl fullWidth
+                             disabled={!values.protects}
+                             className={classes.selectControl}>
+                  <Select variant={"outlined"}
+                          id={"protection"}
+                          value={values.protection ?? 0}
+                          name={"protection"}
+                          onChange={handleSelect}>
+                    <MenuItem value={0}>Unarmoured (0)</MenuItem>
+                    <MenuItem value={-1}>Light (-1)</MenuItem>
+                    <MenuItem value={-2}>Medium (-2)</MenuItem>
+                    <MenuItem value={-3}>Heavy (-3)</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid></Grid>
-            <Grid item container spacing={2}>
-              <Grid item xs={3}>
+            <Grid item
+                  container
+                  spacing={2}>
+              <Grid item
+                    xs={3}>
                 <FormControlLabel labelPlacement={"start"}
                                   control={<Switch checked={values.doesDamage}
                                                    onChange={handleChecked}
@@ -225,97 +237,157 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
                                   label={"Damage"} />
               </Grid>
               <Grid item
-                    xs={6}>
+                    xs={9}>
                 <FormControl fullWidth
                              disabled={!values.doesDamage}
                              className={classes.selectControl}>
-                  <Select id="damagesAs"
+                  <Select variant="outlined"
+                          id="damagesAs"
                           value={values.damagesAs ?? 0}
                           name={"damagesAs"}
                           onChange={handleDamageChoice}>
-                    {Object.keys(weaponDamage).sort().map((weapon,index)=>(<MenuItem key={`${index}-${weapon}`} value={weapon}>{weapon}</MenuItem>))}
+                    {Object.keys(weaponDamage)
+                           .sort()
+                           .map((weapon, index) => (
+                               <MenuItem key={`${index}-${weapon}`}
+                                         value={weapon}>{weapon}</MenuItem>))}
                     <MenuItem key={`${Object.keys(weaponDamage).length}-custom`}
                               value={"custom"}>Custom</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
             </Grid>
-            <Collapse in={values.doesDamage}>
-            <Grid item container spacing={2}>
-              <Grid item xs={3}/>
-              <Grid item xs={9}>
+
+            <Grid item
+                  container
+                  spacing={2}>
+              <Grid item
+                    xs={3} />
+              <Grid item
+                    xs={9}>
                 <Table size="small">
                   <TableBody>
                     <TableRow>
-                      {(values.damage??Array(7)).map((_,index)=> <TableCell padding={"none"} key={`damage-cell-${index}`}><TextField InputLabelProps={{classes: {
-                          root: classes.damageCell
-                        }}} InputProps={{classes: {root:classes.damageCell}}} label={`${index+1}${index==6?"+":""}`} variant={"outlined" } type={"number"} value={values?.damage?.[index] ?? 0}/></TableCell>)}
+                      {(
+                          values.damage ?? Array(7)).map((_, index) =>
+                          <TableCell padding={"none"}
+                                     key={`damage-cell-${index}`}>
+                            <TextField disabled={!values.doesDamage} InputLabelProps={{
+                              classes: {
+                                root: classes.damageCell,
+                              },
+                            }}
+                                       InputProps={{classes: {root: classes.damageCell}}}
+                                       label={`${index + 1}${index == 6
+                                                             ? "+"
+                                                             : ""}`}
+                                       variant={"outlined"}
+                                       type={"number"}
+                                       value={values?.damage?.[index] ??
+                                              0} /></TableCell>)}
                     </TableRow>
                   </TableBody>
                 </Table>
-            </Grid>
-          </Grid>
-            </Collapse>
-            <Grid item container spacing={2}>
-
-            <Grid item xs={3}>
-              <FormControlLabel labelPlacement={"start"}
-                                control={<Switch checked={values.customSize}
-                                                 onChange={handleChecked}
-                                                 id={"item-customSize"}
-                                                 name="item-customSize" />}
-                                label={"Custom Size"} />
-            </Grid>
-            <Grid item xs={9}>
-              <TextField type={"number"} variant={"outlined"} label={"Size"} disabled={!values.customSize} value={values.size ?? 0 } InputLabelProps={{shrink:true}}/>
-
-            </Grid>
-            </Grid>
-
-            {/*Size*/}
-            <Grid item
-                    container>
-              <Grid item>
-
               </Grid>
-
-             </Grid>
-             <Grid item
-                    container>
-               {"Size"}
-             </Grid>
-
-
-
-
-
-
-
-            {/*Two Handed*/}
+            </Grid>
+            <Grid item
+                  container
+                  spacing={2}>
+              <Grid item
+                    xs={3} />
+              <Grid item
+                    xs={9}>
+                <FormGroup row>
+                  <FormControlLabel control={<Checkbox disabled={!values.doesDamage} onChange={handleChecked}
+                                                       name="item-twoHanded" />}
+                                    label="Two Handed" />
+                  <FormControlLabel control={<Checkbox disabled={!values.doesDamage} onChange={handleChecked}
+                                                       name="item-armourPiercing" />}
+                                    label="Armour Piercing" />
+                </FormGroup>
+                <Divider />
+              </Grid>
+            </Grid>
+            <Grid item
+                  container
+                  spacing={2}>
 
               <Grid item
-                     container>
-               {"Two Handed"}
-             </Grid>
-
-            <Grid item
-                     container>
-               {"Damage / AP"}
-             </Grid>
-
-
-            <Grid item
-                     container>
-               {"Charges"}
-             </Grid>
-
-
-            {/*Modifiers*/}
-
+                    xs={3}>
+                <FormControlLabel labelPlacement={"start"}
+                                  control={<Switch checked={values.customSize}
+                                                   onChange={handleChecked}
+                                                   id={"item-customSize"}
+                                                   name="item-customSize" />}
+                                  label={"Custom Size"} />
+              </Grid>
               <Grid item
-                     container>
-               {"Modifiers"}
-             </Grid>
+                    xs={9}>
+                <TextField fullWidth
+                           type={"number"}
+                           variant={"outlined"}
+                           label={"Size"}
+                           disabled={!values.customSize}
+                           value={values.size ?? 0}
+                           InputLabelProps={{shrink: true}} />
+              </Grid>
+            </Grid>
+
+            <Grid item
+                  container
+                  spacing={2}>
+              <Grid item
+                    xs={3}>
+                <FormControlLabel labelPlacement={"start"}
+                                  control={<Switch checked={values.hasCharges}
+                                                   onChange={handleChecked}
+                                                   id={"item-hasCharges"}
+                                                   name="item-hasCharges" />}
+                                  label={"Charges"} />
+              </Grid>
+              <Grid item
+                    xs={9}>
+                <FormGroup row>
+                  <TextField value={values.charges?.initial ?? 0}
+                             disabled={!values.hasCharges}
+                             variant={"outlined"}
+                             label={"Initial"}
+                             type={"number"}
+                             InputLabelProps={{shrink: true}} />
+                  <TextField value={values.charges?.initial ?? 0}
+                             variant={"outlined"}
+                             disabled={!values.hasCharges}
+                             label={"Max"}
+                             type={"number"}
+                             InputLabelProps={{shrink: true}} /> </FormGroup>
+              </Grid>
+            </Grid>
+
+            <Grid item
+                  container
+                  spacing={2}>
+              <Grid item
+                    xs={3}><FormControlLabel labelPlacement={"start"}
+                                             control={
+                                               <Switch checked={values.hasModifiers}
+                                                       onChange={handleChecked}
+                                                       id={"item-hasModifiers"}
+                                                       name="item-hasModifiers" />}
+                                             label={"Modifiers"} /></Grid>
+              <Grid item
+                    xs={9}><Box p={2}>
+                <Fade in={values.hasModifiers}>
+                  <Grid container
+                        spacing={2}><Chip avatar={<Avatar>+1</Avatar>}
+                                          label="Second Sight"
+                                          clickable
+                                          onDelete={(e) => {console.log(e);}}
+                                          color="primary" />
+                    <Chip avatar={<Avatar><Add /></Avatar>}
+                          clickable
+                          label="New Modifier" /></Grid>
+                </Fade></Box>
+              </Grid></Grid>
 
             <Grid item
                   container
@@ -343,17 +415,18 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
       </Dialog>);
 };
 
-const FormItem = ({children}:PropsWithChildren<any>)=><ListItem><ListItemText inset>{children}</ListItemText></ListItem>
+const FormItem = ({children}: PropsWithChildren<any>) =>
+    <ListItem><ListItemText inset>{children}</ListItemText></ListItem>;
 
 const useStyles = makeStyles((theme: Theme) => (
     {
       root: {},
       selectControl: {
-        flexGrow:1
+        flexGrow: 1,
       },
       damageCell: {
-        marginTop: theme.spacing(1)
-      }
+        marginTop: theme.spacing(1),
+      },
     }));
 
 export default NewItemDialog;
