@@ -5,7 +5,7 @@ import { Avatar } from '@material-ui/core';
 import DragAndDrop from '../DragAndDrop';
 import { usePortrait, useCharacter } from '../../store/selectors';
 import {
-  useFirebaseConnect, isLoaded, useFirebase,
+  useFirebaseConnect, isLoaded, useFirebase, isEmpty,
 } from 'react-redux-firebase';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -36,7 +36,6 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
 
   useEffect(()=>{
     getPortrait();
-
   }, [portrait, character])
 
   const handleDrop = async (files: FileList): Promise<void> => {
@@ -54,7 +53,7 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
         {name});
 
     if(ref) {
-      if(character?.portrait) await firebase.storage().ref(character?.portrait).delete();
+      if(!isEmpty(character?.portrait)) await firebase.storage().ref(character?.portrait).delete();
       await firebase.ref(`/characters/${characterKey}/portrait`).set(ref.uploadTaskSnapshot.metadata.fullPath);
     }
   };
@@ -68,10 +67,6 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
     if (file.size > 1048576) return false;
     return true;
   }
-
-
-  console.log("===> ", portraitUrl ?? "");
-
 
   return (
       <Box alignItems={"center"} justifyItems={"center"} className={classes.root}>

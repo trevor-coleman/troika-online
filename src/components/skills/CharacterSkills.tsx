@@ -39,9 +39,9 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
   const firebase=useFirebase();
   useFirebaseConnect([`/character/${characterKey}/skills`]);
   const characterSkills = useCharacterSkills(characterKey);
-  const [dialogState, setDialogState] = useState<{ [key: string]: boolean }>(initialState);
-
   const [selectedSkill, setSelectedSkill] = useState("");
+
+  const [dialogState, setDialogState] = useState<{ [key: string]: boolean }>(initialState);
 
 
 

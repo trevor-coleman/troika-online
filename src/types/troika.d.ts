@@ -12,19 +12,19 @@ export interface Background {
 
 export type Possession = Weapon | Armour | Item;
 
-export interface GenericItem {
+export interface InventoryItem {
   name: string,
   description: string,
   size: number,
   type: "weapon" | "armour" | "item"
 }
 
-export interface Armour extends GenericItem {
+export interface Armour extends InventoryItem {
   type: "armour"
   protection: number,
 }
 
-export interface Weapon extends GenericItem{
+export interface Weapon extends InventoryItem{
   type: "weapon",
   damage: number[],
   twoHanded: boolean,
@@ -35,7 +35,7 @@ export interface Weapon extends GenericItem{
   };
 }
 
-export interface Item extends GenericItem {
+export interface Item extends InventoryItem {
   type: "item"
   charges?: {
     current: number;

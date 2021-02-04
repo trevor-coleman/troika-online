@@ -10,6 +10,11 @@ import {
 import List from '@material-ui/core/List';
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import AddSkillsDialog from '../skills/AddSkillsDialog';
+import NewSkillDialog from '../skills/NewSkillDialog';
+import AddItemsDialog from './AddItemsDialog';
+import NewItemDialog from './NewItemDialog';
+import Button from '@material-ui/core/Button';
 
 interface CharacterItemsProps {
   characterKey: string,
@@ -29,6 +34,13 @@ const tempItems: {
 
 const spacing = 6;
 
+const initialState: { add: boolean; new: boolean; edit: boolean; remove: boolean } = {
+  add: false,
+  new: false,
+  edit: false,
+  remove: false
+};
+
 //COMPONENT
 const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: CharacterItemsProps) => {
   const {
@@ -38,6 +50,19 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
   const theme=useTheme();
   const dispatch = useDispatch();
   const [items,setItems] = useState<string[]>(Object.keys(tempItems))
+
+  const [dialogState, setDialogState] = useState<{ [key: string]: boolean }>(
+      initialState);
+
+  function showDialog(dialog?: string, key?: string): void {
+    const newState = initialState;
+    setDialogState(dialog
+                   ? {
+          ...newState,
+          [dialog]: true,
+        }
+                   : newState);
+  }
 
   function handleDragEnd(result: DropResult,
                          provided: ResponderProvided): void {
@@ -68,6 +93,8 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
       <div>
         <Typography variant={"h5"}>
           Items </Typography>
+        <Button onClick={() => showDialog("add")}>Import Item</Button>
+        <Button onClick={() => showDialog("new")}>New Item</Button>
         <Paper><Box p={2}>
           <DragDropContext onDragStart={() => {}}
                            onDragUpdate={() => {}}
@@ -98,6 +125,12 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
 
           </DragDropContext>
         </Box></Paper>
+        <AddItemsDialog open={dialogState.add}
+                         onClose={() => showDialog()}
+                         characterKey={characterKey} />
+        <NewItemDialog open={dialogState.new}
+                        character={characterKey}
+                        onClose={() => showDialog()} />
       </div>);
 };
 

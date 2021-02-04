@@ -1,9 +1,9 @@
 import {
   Skill,
-  Item,
+  OtherItem,
   Weapon,
   Spell,
-  Possession,
+  InventoryItem,
 } from '../types/troika';
 import { Profile } from './index';
 
@@ -18,7 +18,7 @@ export default interface Schema {
   profiles: Profile,
   skills: Skill,
   items: {
-    [key: string]: Item
+    [key: string]: OtherItem
   },
   weapons: {
     [key: string]: Weapon
@@ -28,6 +28,8 @@ export default interface Schema {
   },
   addSkills_mySkills: Skill,
   addSkills_srdSkills: Skill,
+  addItems_myItems: Skill,
+  addItems_srdItems: Skill,
   games: Game,
   rolls: {[key:string]: FbRoll },
   characters: Character
@@ -86,9 +88,10 @@ export interface Character {
   monies: number;
   provisions: number;
   items: KeyList;
+  equipped: KeyList;
   skills: KeyList;
   skillValues: {[key:string]:SkillValues}
-  possessions: Possession[],
+  possessions: InventoryItem[],
 }
 
 export interface SkillValues {
@@ -103,3 +106,56 @@ export interface Skill {
   name: string,
   description: string,
 }
+
+
+export interface Possession {
+  name: string,
+  characters: KeyList,
+  description: string,
+  size: number,
+  protects: boolean
+  protection?: number,
+  doesDamage: boolean,
+  damagesAs?: string
+  damage?: number[],
+  armourPiercing: boolean,
+  hasModifiers: boolean,
+  modifiers: KeyList,
+  hasCharges: boolean,
+  charges?: {
+    current: number; max: number
+  };
+}
+
+export interface Armour extends InventoryItem {
+  type: "armour"
+  protection: number,
+}
+
+export interface Weapon extends InventoryItem {
+  type: "weapon",
+  damage: number[],
+  twoHanded: boolean,
+  armourPiercing: boolean,
+  charges?: {
+    current: number; max: number
+  };
+}
+
+export interface Item extends InventoryItem {
+  type: "item"
+
+  modifiers: Modifier[];
+}
+
+export type Target = "self" | "enemy" | "player" | "object";
+
+export interface Modifier {
+  skills: string[] | "*",
+  value: number;
+  type: "equipped" | "permanent" | "one-roll",
+  targetTypes: Target[],
+  targets: string[],
+}
+
+export type Damage =[number, number, number, number, number, number, number];
