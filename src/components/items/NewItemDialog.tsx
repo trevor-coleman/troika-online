@@ -33,6 +33,9 @@ import { Possession, Damage } from '../../store/Schema';
 import Divider from '@material-ui/core/Divider';
 import { Add } from '@material-ui/icons';
 import Box from '@material-ui/core/Box';
+import NameInput from './forms/NameInput';
+import DescriptionInput from './forms/DescriptionInput';
+import ArmourSection from './forms/ArmourSection';
 
 interface NewItemDialogProps {
   open: boolean;
@@ -89,6 +92,11 @@ const initialState: Possession = {
   protects: false,
 };
 
+export interface FormValueChange {
+  id:string,
+  value: any
+}
+
 //COMPONENT
 const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDialogProps) => {
   const {
@@ -116,6 +124,11 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
       ...values,
       [e.target.id.slice(5)]: e.target.value,
     });
+  }
+
+
+  function handleValueUpdate (update:FormValueChange) {
+    setValues({...values, [update.id]: update.value})
   }
 
   async function saveItem() {
@@ -177,53 +190,16 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
                 direction={"column"}
                 spacing={2}>
             <Grid item>
-              <TextField variant={"outlined"}
-                         label={"Name"}
-                         id={"item-name"}
-                         value={values.name}
-                         onChange={handleChange}
-                         placeholder={"New Item"}
-                         fullWidth />
+              <NameInput name={values.name} onChange={handleChange}/>
             </Grid>
             <Grid item>
-              <TextField variant={"outlined"}
-                         multiline
-                         id={"item-description"}
-                         value={values.description}
-                         onChange={handleChange}
-                         label={"description"}
-                         rows={2}
-                         fullWidth />
+             <DescriptionInput description={values.description} onChange={handleChange}/>
             </Grid>
             <Grid item
                   container
                   spacing={2}>
-              <Grid item
-                    xs={3}>
-                <FormControlLabel labelPlacement={"start"}
-                                  control={<Switch checked={values.protects}
-                                                   onChange={handleChecked}
-                                                   id={"item-protects"}
-                                                   name="item-protects" />}
-                                  label={"Armour"} />
-              </Grid>
-              <Grid item
-                    xs={9}>
-                <FormControl fullWidth
-                             disabled={!values.protects}
-                             className={classes.selectControl}>
-                  <Select variant={"outlined"}
-                          id={"protection"}
-                          value={values.protection ?? 0}
-                          name={"protection"}
-                          onChange={handleSelect}>
-                    <MenuItem value={0}>Unarmoured (0)</MenuItem>
-                    <MenuItem value={-1}>Light (-1)</MenuItem>
-                    <MenuItem value={-2}>Medium (-2)</MenuItem>
-                    <MenuItem value={-3}>Heavy (-3)</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid></Grid>
+              <ArmourSection enabled={values.protects} protection={values.protection} onChange={handleValueUpdate}/>
+            </Grid>
             <Grid item
                   container
                   spacing={2}>
