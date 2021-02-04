@@ -9,17 +9,9 @@ import {
   TextField,
   Dialog,
   FormControlLabel,
-  Checkbox,
-  FormControl,
-  Select,
-  MenuItem,
   Switch,
   ListItem,
   ListItemText,
-  TableBody,
-  Table,
-  TableCell,
-  TableRow,
   FormGroup,
   Chip,
   Avatar,
@@ -36,6 +28,8 @@ import Box from '@material-ui/core/Box';
 import NameInput from './forms/NameInput';
 import DescriptionInput from './forms/DescriptionInput';
 import ArmourSection from './forms/ArmourSection';
+import DamageSection, { weaponDamage } from './forms/DamageSection';
+import { FormValueChange } from './forms/FormValueChange';
 
 interface NewItemDialogProps {
   open: boolean;
@@ -45,57 +39,26 @@ interface NewItemDialogProps {
   srd?: boolean;
 }
 
-const weaponDamage: { [key: string]: Damage } = {
-  sword: [4, 6, 6, 6, 6, 8, 10],
-  axe: [2, 2, 6, 6, 8, 10, 12],
-  knife: [2, 2, 2, 2, 4, 8, 10],
-  staff: [2, 4, 4, 4, 4, 6, 8],
-  hammer: [1, 2, 4, 6, 8, 10, 12],
-  spear: [4, 4, 6, 6, 8, 8, 10],
-  longsword: [4, 6, 8, 8, 10, 12, 14],
-  mace: [2, 4, 4, 6, 6, 8, 10],
-  polearm: [2, 4, 4, 8, 12, 14, 18],
-  maul: [1, 2, 3, 6, 12, 13, 14],
-  greatsword: [2, 4, 8, 10, 12, 14, 18],
-  club: [1, 1, 2, 3, 6, 8, 10],
-  unarmed: [1, 1, 1, 2, 2, 3, 4],
-  shield: [2, 2, 2, 4, 4, 6, 8],
-  fusil: [2, 4, 4, 6, 12, 18, 24],
-  bow: [2, 4, 6, 8, 8, 10, 12],
-  crossbow: [4, 4, 6, 8, 8, 8, 10],
-  pistolet: [2, 2, 4, 4, 6, 12, 16],
-  smallBeast: [2, 2, 3, 3, 4, 5, 6],
-  modestBeast: [4, 6, 6, 8, 8, 10, 12],
-  largeBeast: [4, 6, 8, 10, 12, 14, 16],
-  giganticBeast: [4, 8, 12, 12, 16, 18, 24],
-
-};
-
 const initialState: Possession = {
   armourPiercing: false,
-  customSize: false,
-  characters: {},
-  charges: {
+  customSize    : false,
+  characters    : {},
+  charges       : {
     initial: 0,
-    max: 0,
+    max    : 0,
   },
-  damagesAs: "unarmed",
-  damage: weaponDamage["unarmed"],
-  doesDamage: false,
-  hasCharges: false,
-  hasModifiers: false,
-  modifiers: {},
-  protection: 0,
-  size: 0,
-  description: '',
-  name: '',
-  protects: false,
+  damagesAs     : "unarmed",
+  damage        : weaponDamage["unarmed"],
+  doesDamage    : false,
+  hasCharges    : false,
+  hasModifiers  : false,
+  modifiers     : {},
+  protection    : 0,
+  size          : 0,
+  description   : '',
+  name          : '',
+  protects      : false,
 };
-
-export interface FormValueChange {
-  id:string,
-  value: any
-}
 
 //COMPONENT
 const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDialogProps) => {
@@ -114,21 +77,28 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
 
   const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
-      ...values,
-      [event.target.id.slice(5)]: event.target.checked,
-    });
+                ...values,
+                [event.target.id.slice(5)]: event.target.checked,
+              });
   };
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
     setValues({
-      ...values,
-      [e.target.id.slice(5)]: e.target.value,
-    });
+                ...values,
+                [e.target.id.slice(5)]: e.target.value,
+              });
   }
 
+  function handleValueUpdate(updates: FormValueChange<any>[]) {
 
-  function handleValueUpdate (update:FormValueChange) {
-    setValues({...values, [update.id]: update.value})
+    const update = updates.reduce<Partial<Possession>>((prev, curr, index) => {
+      return {
+        ...prev,
+        [curr.id]: curr.value,
+      };
+    }, {});
+
+    setValues({...values, ...update});
   }
 
   async function saveItem() {
@@ -140,13 +110,14 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
                           : null;
     const itemRef = await firebase.ref('/items')
                                   .push({
-                                    ...values,
-                                    owner: srd
-                                           ? "srd"
-                                           : auth.uid,
-                                    characters: characterKeys,
-                                  });
-    if (itemRef.key && character) {
+                                          ...values,
+                                          owner     : srd
+                                                      ? "srd"
+                                                      : auth.uid,
+                                          characters: characterKeys,
+                                        });
+    if (itemRef.key && character)
+    {
       await firebase.ref(`/characters/${character}/items/${itemRef.key}`)
                     .set(true);
     }
@@ -163,20 +134,6 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
         e), e);
   }
 
-  function handleDamageChoice(e: ChangeEvent<{ name?: string; value: any; }>): any {
-    const {
-      name,
-      value,
-    } = e.target;
-    setValues({
-      ...values,
-      damagesAs: value,
-      damage: value == "custom"
-              ? values.damage
-              : weaponDamage[value],
-    });
-  }
-
   return (
       <Dialog open={true}
               onClose={onClose}
@@ -190,15 +147,19 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
                 direction={"column"}
                 spacing={2}>
             <Grid item>
-              <NameInput name={values.name} onChange={handleChange}/>
+              <NameInput name={values.name}
+                         onChange={handleChange} />
             </Grid>
             <Grid item>
-             <DescriptionInput description={values.description} onChange={handleChange}/>
+              <DescriptionInput description={values.description}
+                                onChange={handleChange} />
             </Grid>
             <Grid item
                   container
                   spacing={2}>
-              <ArmourSection enabled={values.protects} protection={values.protection} onChange={handleValueUpdate}/>
+              <ArmourSection enabled={values.protects}
+                             protection={values.protection}
+                             onChange={handleValueUpdate} />
             </Grid>
             <Grid item
                   container
@@ -214,76 +175,14 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
               </Grid>
               <Grid item
                     xs={9}>
-                <FormControl fullWidth
-                             disabled={!values.doesDamage}
-                             className={classes.selectControl}>
-                  <Select variant="outlined"
-                          id="damagesAs"
-                          value={values.damagesAs ?? 0}
-                          name={"damagesAs"}
-                          onChange={handleDamageChoice}>
-                    {Object.keys(weaponDamage)
-                           .sort()
-                           .map((weapon, index) => (
-                               <MenuItem key={`${index}-${weapon}`}
-                                         value={weapon}>{weapon}</MenuItem>))}
-                    <MenuItem key={`${Object.keys(weaponDamage).length}-custom`}
-                              value={"custom"}>Custom</MenuItem>
-                  </Select>
-                </FormControl>
+                <DamageSection damagesAs={values.damagesAs}
+                               damage={values.damage}
+                               doesDamage={values.doesDamage}
+                               onChange={handleValueUpdate} />
+
               </Grid>
             </Grid>
 
-            <Grid item
-                  container
-                  spacing={2}>
-              <Grid item
-                    xs={3} />
-              <Grid item
-                    xs={9}>
-                <Table size="small">
-                  <TableBody>
-                    <TableRow>
-                      {(
-                          values.damage ?? Array(7)).map((_, index) =>
-                          <TableCell padding={"none"}
-                                     key={`damage-cell-${index}`}>
-                            <TextField disabled={!values.doesDamage} InputLabelProps={{
-                              classes: {
-                                root: classes.damageCell,
-                              },
-                            }}
-                                       InputProps={{classes: {root: classes.damageCell}}}
-                                       label={`${index + 1}${index == 6
-                                                             ? "+"
-                                                             : ""}`}
-                                       variant={"outlined"}
-                                       type={"number"}
-                                       value={values?.damage?.[index] ??
-                                              0} /></TableCell>)}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </Grid>
-            </Grid>
-            <Grid item
-                  container
-                  spacing={2}>
-              <Grid item
-                    xs={3} />
-              <Grid item
-                    xs={9}>
-                <FormGroup row>
-                  <FormControlLabel control={<Checkbox disabled={!values.doesDamage} onChange={handleChecked}
-                                                       name="item-twoHanded" />}
-                                    label="Two Handed" />
-                  <FormControlLabel control={<Checkbox disabled={!values.doesDamage} onChange={handleChecked}
-                                                       name="item-armourPiercing" />}
-                                    label="Armour Piercing" />
-                </FormGroup>
-                <Divider />
-              </Grid>
-            </Grid>
             <Grid item
                   container
                   spacing={2}>
@@ -396,12 +295,9 @@ const FormItem = ({children}: PropsWithChildren<any>) =>
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root: {},
+      root         : {},
       selectControl: {
         flexGrow: 1,
-      },
-      damageCell: {
-        marginTop: theme.spacing(1),
       },
     }));
 

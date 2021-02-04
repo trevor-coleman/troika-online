@@ -1,19 +1,15 @@
 import {
-  Skill,
-  OtherItem,
-  Weapon,
-  Spell,
-  InventoryItem,
+  Skill, OtherItem, Weapon, Spell, InventoryItem,
 } from '../types/troika';
 import { Profile } from './index';
 
 export default interface Schema {
-  queryTest:any
+  queryTest: any
   addFriendResult: any,
   sentRequests: any,
   portraits: any,
   characterSkills: {
-    [key:string]: Skill
+    [key: string]: Skill
   },
   profiles: Profile,
   skills: Skill,
@@ -31,7 +27,7 @@ export default interface Schema {
   addItems_myItems: Skill,
   addItems_srdItems: Skill,
   games: Game,
-  rolls: {[key:string]: FbRoll },
+  rolls: { [key: string]: FbRoll },
   characters: Character
 }
 
@@ -81,16 +77,16 @@ export interface Character {
   background: string;
   special: string;
   skill: number;
-  stamina_current:number;
+  stamina_current: number;
   stamina_max: number;
   luck_current: number;
-  luck_max:number;
+  luck_max: number;
   monies: number;
   provisions: number;
   items: KeyList;
   equipped: KeyList;
   skills: KeyList;
-  skillValues: {[key:string]:SkillValues}
+  skillValues: { [key: string]: SkillValues }
   possessions: InventoryItem[],
 }
 
@@ -107,26 +103,26 @@ export interface Skill {
   description: string,
 }
 
-
 export interface Possession {
-  name: string,
-  characters: KeyList,
-  description: string,
-  size: number,
-  protects: boolean
-  protection?: number,
-  doesDamage: boolean,
-  damagesAs?: string
-  damage?: number[],
   armourPiercing: boolean,
-  hasModifiers: boolean,
-  customSize: boolean,
-  modifiers: KeyList,
-  hasCharges: boolean,
-  hasModifiers: boolean,
+  characters: KeyList,
   charges?: {
     initial: number; max: number
   };
+  customSize: boolean,
+  damage?: number[],
+  damagesAs?: string
+  description: string,
+  doesDamage: boolean,
+  hasModifiers: boolean,
+  name: string,
+  protection?: number,
+  protects: boolean
+  size: number,
+  ranged: boolean
+  modifiers: KeyList,
+  hasCharges: boolean,
+  hasModifiers: boolean,
 }
 
 export interface Armour extends InventoryItem {
@@ -160,4 +156,4 @@ export interface Modifier {
   targets: string[],
 }
 
-export type Damage =[number, number, number, number, number, number, number];
+export type Damage = [number, number, number, number, number, number, number];
