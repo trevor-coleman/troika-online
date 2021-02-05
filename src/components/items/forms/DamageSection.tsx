@@ -12,11 +12,13 @@ import {
   Select,
   MenuItem,
   FormControl,
+  Switch, InputLabel,
 } from '@material-ui/core';
 import { Damage } from '../../../store/Schema';
-import { FormValueChangeHandler } from './FormValueChange';
+import { FormValueChangeHandler, FormValueChange } from './FormValueChange';
+import Grid from '@material-ui/core/Grid';
 
-export const weaponNames: {[key:string]: string} = {
+export const weaponNames: { [key: string]: string } = {
   sword        : "Sword",
   axe          : "Axe",
   knife        : "Knife",
@@ -39,7 +41,7 @@ export const weaponNames: {[key:string]: string} = {
   modestBeast  : "Modest Beast",
   largeBeast   : "Large Beast",
   giganticBeast: "Gigantic Beast",
-}
+};
 
 export const weaponDamage: { [key: string]: Damage } = {
   sword        : [4, 6, 6, 6, 6, 8, 10],
@@ -87,12 +89,18 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
   const classes = useStyles();
 
   const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange([
-               {
-                 id   : event.target.id.slice(5),
-                 value: event.target.checked,
-               },
-             ]);
+
+    let{name:id, checked:value} = event.target;
+    id = id.slice(5)
+
+    const updates:FormValueChange<number|boolean>[] = [
+      {
+        id,
+        value
+      },
+    ]
+
+    onChange(updates);
   };
 
   function handleDamageChoice(e: ChangeEvent<{ name?: string; value: any; }>): any {
@@ -131,75 +139,89 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
   const disableCustomFields = !doesDamage || damagesAs !== "custom";
 
   return (
-      <>
-        <FormControl fullWidth
-                     disabled={!doesDamage}
-                     className={classes.selectControl}>
-          <Select variant="outlined"
-                  id="damagesAs"
-                  value={damagesAs ?? 0}
-                  name={"damagesAs"}
-                  onChange={handleDamageChoice}>
-            {Object.keys(weaponDamage)
-                   .sort()
-                   .map((weapon, index) => (
-                       <MenuItem key={`${index}-${weapon}`}
-                                 value={weapon}>{weapon}</MenuItem>))}
-            <MenuItem key={`${Object.keys(weaponDamage).length}-custom`}
-                      value={"custom"}>Custom</MenuItem>
-          </Select>
-        </FormControl>
-        <Table size="small">
-          <TableBody>
-            <TableRow>
-              {(
-                  damage ?? Array(7))
-                  .map((_, index) => (
-                      <TableCell padding={"none"}
-                                 key={`damage-cell-${index}`}>
-                        <TextField disabled={disableCustomFields}
-                                   InputLabelProps={{
-                                     classes: {
-                                       root: classes.damageRoot,
-                                     },
-                                   }}
-                                   InputProps={{
-                                     classes: {
-                                       root : classes.damageRoot,
-                                       input: classes.damageInput,
-                                     },
-                                   }}
-                                   label={`${index + 1}${index == 6
-                                                         ? "+"
-                                                         : ""}`}
-                                   onChange={handleCustomDamageChange}
-                                   variant={"outlined"}
-                                   id={`damage-cell-${index}`}
-                                   type={"number"}
-                                   value={damage?.[index] ??
-                                          0} /></TableCell>))}
-            </TableRow>
-          </TableBody>
-        </Table>
-        <FormGroup row>
-          <FormControlLabel control={<Checkbox disabled={!doesDamage}
-                                               onChange={handleChecked}
-                                               name="item-ranged" />}
-                            label="Ranged" />
-          <FormControlLabel control={<Checkbox disabled={!doesDamage}
-                                               onChange={handleChecked}
-                                               name="item-twoHanded" />}
-                            label="Two Handed" />
-          <FormControlLabel control={<Checkbox disabled={!doesDamage}
-                                               onChange={handleChecked}
-                                               name="item-armourPiercing" />}
-                            label="Armour Piercing" />
-        </FormGroup>
-      </>);
+      <Grid item container spacing={2}>
+        <Grid item
+              xs={3}>
+          <FormControlLabel labelPlacement={"start"}
+                            control={<Switch checked={doesDamage}
+                                             onChange={handleChecked}
+                                             id={"item-doesDamage"}
+                                             name="item-doesDamage" />}
+                            label={"Damage"} />
+        </Grid>
+        <Grid item
+              xs={9}>
+          <FormControl fullWidth
+                       disabled={!doesDamage}
+          >
+            <Select
+                variant="outlined"
+                    id="damagesAs"
+                    value={damagesAs ?? 0}
+                    name={"damagesAs"}
+                    onChange={handleDamageChoice}>
+              {Object.keys(weaponDamage)
+                     .sort()
+                     .map((weapon, index) => (
+                         <MenuItem key={`${index}-${weapon}`}
+                                   value={weapon}>{weapon}</MenuItem>))}
+              <MenuItem key={`${Object.keys(weaponDamage).length}-custom`}
+                        value={"custom"}>Custom</MenuItem>
+            </Select>
+          </FormControl>
+          <Table size="small">
+            <TableBody>
+              <TableRow>
+                {(
+                    damage ?? Array(7))
+                    .map((_, index) => (
+                        <TableCell padding={"none"}
+                                   key={`damage-cell-${index}`}>
+                          <TextField disabled={disableCustomFields}
+                                     InputLabelProps={{
+                                       classes: {
+                                         root: classes.damageRoot,
+                                       },
+                                     }}
+                                     InputProps={{
+                                       classes: {
+                                         root : classes.damageRoot,
+                                         input: classes.damageInput,
+                                       },
+                                     }}
+                                     label={`${index + 1}${index == 6
+                                                           ? "+"
+                                                           : ""}`}
+                                     onChange={handleCustomDamageChange}
+                                     variant={"outlined"}
+                                     id={`damage-cell-${index}`}
+                                     type={"number"}
+                                     value={damage?.[index] ??
+                                            0} /></TableCell>))}
+              </TableRow>
+            </TableBody>
+          </Table>
+          <FormGroup row>
+            <FormControlLabel control={<Checkbox disabled={!doesDamage}
+                                                 onChange={handleChecked}
+                                                 name="item-ranged" />}
+                              label="Ranged" />
+            <FormControlLabel control={<Checkbox disabled={!doesDamage}
+                                                 onChange={handleChecked}
+                                                 name="item-twoHanded" />}
+                              label="Two Handed" />
+            <FormControlLabel control={<Checkbox disabled={!doesDamage}
+                                                 onChange={handleChecked}
+                                                 name="item-armourPiercing" />}
+                              label="Armour Piercing" />
+          </FormGroup>
+        </Grid>
+      </Grid>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
+      formControl: {margin: theme.spacing(1),},
       DamageSection: {},
       damageRoot   : {
         marginTop: theme.spacing(1),
@@ -210,9 +232,6 @@ const useStyles = makeStyles((theme: Theme) => (
         paddingLeft : 0,
         paddingRight: 0,
         textAlign   : "center",
-      },
-      selectControl: {
-        flexGrow: 1,
       },
     }));
 

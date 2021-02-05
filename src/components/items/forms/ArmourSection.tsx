@@ -58,41 +58,49 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
   function handleSelectProtection(e: ChangeEvent<{ value: any; }>): void {
 
     const {value} = e.target;
+    let size;
 
     if (value > 0)
     {
       setCustomValue(selected);
-      console.log("custom", selected);
+      size=selected;
       setCustom(true);
+      setSelected(value);
     }
     else
     {
       setCustomValue(value);
       setCustom(false);
+      size = value;
     }
 
     onChange([
                {
                  id: "protection",
-                 value,
-               },
+                 value: size,
+               }
              ]);
 
     setSelected(value);
-
-    console.log("setting", value);
   }
 
   function handleProtectionChange(e: ChangeEvent<HTMLInputElement>) {
     console.log("protection change", e.target.value);
 
     let value: number = parseInt(e.target.value);
+    value = value <= 0
+                   ? value
+                   : 0;
     setCustomValue(value);
     onChange([
                {
                  id: 'protection',
                  value,
                },
+               {
+                 id: 'size',
+                 value: value * -2
+               }
              ]);
 
   }

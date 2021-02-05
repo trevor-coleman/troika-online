@@ -122,7 +122,8 @@ export interface Possession {
   ranged: boolean
   modifiers: KeyList,
   hasCharges: boolean,
-  hasModifiers: boolean,
+  twoHanded: boolean,
+
 }
 
 export interface Armour extends InventoryItem {
@@ -139,6 +140,7 @@ export interface Weapon extends InventoryItem {
     current: number; max: number
   };
 }
+
 
 export interface Item extends InventoryItem {
   type: "item"

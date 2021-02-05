@@ -21,8 +21,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { useAuth } from '../../store/selectors';
 import { useFirebase } from 'react-redux-firebase';
-import { Possession, Damage } from '../../store/Schema';
-import Divider from '@material-ui/core/Divider';
+import { Possession } from '../../store/Schema';
 import { Add } from '@material-ui/icons';
 import Box from '@material-ui/core/Box';
 import NameInput from './forms/NameInput';
@@ -30,6 +29,8 @@ import DescriptionInput from './forms/DescriptionInput';
 import ArmourSection from './forms/ArmourSection';
 import DamageSection, { weaponDamage } from './forms/DamageSection';
 import { FormValueChange } from './forms/FormValueChange';
+import CustomSizeSection from './forms/CustomSizeSection';
+import ChargesSection from './forms/ChargesSection';
 
 interface NewItemDialogProps {
   open: boolean;
@@ -40,6 +41,7 @@ interface NewItemDialogProps {
 }
 
 const initialState: Possession = {
+  ranged        : false,
   armourPiercing: false,
   customSize    : false,
   characters    : {},
@@ -54,7 +56,8 @@ const initialState: Possession = {
   hasModifiers  : false,
   modifiers     : {},
   protection    : 0,
-  size          : 0,
+  twoHanded     : false,
+  size          : 1,
   description   : '',
   name          : '',
   protects      : false,
@@ -89,12 +92,117 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
               });
   }
 
-  function handleValueUpdate(updates: FormValueChange<any>[]) {
+  function calculateSize(update: FormValueChange<any>) {
+    const sizeOverride: Partial<Possession> = {};
+    const {
+      id,
+      value,
+      source,
+    } = update;
+
+    function twoHandedSize(isTwoHanded: boolean) {
+
+      return isTwoHanded
+             ? Math.max(2,
+                        (
+                            values.protects && values.protection)
+                        ? values.protection * -2
+                        : 0,
+                        1)
+             : Math.max((
+                            values.protects && values.protection)
+                        ? values.protection * -2
+                        : 0, 1);
+    }
+
+    function protectionSize(protects: boolean, protection: number) {
+      console.log(protects, Math.max(1,
+
+                           values.doesDamage && values.twoHanded
+                           ? 2
+                           : 0,
+
+                           protects && protection
+                           ? protection * -2
+                           : 0))
+      return protects
+             ? Math.max(1,
+
+                        values.doesDamage && values.twoHanded
+                        ? 2
+                        : 0,
+
+                        protects && protection
+                        ? protection * -2
+                        : 0)
+
+             : Math.max(1,
+                        (
+                            values.doesDamage && values.twoHanded)
+                        ? 2
+                        : 0);
+    }
+
+    //reject changes if custom size is enabled
+    if (values.customSize && id === "size" && source !== "customSizeSection")
+    {
+      sizeOverride.size = value.size;
+    }
+
+    //recalculate size if disabling custom size
+    else if (id === "customSize" && !value)
+    {
+      sizeOverride.size =
+          Math.max(values.twoHanded
+                   ? 2
+                   : 0,
+                   values.protects && values.protection
+                   ? values.protection * -2
+                   : 0,
+                   1);
+    }
+
+    else if (id === "doesDamage")
+    {
+      if (value && values.twoHanded)
+      {
+        sizeOverride.size = twoHandedSize(values.twoHanded);
+      }
+      else
+      {
+        sizeOverride.size = twoHandedSize(false);
+        console.log(sizeOverride);
+      }
+    }
+
+    //adjust size if needed for two handed weapons
+    else if (id === "twoHanded" && !values.customSize)
+    {
+      sizeOverride.size = twoHandedSize(value);
+    }
+
+    else if (id == "protects" && !values.customSize)
+    {
+      sizeOverride.size = protectionSize(value, values.protection ?? 0);
+    }
+
+    //adjust size if needed for armour
+    else if (id === "protection" && !values.customSize)
+    {
+      sizeOverride.size = protectionSize(values.protects, value);
+    }
+
+    return sizeOverride;
+  }
+
+  function handleValueUpdates(updates: FormValueChange<any>[]) {
 
     const update = updates.reduce<Partial<Possession>>((prev, curr, index) => {
+      const sizeOverride = calculateSize(curr);
+
       return {
         ...prev,
-        [curr.id]: curr.value,
+        [curr.id]: curr.value, ...sizeOverride,
       };
     }, {});
 
@@ -135,7 +243,7 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
   }
 
   return (
-      <Dialog open={true}
+      <Dialog open={open}
               onClose={onClose}
               maxWidth={"sm"}
               fullWidth>
@@ -159,83 +267,32 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
                   spacing={2}>
               <ArmourSection enabled={values.protects}
                              protection={values.protection}
-                             onChange={handleValueUpdate} />
+                             onChange={handleValueUpdates} />
             </Grid>
             <Grid item
                   container
                   spacing={2}>
-              <Grid item
-                    xs={3}>
-                <FormControlLabel labelPlacement={"start"}
-                                  control={<Switch checked={values.doesDamage}
-                                                   onChange={handleChecked}
-                                                   id={"item-doesDamage"}
-                                                   name="item-doesDamage" />}
-                                  label={"Damage"} />
-              </Grid>
-              <Grid item
-                    xs={9}>
-                <DamageSection damagesAs={values.damagesAs}
-                               damage={values.damage}
-                               doesDamage={values.doesDamage}
-                               onChange={handleValueUpdate} />
+              <DamageSection damagesAs={values.damagesAs}
+                             damage={values.damage}
+                             doesDamage={values.doesDamage}
+                             onChange={handleValueUpdates} />
 
-              </Grid>
+            </Grid>
+            <Grid item
+                  container
+                  spacing={2}>
+
+              <CustomSizeSection customSize={values.customSize}
+                                 size={values.size}
+                                 onChange={handleValueUpdates} />
+
+
             </Grid>
 
             <Grid item
                   container
                   spacing={2}>
-
-              <Grid item
-                    xs={3}>
-                <FormControlLabel labelPlacement={"start"}
-                                  control={<Switch checked={values.customSize}
-                                                   onChange={handleChecked}
-                                                   id={"item-customSize"}
-                                                   name="item-customSize" />}
-                                  label={"Custom Size"} />
-              </Grid>
-              <Grid item
-                    xs={9}>
-                <TextField fullWidth
-                           type={"number"}
-                           variant={"outlined"}
-                           label={"Size"}
-                           disabled={!values.customSize}
-                           value={values.size ?? 0}
-                           InputLabelProps={{shrink: true}} />
-              </Grid>
-            </Grid>
-
-            <Grid item
-                  container
-                  spacing={2}>
-              <Grid item
-                    xs={3}>
-                <FormControlLabel labelPlacement={"start"}
-                                  control={<Switch checked={values.hasCharges}
-                                                   onChange={handleChecked}
-                                                   id={"item-hasCharges"}
-                                                   name="item-hasCharges" />}
-                                  label={"Charges"} />
-              </Grid>
-              <Grid item
-                    xs={9}>
-                <FormGroup row>
-                  <TextField value={values.charges?.initial ?? 0}
-                             disabled={!values.hasCharges}
-                             variant={"outlined"}
-                             label={"Initial"}
-                             type={"number"}
-                             InputLabelProps={{shrink: true}} />
-                  <TextField value={values.charges?.initial ?? 0}
-                             variant={"outlined"}
-                             disabled={!values.hasCharges}
-                             label={"Max"}
-                             type={"number"}
-                             InputLabelProps={{shrink: true}} /> </FormGroup>
-              </Grid>
+              <ChargesSection charges={values.charges} hasCharges={values.hasCharges} onChange={handleValueUpdates}/>
             </Grid>
 
             <Grid item
