@@ -7,7 +7,7 @@ import {
 import { FormValueChange, FormValueChangeHandler } from './FormValueChange';
 
 interface IArmourSectionProps {
-  enabled: boolean;
+  protects: boolean;
   protection: number | undefined;
   onChange: FormValueChangeHandler,
 }
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => (
 
 const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSectionProps) => {
   const {
-    enabled,
+    protects,
     protection,
     onChange,
   } = props;
@@ -63,7 +63,7 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
     if (value > 0)
     {
       setCustomValue(selected);
-      size=selected;
+      size = selected;
       setCustom(true);
       setSelected(value);
     }
@@ -75,10 +75,12 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
     }
 
     onChange([
-               {
-                 id: "protection",
-                 value: size,
-               }
+               {id    : "protectsAs",
+                 value: value,
+               }, {
+        id   : "protection",
+        value: size,
+      },
              ]);
 
     setSelected(value);
@@ -88,28 +90,28 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
     console.log("protection change", e.target.value);
 
     let value: number = parseInt(e.target.value);
-    value = value <= 0
-                   ? value
-                   : 0;
+    value =
+        value <= 0
+        ? value
+        : 0;
     setCustomValue(value);
     onChange([
                {
                  id: 'protection',
                  value,
-               },
-               {
-                 id: 'size',
-                 value: value * -2
-               }
+               }, {
+        id   : 'size',
+        value: value * -2,
+      },
              ]);
 
   }
 
   return (
-      <><Grid item
+      <Grid container direction={"row"}><Grid item
               xs={3}>
         <FormControlLabel labelPlacement={"start"}
-                          control={<Switch checked={enabled}
+                          control={<Switch checked={protects}
                                            onChange={handleEnabled}
                                            id={"item-protects"}
                                            name="item-protects" />}
@@ -117,7 +119,7 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
       </Grid>
         <Grid item
               xs={9}>
-          <FormGroup row><FormControl disabled={!enabled}
+          <FormGroup row><FormControl disabled={!protects}
                                       className={classes.selectControl}>
             <Select variant={"outlined"}
                     id={"protection"}
@@ -130,14 +132,14 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
               <MenuItem value={1}>Custom</MenuItem>
             </Select>
           </FormControl>
-            <TextField disabled={!enabled || !custom}
+            <TextField disabled={!protects || !custom}
                        variant={"outlined"}
                        label={"Damage Reduction"}
                        type={"number"}
                        value={customValue ?? 0}
                        onChange={handleProtectionChange} />
           </FormGroup>
-        </Grid></>);
+        </Grid></Grid>);
 };
 
 export default ArmourSection;

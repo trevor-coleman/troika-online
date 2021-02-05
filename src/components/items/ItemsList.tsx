@@ -80,7 +80,7 @@ const ItemsListItem = ({
   const toggleExpand = ()=> setExpand(!expand);
 
 
-  const itemInfo = useTypedSelector(state => state.firebase.data.items[item]);
+  const itemInfo = useTypedSelector(state => state.firebase.data?.items?.[item]);
   return (
       <><ListItem dense>
         <ListItemAvatar><Checkbox id={item}
@@ -90,7 +90,7 @@ const ItemsListItem = ({
         <ListItemSecondaryAction onClick={toggleExpand}><ExpandMore/></ListItemSecondaryAction>
       </ListItem>
         <Collapse in={expand}>
-          <ListItem dense className={classes.listDescription}><ListItemText inset secondary={itemInfo.description}/></ListItem>
+          <ListItem dense className={classes.listDescription}><ListItemText inset secondary={itemInfo?.description}/></ListItem>
         </Collapse>
         <Divider />
       </>

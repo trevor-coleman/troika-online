@@ -15,7 +15,7 @@ import {
   FormGroup,
   Chip,
   Avatar,
-  Fade,
+  Fade, CircularProgress,
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -31,6 +31,7 @@ import DamageSection, { weaponDamage } from './forms/DamageSection';
 import { FormValueChange } from './forms/FormValueChange';
 import CustomSizeSection from './forms/CustomSizeSection';
 import ChargesSection from './forms/ChargesSection';
+import { calculateSize } from './calculateSize';
 
 interface NewItemDialogProps {
   open: boolean;
@@ -79,6 +80,7 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
   const firebase = useFirebase();
 
   const [values, setValues] = useState<Possession>(initialState);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
@@ -94,113 +96,12 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
               });
   }
 
-  function calculateSize(update: FormValueChange<any>) {
-    const sizeOverride: Partial<Possession> = {};
-    const {
-      id,
-      value,
-      source,
-    } = update;
-
-    function twoHandedSize(isTwoHanded: boolean) {
-
-      return isTwoHanded
-             ? Math.max(2,
-                        (
-                            values.protects && values.protection)
-                        ? values.protection * -2
-                        : 0,
-                        1)
-             : Math.max((
-                            values.protects && values.protection)
-                        ? values.protection * -2
-                        : 0, 1);
-    }
-
-    function protectionSize(protects: boolean, protection: number) {
-      console.log(protects, Math.max(1,
-
-                           values.doesDamage && values.twoHanded
-                           ? 2
-                           : 0,
-
-                           protects && protection
-                           ? protection * -2
-                           : 0))
-      return protects
-             ? Math.max(1,
-
-                        values.doesDamage && values.twoHanded
-                        ? 2
-                        : 0,
-
-                        protects && protection
-                        ? protection * -2
-                        : 0)
-
-             : Math.max(1,
-                        (
-                            values.doesDamage && values.twoHanded)
-                        ? 2
-                        : 0);
-    }
-
-    //reject changes if custom size is enabled
-    if (values.customSize && id === "size" && source !== "customSizeSection")
-    {
-      sizeOverride.size = value.size;
-    }
-
-    //recalculate size if disabling custom size
-    else if (id === "customSize" && !value)
-    {
-      sizeOverride.size =
-          Math.max(values.twoHanded
-                   ? 2
-                   : 0,
-                   values.protects && values.protection
-                   ? values.protection * -2
-                   : 0,
-                   1);
-    }
-
-    else if (id === "doesDamage")
-    {
-      if (value && values.twoHanded)
-      {
-        sizeOverride.size = twoHandedSize(values.twoHanded);
-      }
-      else
-      {
-        sizeOverride.size = twoHandedSize(false);
-        console.log(sizeOverride);
-      }
-    }
-
-    //adjust size if needed for two handed weapons
-    else if (id === "twoHanded" && !values.customSize)
-    {
-      sizeOverride.size = twoHandedSize(value);
-    }
-
-    else if (id == "protects" && !values.customSize)
-    {
-      sizeOverride.size = protectionSize(value, values.protection ?? 0);
-    }
-
-    //adjust size if needed for armour
-    else if (id === "protection" && !values.customSize)
-    {
-      sizeOverride.size = protectionSize(values.protects, value);
-    }
-
-    return sizeOverride;
-  }
 
   function handleValueUpdates(updates: FormValueChange<any>[]) {
 
     const update = updates.reduce<Partial<Possession>>((prev, curr, index) => {
-      const sizeOverride = calculateSize(curr);
+      const sizeOverride = calculateSize(values, curr);
+      console.log(curr.id, curr.value);
 
       return {
         ...prev,
@@ -212,6 +113,7 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
   }
 
   async function saveItem() {
+    setIsSaving(true)
 
     const characterKeys = character
                           ? {
@@ -226,17 +128,36 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
                                                       : auth.uid,
                                           characters: characterKeys,
                                         });
-    if (itemRef.key && character)
+    if (itemRef.key)
     {
+      if(!character){
+        setValues(initialState);
+        setIsSaving(false);
+        onClose();
+        return
+      }
+
       const newInventory = [...(inventory ?? []), itemRef.key]
 
-      await firebase.ref(`/characters/${character}/items/${itemRef.key}`)
+      const saveToProfile = firebase.ref(`/profiles/${auth.uid}/items/${itemRef.key}`).set(true);
+      const saveToCharacter = firebase.ref(`/characters/${character}/items/${itemRef.key}`)
                     .set(true);
-      await firebase.ref(`/characters/${character}/inventory`).set(newInventory);
-    }
-    setValues(initialState);
+      const saveToCharacterInventory= firebase.ref(`/characters/${character}/inventory`).set(newInventory);
 
-    onClose();
+
+      await Promise.all([
+                          saveToProfile,
+                          saveToCharacter,
+                          saveToCharacterInventory
+                        ]);
+      setIsSaving(false);
+    } else {
+      setIsSaving(false);
+    }
+
+
+
+
 
   }
 
@@ -270,7 +191,7 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
             <Grid item
                   container
                   spacing={2}>
-              <ArmourSection enabled={values.protects}
+              <ArmourSection protects={values.protects}
                              protection={values.protection}
                              onChange={handleValueUpdates} />
             </Grid>
@@ -280,6 +201,9 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
               <DamageSection damagesAs={values.damagesAs}
                              damage={values.damage}
                              doesDamage={values.doesDamage}
+                             twoHanded={values.twoHanded}
+                             ranged={values.ranged}
+                             armourPiercing={values.armourPiercing}
                              onChange={handleValueUpdates} />
 
             </Grid>
@@ -333,18 +257,15 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
               <Grid item
                     xs={6} />
               <Grid item
-                    xs={3}>
+                    xs={6} className={classes.saveButton}>
                 <Button onClick={onClose}
                         variant={"outlined"}
                         fullWidth>Cancel</Button>
-              </Grid>
-              <Grid item
-                    xs={3}>
-                <Button disabled={!isValid}
+                <Button disabled={!isValid || isSaving}
                         onClick={saveItem}
-                        color={'primary'}
+                        color={"primary"}
                         variant={"contained"}
-                        fullWidth>Save</Button>
+                        fullWidth>{isSaving? "Saving" : "Save"}</Button>
               </Grid>
             </Grid>
           </Grid>
@@ -360,6 +281,19 @@ const useStyles = makeStyles((theme: Theme) => (
       root         : {},
       selectControl: {
         flexGrow: 1,
+      },
+      saveButton: {
+        margin  : theme.spacing(1),
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'row',
+      },
+      buttonProgress: {
+        position  : 'absolute',
+        top       : '50%',
+        left      : '50%',
+        marginTop : -12,
+        marginLeft: -12,
       },
     }));
 

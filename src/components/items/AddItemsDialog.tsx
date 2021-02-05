@@ -17,12 +17,14 @@ import { KeyList } from '../../store/Schema';
 interface AddItemsDialogProps {
   open: boolean,
   characterKey: string,
-  onClose: () => void
+  onClose: () => void,
+  inventory: string[],
+  onAdd: (selected: KeyList) => void;
 }
 
 function a11yProps(index: any) {
   return {
-    id: `items-tab-${index}`,
+    id             : `items-tab-${index}`,
     'aria-controls': `items-tabpanel-${index}`,
   };
 }
@@ -62,8 +64,10 @@ function TabPanel(props: TabPanelProps) {
 const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsDialogProps) => {
   const {
     open,
+    onAdd,
     onClose,
     characterKey,
+    inventory,
   } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -75,16 +79,22 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
   const [selection, setSelection] = useState<KeyList>({});
 
   useFirebaseConnect([
-    {path: `/characters/${characterKey}/items`}, {
-      path: 'items',
-      storeAs: 'addItems_myItems',
-      queryParams: ['orderByChild=owner', `equalTo=${auth.uid}`],
-    }, {
-      path: 'items',
-      storeAs: 'addItems_srdItems',
-      queryParams: ['orderByChild=owner', `equalTo=srd`],
-    },
-  ]);
+                       {path: `/characters/${characterKey}/items`},
+                       {path: `/profiles/${auth.uid}/items`},
+                       {
+                         path       : 'items',
+                         storeAs    : 'addItems_myItems',
+                         queryParams: [
+                           'orderByChild=owner',
+                           `equalTo=${auth.uid}`,
+                         ],
+                       },
+                       {
+                         path       : 'items',
+                         storeAs    : 'addItems_srdItems',
+                         queryParams: ['orderByChild=owner', `equalTo=srd`],
+                       },
+                     ]);
 
   const myItems = useTypedSelector(state => state.firebase.data?.addItems_myItems);
   const srdItems = useTypedSelector(state => state?.firebase?.data?.addItems_srdItems);
@@ -96,6 +106,19 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
     setValue(newValue);
   };
 
+  const srdSort = (a: string, b: string) => {
+    console.log(a , srdItems[a]);
+    return (srdItems
+           ? srdItems[a]["name"].localeCompare(srdItems[b]["name"])
+           : a.localeCompare(b));
+  };
+  const mySort = (a: string, b: string) => {
+    console.log(a, myItems[a]);
+    return (myItems
+           ? myItems[a]["name"].localeCompare(myItems[b]["name"])
+           : a.localeCompare(b));
+  };
+
   const myItemKeys: string[] = isLoaded(myItems) && !isEmpty(myItems)
                                ? Object.keys(myItems)
                                        .filter(key => characterItemKeys.indexOf(
@@ -103,6 +126,7 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
                                        .filter(key => myItems[key].name.toLowerCase()
                                                                   .includes(
                                                                       search))
+                                       .sort(mySort)
                                : [];
 
   const srdItemKeys: string[] = isLoaded(srdItems) && !isEmpty(srdItems)
@@ -112,6 +136,7 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
                                         .filter(key => srdItems[key].name.toLowerCase()
                                                                     .includes(
                                                                         search))
+                                        .sort(srdSort)
                                 : [];
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
@@ -119,26 +144,7 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
   };
 
   const addToCharacter = async () => {
-    let selectedKeys: string[] = [];
-    const updateObj = Object.keys(selection)
-                            .reduce<KeyList>((prev: KeyList,
-                                              curr: string,
-                                              index) => {
-                              if (selection[curr]) {
-                                selectedKeys.push(curr);
-                                return {
-                                  ...prev,
-                                  [curr]: true,
-                                };
-                              }
-                              return prev;
-                            }, {});
-
-    const updatePromises = selectedKeys.map(key => firebase.ref(`/items/${key}/character/${characterKey}`)
-                                                           .set(true));
-    updatePromises.push(firebase.ref(`/characters/${characterKey}/items`)
-                                .update(updateObj));
-    await Promise.all(updatePromises);
+    onAdd(selection);
 
     setSelection({});
     onClose();
@@ -173,7 +179,7 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
               <TabPanel index={0}
                         value={value}>
                 <div className={classes.scrollList}>
-                  <ItemsList items={srdItemKeys}
+                  <ItemsList items={myItemKeys}
                              values={selection}
                              setValues={setSelection} />
                 </div>
@@ -196,29 +202,29 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root: {},
-      dialog: {},
-      tabs: {
-        width: "50vw",
-        position: "fixed",
+      root       : {},
+      dialog     : {},
+      tabs       : {
+        width          : "50vw",
+        position       : "fixed",
         backgroundColor: theme.palette.background.paper,
-        zIndex: 100,
+        zIndex         : 100,
       },
       contentRoot: {
         paddingTop: 0,
       },
-      tabContent: {
+      tabContent : {
         paddingTop: theme.spacing(9),
       },
-      container: {
-        width: "50vw",
+      container  : {
+        width : "50vw",
         height: "70vh",
       },
-      search: {
-        padding: theme.spacing(1),
+      search     : {
+        padding   : theme.spacing(1),
         background: theme.palette.grey['200'],
       },
-      scrollList: {
+      scrollList : {
         overflow: "auto",
       },
     }));

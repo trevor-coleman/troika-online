@@ -11,7 +11,7 @@ import AddItemsDialog from './AddItemsDialog';
 import NewItemDialog from './NewItemDialog';
 import Button from '@material-ui/core/Button';
 import {
-  useFirebaseConnect, isLoaded, useFirebase,
+  useFirebaseConnect, isLoaded, useFirebase, isEmpty,
 } from 'react-redux-firebase';
 import { useInventory, useItems } from '../../store/selectors';
 import InventoryItem from './InventoryItem';
@@ -61,8 +61,8 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
                      ]);
 
   useEffect(() => {
-    if (isLoaded(inv)) setInventory(inv);
-  }, [inventory, items]);
+    if (isLoaded(inv)) setInventory(inv ?? []);
+  }, [inv, items]);
 
   const [dialogState, setDialogState] = useState<{ [key: string]: boolean }>(
       initialState);
@@ -101,7 +101,52 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
                   .set(newItemArray);
   }
 
-  let inventoryPostition: number = 0;
+  const removeItem = (id:string)=> {
+    const newInventory = [...inventory]
+
+    const index = newInventory.indexOf(id);
+    if (index > -1)
+    {
+      newInventory.splice(index, 1);
+    }
+
+    firebase.ref(`/characters/${characterKey}/inventory`).set(newInventory);
+    firebase.ref(`/characters/${characterKey}/items/${id}`).set(null);
+
+    setInventory(newInventory);
+
+  }
+
+  const addItem = async (selection:KeyList) => {
+    let selectedKeys: string[] = [];
+    const updateObj = Object.keys(selection)
+                            .reduce<KeyList>((prev: KeyList,
+                                              curr: string,
+                                              index) => {
+                              if (selection[curr])
+                              {
+                                selectedKeys.push(curr);
+                                return {
+                                  ...prev,
+                                  [curr]: true,
+                                };
+                              }
+                              return prev;
+                            }, {});
+
+    console.log(inventory);
+    let newInventory = inventory.concat(selectedKeys);
+    setInventory(newInventory);
+
+    const updatePromises = selectedKeys.map(key => firebase.ref(`/items/${key}/character/${characterKey}`)
+                                                           .set(true));
+    updatePromises.push(firebase.ref(`/characters/${characterKey}/items`)
+                                .update(updateObj));
+    updatePromises.push(firebase.ref(`/characters/${characterKey}/inventory`)
+                                .set(newInventory));
+    await Promise.all(updatePromises);
+
+  };
 
   return (
       <div>
@@ -111,11 +156,13 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
         <Button onClick={() => showDialog("new")}>New Item</Button>
         <Grid container direction={"column"} spacing={2}>
 
-            {inventory.map((key, index) => (
-                <InventoryItem key={key} id={key}/>))}
+            {isLoaded(inventory) && !isEmpty(inventory) ? inventory.map((key, index) => (
+                <InventoryItem key={key} id={key} onRemove={removeItem}/>)) : <div/>}
 
         </Grid>
         <AddItemsDialog open={dialogState.add}
+                        onAdd={addItem}
+                        inventory={inventory}
                         onClose={() => showDialog()}
                         characterKey={characterKey} />
         <NewItemDialog open={dialogState.new}

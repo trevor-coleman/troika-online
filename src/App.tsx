@@ -35,7 +35,7 @@ function App(props: any) {
               <Route path={"/*"}>
                 <Layout>
                   <Switch>
-                    <PrivateRoute path={"/srd"}><SRD /></PrivateRoute>
+                    <PrivateRoute path={"/srd/:type"}><SRD /></PrivateRoute>
                     <PrivateRoute path={"/home"}><Home /></PrivateRoute>
                     <PrivateRoute path={"/roll"}><RollView /></PrivateRoute>
                     <PrivateRoute path={"/game/:gameKey"}><Game /></PrivateRoute>

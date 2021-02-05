@@ -13,12 +13,7 @@ export default interface Schema {
   },
   profiles: Profile,
   skills: Skill,
-  items: {
-    [key: string]: OtherItem
-  },
-  weapons: {
-    [key: string]: Weapon
-  },
+  items: Possession,
   spells: {
     [key: string]: Spell
   },
@@ -105,8 +100,9 @@ export interface Skill {
 }
 
 export interface Possession {
+  [key:string]: any,
   armourPiercing: boolean,
-  characters: KeyList,
+  characters?: KeyList,
   charges?: {
     initial: number; max: number
   };
