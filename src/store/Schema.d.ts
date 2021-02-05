@@ -84,6 +84,7 @@ export interface Character {
   monies: number;
   provisions: number;
   items: KeyList;
+  inventory: string[];
   equipped: KeyList;
   skills: KeyList;
   skillValues: { [key: string]: SkillValues }

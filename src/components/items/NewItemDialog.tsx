@@ -37,6 +37,7 @@ interface NewItemDialogProps {
   onClose: () => void;
   itemKey?: string;
   character: string | null;
+  inventory?: string[];
   srd?: boolean;
 }
 
@@ -68,6 +69,7 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
   const {
     open,
     onClose,
+      inventory,
     character,
     srd,
   } = props;
@@ -226,8 +228,11 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
                                         });
     if (itemRef.key && character)
     {
+      const newInventory = [...(inventory ?? []), itemRef.key]
+
       await firebase.ref(`/characters/${character}/items/${itemRef.key}`)
                     .set(true);
+      await firebase.ref(`/characters/${character}/inventory`).set(newInventory);
     }
     setValues(initialState);
 

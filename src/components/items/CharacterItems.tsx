@@ -1,20 +1,21 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
-import { Paper, ListItemText, ListItem } from '@material-ui/core';
+import { Paper, ListItem } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { KeyList } from '../../store/Schema';
-import {
-  DragDropContext, Droppable, Draggable, DropResult, ResponderProvided,
-} from 'react-beautiful-dnd';
+import { DropResult, ResponderProvided } from 'react-beautiful-dnd';
 import List from '@material-ui/core/List';
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import AddSkillsDialog from '../skills/AddSkillsDialog';
-import NewSkillDialog from '../skills/NewSkillDialog';
 import AddItemsDialog from './AddItemsDialog';
 import NewItemDialog from './NewItemDialog';
 import Button from '@material-ui/core/Button';
+import {
+  useFirebaseConnect, isLoaded, useFirebase,
+} from 'react-redux-firebase';
+import { useInventory, useItems } from '../../store/selectors';
+import InventoryItem from './InventoryItem';
+import Grid from '@material-ui/core/Grid';
 
 interface CharacterItemsProps {
   characterKey: string,
@@ -35,21 +36,33 @@ const tempItems: {
 const spacing = 6;
 
 const initialState: { add: boolean; new: boolean; edit: boolean; remove: boolean } = {
-  add: false,
-  new: false,
-  edit: false,
-  remove: false
+  add   : false,
+  new   : false,
+  edit  : false,
+  remove: false,
 };
 
-//COMPONENT
 const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: CharacterItemsProps) => {
   const {
-    characterKey
+    characterKey,
   } = props;
   const classes = useStyles();
-  const theme=useTheme();
+  const theme = useTheme();
   const dispatch = useDispatch();
-  const [items,setItems] = useState<string[]>(Object.keys(tempItems))
+  const inv = useInventory(characterKey);
+  const items = useItems(characterKey);
+
+  const [inventory, setInventory] = useState<string[]>([]);
+
+  const firebase = useFirebase();
+  useFirebaseConnect([
+                       `/characters/${characterKey}/inventory`,
+                       `/characters/${characterKey}/items`,
+                     ]);
+
+  useEffect(() => {
+    if (isLoaded(inv)) setInventory(inv);
+  }, [inventory, items]);
 
   const [dialogState, setDialogState] = useState<{ [key: string]: boolean }>(
       initialState);
@@ -64,8 +77,8 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
                    : newState);
   }
 
-  function handleDragEnd(result: DropResult,
-                         provided: ResponderProvided): void {
+  async function handleDragEnd(result: DropResult,
+                               provided: ResponderProvided): Promise<void> {
     const {
       destination,
       source,
@@ -80,89 +93,37 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
       return;
     }
 
-    const newItemArray: string[] = items;
+    const newItemArray: string[] = [...inventory];
     newItemArray.splice(source.index, 1);
     newItemArray.splice(destination.index, 0, draggableId);
-
-    setItems(newItemArray);
+    setInventory(newItemArray);
+    await firebase.ref(`/characters/${characterKey}/inventory`)
+                  .set(newItemArray);
   }
 
-
+  let inventoryPostition: number = 0;
 
   return (
       <div>
         <Typography variant={"h5"}>
-          Items </Typography>
+          Inventory </Typography>
         <Button onClick={() => showDialog("add")}>Import Item</Button>
         <Button onClick={() => showDialog("new")}>New Item</Button>
-        <Paper><Box p={2}>
-          <DragDropContext onDragStart={() => {}}
-                           onDragUpdate={() => {}}
-                           onDragEnd={handleDragEnd}>
-            <Grid container>
-              <Grid item container direction={"column"} xs={1}>
-                <List>
-                  {Array.from({length: 12}, (_, i) => i + 1).map(
-                        (item,index)=>(<ListItem key={`1st-col-${index}`} style={{height: theme.spacing(spacing)}}><ListItemText primary={(index + 1).toString()}/> </ListItem>))}
-                </List>
-              </Grid>
-              <Grid item container xs={5}>
-              <Grid item
-                                  xs={6}><Droppable droppableId={characterKey +
-                                                                 "-items"}>{provided => (
-                <List innerRef={provided.innerRef} {...provided.droppableProps} >
-                  {items.map((item, index) => {
-                    return (
-                        <DraggableItem key={item} item={item} index={index}></DraggableItem>);
-                  })
-                  }
-                  {provided.placeholder}
-                </List>)}
-            </Droppable>
-              </Grid>
-              </Grid>
-            </Grid>
+        <Grid container direction={"column"} spacing={2}>
 
-          </DragDropContext>
-        </Box></Paper>
+            {inventory.map((key, index) => (
+                <InventoryItem key={key} id={key}/>))}
+
+        </Grid>
         <AddItemsDialog open={dialogState.add}
-                         onClose={() => showDialog()}
-                         characterKey={characterKey} />
+                        onClose={() => showDialog()}
+                        characterKey={characterKey} />
         <NewItemDialog open={dialogState.new}
-                        character={characterKey}
-                        onClose={() => showDialog()} />
+                       character={characterKey}
+                       inventory={inventory}
+                       onClose={() => showDialog()} />
       </div>);
 };
-
-const DraggableItem = (props:{item:string, index:number})=> {
-  const classes=useItemStyles(props);
-  const theme=useTheme();
-  const {item,index}=props;
-  return (
-      <Draggable key={item}
-                 draggableId={item}
-                 index={index}>
-        {provided => (
-            <ListItem {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      innerRef={provided.innerRef}
-                      className={classes.listItem}
-
-            >
-              <ListItemText  primary={`${item}-${tempItems[item].size}` } />
-            </ListItem>)}</Draggable>);
-}
-
-const useItemStyles = makeStyles((theme: Theme) => (
-    {
-      root: {},
-      listItem: {
-        backgroundColor: theme.palette.background.paper,
-        border: "1px solid lightgrey",
-        height: (props: { index: number, item: string }) => theme.spacing(
-            tempItems[props.item].size * spacing),
-      },
-    }));
 
 const useStyles = makeStyles((theme: Theme) => (
     {
