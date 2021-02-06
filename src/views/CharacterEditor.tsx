@@ -15,6 +15,7 @@ import CharacterSkills from '../components/skills/CharacterSkills';
 import Stats from '../components/stats/Stats';
 import Bio from '../components/bio/Bio';
 import CharacterItems from '../components/items/CharacterItems';
+import { useTypedSelector } from '../store';
 
 interface CharacterEditorProps {
   init?: boolean
@@ -26,17 +27,22 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
   const {characterKey} = useParams<{ characterKey: string }>();
   const classes = useStyles();
   const dispatch = useDispatch();
-  useFirebaseConnect({
-    path: `/characters/${characterKey}`,
-  });
-  const character = useCharacter(characterKey);
+  useFirebaseConnect(
+     [
+         `/characters/${characterKey}/name`,
+         `/characters/${characterKey}/game`,
+]
+  );
+  const name = useTypedSelector(state => state.firebase.data?.characters?.[characterKey].name);
+  const game = useTypedSelector(state => state.firebase.data?.characters?.[characterKey].name);
   const firebase = useFirebase();
 
-  const [values, setValues] = useState<Partial<Character>>(blankCharacter);
+  const [values, setValues] = useState<Partial<Character>>({});
 
   useEffect(() => {
-    if (character) setValues({...blankCharacter, ...character});
-  }, [character]);
+    if (name) setValues({...values, name});
+    if (game) setValues({...values, game});
+  }, [name, game]);
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
     setValues({
@@ -51,7 +57,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
   return (
       <div>
         <div>
-          <Link to={`/game/${character?.game}`}>
+          <Link to={`/game/${values?.game}`}>
             <Typography paragraph>{"<"} Back to Game</Typography></Link>
         </div>
 
@@ -80,8 +86,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
                 xs={12}>
           <Grid item
                 xs={12}>
-            <CharacterSkills characterKey={characterKey}
-                             skills={character?.skills} />
+            <CharacterSkills characterKey={characterKey} />
           </Grid>
           </Grid>
           <Grid container
@@ -90,8 +95,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
                 xs={12}>
             <Grid item
                   xs={12}>
-              <CharacterItems characterKey={characterKey}
-                               items={character?.items} />
+              <CharacterItems characterKey={characterKey} />
             </Grid>
           </Grid>
         </Grid>

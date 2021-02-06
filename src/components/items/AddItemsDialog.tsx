@@ -2,24 +2,22 @@ import React, { FunctionComponent, ChangeEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
-  DialogTitle, DialogContent, Dialog, Tabs, Tab, DialogActions, TextField,
+  DialogTitle, DialogContent, Dialog, DialogActions, TextField,
 } from '@material-ui/core';
-import {
-  useFirebaseConnect, isLoaded, isEmpty, useFirebase,
-} from 'react-redux-firebase';
+import { useFirebase } from 'react-redux-firebase';
 import { useAuth } from '../../store/selectors';
-import { useTypedSelector } from '../../store';
-import ItemsList from './ItemsList';
+import SrdItemsList from './SrdItemsList';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import { KeyList } from '../../store/Schema';
+import { Item } from '../../store/Schema';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface AddItemsDialogProps {
   open: boolean,
   characterKey: string,
   onClose: () => void,
   inventory: string[],
-  onAdd: (selected: KeyList) => void;
+  setInventory: (i: string[]) => void;
 }
 
 function a11yProps(index: any) {
@@ -64,10 +62,10 @@ function TabPanel(props: TabPanelProps) {
 const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsDialogProps) => {
   const {
     open,
-    onAdd,
     onClose,
     characterKey,
     inventory,
+    setInventory,
   } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -76,78 +74,42 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
 
   const [value, setValue] = useState(0);
   const [search, setSearch] = useState("");
-  const [selection, setSelection] = useState<KeyList>({});
-
-  useFirebaseConnect([
-                       {path: `/characters/${characterKey}/items`},
-                       {path: `/profiles/${auth.uid}/items`},
-                       {
-                         path       : 'items',
-                         storeAs    : 'addItems_myItems',
-                         queryParams: [
-                           'orderByChild=owner',
-                           `equalTo=${auth.uid}`,
-                         ],
-                       },
-                       {
-                         path       : 'items',
-                         storeAs    : 'addItems_srdItems',
-                         queryParams: ['orderByChild=owner', `equalTo=srd`],
-                       },
-                     ]);
-
-  const myItems = useTypedSelector(state => state.firebase.data?.addItems_myItems);
-  const srdItems = useTypedSelector(state => state?.firebase?.data?.addItems_srdItems);
-  const characterItemKeys = useTypedSelector(state => state?.firebase?.data?.characters?.[characterKey]?.items
-                                                      ? Object.keys(state.firebase.data.characters[characterKey].items)
-                                                      : []);
+  const [selection, setSelection] = useState<{ [key: string]: Item }>({});
+  const [isAdding, setIsAdding] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
 
-  const srdSort = (a: string, b: string) => {
-    console.log(a , srdItems[a]);
-    return (srdItems
-           ? srdItems[a]["name"].localeCompare(srdItems[b]["name"])
-           : a.localeCompare(b));
-  };
-  const mySort = (a: string, b: string) => {
-    console.log(a, myItems[a]);
-    return (myItems
-           ? myItems[a]["name"].localeCompare(myItems[b]["name"])
-           : a.localeCompare(b));
-  };
-
-  const myItemKeys: string[] = isLoaded(myItems) && !isEmpty(myItems)
-                               ? Object.keys(myItems)
-                                       .filter(key => characterItemKeys.indexOf(
-                                           key) === -1)
-                                       .filter(key => myItems[key].name.toLowerCase()
-                                                                  .includes(
-                                                                      search))
-                                       .sort(mySort)
-                               : [];
-
-  const srdItemKeys: string[] = isLoaded(srdItems) && !isEmpty(srdItems)
-                                ? Object.keys(srdItems)
-                                        .filter(key => characterItemKeys.indexOf(
-                                            key) === -1)
-                                        .filter(key => srdItems[key].name.toLowerCase()
-                                                                    .includes(
-                                                                        search))
-                                        .sort(srdSort)
-                                : [];
-
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value.toLowerCase());
   };
 
-  const addToCharacter = async () => {
-    onAdd(selection);
+  const addSelectedItemsToCharacter = async () => {
+    setIsAdding(true);
+    const newKeys = [];
+    const itemsRef = firebase.ref(`/characters/${characterKey}/items`);
+    for (let selectedKey in selection) {
+      const newKey = itemsRef.push().key;
+      if (!newKey) {
+        console.error("Failed to create item",
+                      selectedKey,
+                      selection[selectedKey]);
+        return;
+      }
+      newKeys.push(newKey);
+      itemsRef.child(newKey).set(selection[selectedKey]);
+    }
+
+    const newInventory = inventory.concat(newKeys);
+    setInventory(newInventory);
+    await firebase.ref(`/characters/${characterKey}/inventory`)
+                  .set(newInventory);
 
     setSelection({});
+    setSearch("");
     onClose();
+    setIsAdding(false);
   };
 
   return (
@@ -159,44 +121,33 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
 
         <DialogContent classes={{root: classes.contentRoot}}>
           <div className={classes.container}>
+            {isAdding
+             ? <CircularProgress />
+             : <>
+             <div className={classes.tabs}>
+               <div className={classes.search}>
+                 <TextField label={"search"}
+                            variant={'outlined'}
+                            size={'small'}
+                            value={search}
+                            onChange={handleSearch} />
+               </div>
+             </div>
+             <div className={classes.tabContent}>
+               <div className={classes.scrollList}>
+                 <SrdItemsList search={search}
+                               values={selection}
+                               setValues={setSelection} />
+               </div>
 
-            <div className={classes.tabs}>
-              <Tabs value={value}
-                    aria-label="select-items-list"
-                    onChange={handleChange}>
-                <Tab label="My Items" {...a11yProps(1)} />
-                <Tab label="SRD" {...a11yProps(2)} />
-                <Tab label="Community" {...a11yProps(3)} />
-              </Tabs>
-              <div className={classes.search}><TextField label={"search"}
-                                                         variant={'outlined'}
-                                                         size={'small'}
-                                                         value={search}
-                                                         onChange={handleSearch} />
-              </div>
-            </div>
-            <div className={classes.tabContent}>
-              <TabPanel index={0}
-                        value={value}>
-                <div className={classes.scrollList}>
-                  <ItemsList items={myItemKeys}
-                             values={selection}
-                             setValues={setSelection} />
-                </div>
-              </TabPanel>
-              <TabPanel index={1}
-                        value={value}>
-                <div className={classes.scrollList}>
-                  <ItemsList items={srdItemKeys}
-                             values={selection}
-                             setValues={setSelection} /></div>
-              </TabPanel>
-            </div>
+             </div> </>
+             }
+
           </div>
         </DialogContent>
         <DialogActions><Button variant={"contained"}
-                               onClick={addToCharacter}>Add to
-                                                        Character</Button></DialogActions>
+                               onClick={addSelectedItemsToCharacter}>Add to
+                                                                     Character</Button></DialogActions>
       </Dialog>);
 };
 
@@ -218,7 +169,7 @@ const useStyles = makeStyles((theme: Theme) => (
       },
       container  : {
         width : "50vw",
-        height: "70vh",
+        height: "50vh",
       },
       search     : {
         padding   : theme.spacing(1),

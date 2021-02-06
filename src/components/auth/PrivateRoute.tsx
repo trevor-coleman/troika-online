@@ -9,16 +9,19 @@ import { isLoaded, isEmpty } from 'react-redux-firebase'
 import { RootState } from '../../store';
 
 interface PrivateRouteProps {
-  path: string
-
+  path: string,
+  restricted?: boolean,
 }
 
 //COMPONENT
-const PrivateRoute: FunctionComponent<PropsWithChildren<PrivateRouteProps>> = ({children, ...rest}: PropsWithChildren<PrivateRouteProps>) => {
+const PrivateRoute: FunctionComponent<PropsWithChildren<PrivateRouteProps>> = ({children, restricted, ...rest}: PropsWithChildren<PrivateRouteProps>) => {
   const auth = useSelector((state:RootState) => state.firebase.auth)
+
+  const permitted = !restricted || auth.email === "trevor@trevorcoleman.design";
+
   return (
       <Route
-          {...rest} render={({location}) => isLoaded(auth) && !isEmpty(auth)
+          {...rest} render={({location}) => isLoaded(auth) && !isEmpty(auth) && permitted
                                             ? (
                                                 children)
                                             : (

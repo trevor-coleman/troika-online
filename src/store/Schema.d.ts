@@ -4,7 +4,9 @@ import {
 import { Profile } from './index';
 
 export default interface Schema {
-  queryTest: any
+  [key:string]: any,
+  addSrdItems: Item,
+  queryTest: any,
   addFriendResult: any,
   sentRequests: any,
   portraits: any,
@@ -13,14 +15,13 @@ export default interface Schema {
   },
   profiles: Profile,
   skills: Skill,
-  items: Possession,
+  items: Item,
   spells: {
     [key: string]: Spell
   },
   addSkills_mySkills: Skill,
   addSkills_srdSkills: Skill,
-  addItems_myItems: Skill,
-  addItems_srdItems: Skill,
+  srdItems: Item,
   games: Game,
   rolls: { [key: string]: FbRoll },
   characters: Character
@@ -48,6 +49,10 @@ export interface Game {
 
 export interface KeyList {
   [key: string]: boolean;
+}
+
+export interface NullableKeyList {
+  [key: string]: boolean|null;
 }
 
 export interface Profile {
@@ -78,12 +83,11 @@ export interface Character {
   luck_max: number;
   monies: number;
   provisions: number;
-  items: KeyList;
+  items: { [key:string]:Item };
   inventory: string[];
   equipped: KeyList;
   skills: KeyList;
   skillValues: { [key: string]: SkillValues }
-  possessions: InventoryItem[],
 }
 
 export interface SkillValues {
@@ -99,7 +103,7 @@ export interface Skill {
   description: string,
 }
 
-export interface Possession {
+export interface Item {
   [key:string]: any,
   armourPiercing: boolean,
   characters?: KeyList,
@@ -123,27 +127,8 @@ export interface Possession {
 
 }
 
-export interface Armour extends InventoryItem {
-  type: "armour"
-  protection: number,
-}
-
-export interface Weapon extends InventoryItem {
-  type: "weapon",
-  damage: number[],
-  twoHanded: boolean,
-  armourPiercing: boolean,
-  charges?: {
-    current: number; max: number
-  };
-}
 
 
-export interface Item extends InventoryItem {
-  type: "item"
-
-  modifiers: Modifier[];
-}
 
 export type Target = "self" | "enemy" | "player" | "object";
 

@@ -16,7 +16,6 @@ import RemoveSkillDialog from './RemoveSkillDialog';
 
 interface CharacterSkillsProps {
   characterKey: string,
-  skills?: { [key: string]: Skill } | KeyList
 }
 
 const initialState: { add: boolean; new: boolean; edit: boolean; remove: boolean } = {
@@ -30,7 +29,6 @@ const initialState: { add: boolean; new: boolean; edit: boolean; remove: boolean
 const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: CharacterSkillsProps) => {
   const {
     characterKey,
-    skills,
   } = props;
 
   const theme = useTheme();

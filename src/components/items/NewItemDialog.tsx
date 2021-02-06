@@ -21,7 +21,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { useAuth } from '../../store/selectors';
 import { useFirebase } from 'react-redux-firebase';
-import { Possession } from '../../store/Schema';
+import { Item } from '../../store/Schema';
 import { Add } from '@material-ui/icons';
 import Box from '@material-ui/core/Box';
 import NameInput from './forms/NameInput';
@@ -42,7 +42,7 @@ interface NewItemDialogProps {
   srd?: boolean;
 }
 
-const initialState: Possession = {
+const initialState: Item = {
   ranged        : false,
   armourPiercing: false,
   customSize    : false,
@@ -79,7 +79,7 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
   const auth = useAuth();
   const firebase = useFirebase();
 
-  const [values, setValues] = useState<Possession>(initialState);
+  const [values, setValues] = useState<Item>(initialState);
   const [isSaving, setIsSaving] = useState(false);
 
   const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +99,7 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
 
   function handleValueUpdates(updates: FormValueChange<any>[]) {
 
-    const update = updates.reduce<Partial<Possession>>((prev, curr, index) => {
+    const update = updates.reduce<Partial<Item>>((prev, curr, index) => {
       const sizeOverride = calculateSize(values, curr);
       console.log(curr.id, curr.value);
 
@@ -120,15 +120,12 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
           [character]: true,
         }
                           : null;
-    const itemRef = await firebase.ref('/items')
+    const itemRef:string|null = firebase.ref(`/characters/${character}/items/`)
                                   .push({
                                           ...values,
-                                          owner     : srd
-                                                      ? "srd"
-                                                      : auth.uid,
-                                          characters: characterKeys,
-                                        });
-    if (itemRef.key)
+                                          owner     : auth.uid,
+                                        }).key;
+    if (itemRef)
     {
       if(!character){
         setValues(initialState);
@@ -137,21 +134,20 @@ const NewItemDialog: FunctionComponent<NewItemDialogProps> = (props: NewItemDial
         return
       }
 
-      const newInventory = [...(inventory ?? []), itemRef.key]
+      const newInventory = [...(inventory ?? []), itemRef]
 
-      const saveToProfile = firebase.ref(`/profiles/${auth.uid}/items/${itemRef.key}`).set(true);
-      const saveToCharacter = firebase.ref(`/characters/${character}/items/${itemRef.key}`)
-                    .set(true);
+      const saveToProfile = firebase.ref(`/profiles/${auth.uid}/items/${itemRef}`).set(true);
+
       const saveToCharacterInventory= firebase.ref(`/characters/${character}/inventory`).set(newInventory);
 
 
       await Promise.all([
                           saveToProfile,
-                          saveToCharacter,
                           saveToCharacterInventory
                         ]);
       setIsSaving(false);
     } else {
+      console.error("item note saved" )
       setIsSaving(false);
     }
 

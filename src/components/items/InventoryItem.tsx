@@ -1,8 +1,8 @@
 import React, {
-  FunctionComponent, PropsWithChildren, useState, useEffect,
+  FunctionComponent, PropsWithChildren, useState, useEffect, useCallback,
 } from 'react';
 import {
-  useFirebase, useFirebaseConnect, isLoaded,
+  useFirebase, useFirebaseConnect, isLoaded, isEmpty,
 } from 'react-redux-firebase';
 import { useAuth, useItem } from '../../store/selectors';
 import {
@@ -13,7 +13,7 @@ import {
   Switch,
   FormControlLabel,
   SvgIcon,
-  Collapse,
+  Collapse, Avatar,
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import {
@@ -29,7 +29,7 @@ import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import SettingsApplicationsOutlinedIcon
   from '@material-ui/icons/SettingsApplicationsOutlined';
 import IconButton from '@material-ui/core/IconButton';
-import { Possession, KeyList } from '../../store/Schema';
+import { Item, KeyList } from '../../store/Schema';
 import { ReactComponent as SwordIconOutline } from './sword-outline-svgrepo-com.svg';
 import { ReactComponent as SwordIconFilled } from './sword-filled-svgrepo-com.svg';
 import { ReactComponent as LightningOutline } from './lightning-outline-svgrepo-com.svg';
@@ -44,34 +44,37 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import DamageSection from './forms/DamageSection';
 import ChargesSection from './forms/ChargesSection';
 import CustomSizeSection from './forms/CustomSizeSection';
+import SectionToggleIcon from './SectionToggleIcon';
+import { useTypedSelector } from '../../store';
+import {
+  DraggableId,
+  DraggableChildrenFn,
+  DraggableProvidedDragHandleProps,
+  DraggableProps, Draggable,
+} from 'react-beautiful-dnd';
 
 interface IInventoryItemProps {
   id: string;
+  index: number;
   onRemove: (id: string) => void,
+  characterKey: string;
+  dragHandleProps?:DraggableProvidedDragHandleProps
 }
 
 type InventoryItemProps = PropsWithChildren<IInventoryItemProps>
 
-interface SectionToggleIconProps {
-  section: string;
-  activeIcon: JSX.Element;
-  inactiveIcon: JSX.Element;
-  show: boolean;
-  expanded: boolean;
-  onToggle: (section: string) => void,
-}
 
 //COMPONENT
-const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryItemProps) => {
+const InventoryItem: FunctionComponent<InventoryItemProps> = React.memo((props: InventoryItemProps) => {
   const {
-    id, onRemove
+    id, onRemove, characterKey, dragHandleProps, index
   } = props;
   const classes = useStyles();
   const firebase = useFirebase();
   const auth = useAuth();
-  useFirebaseConnect([`/items/${id}`]);
-  const item: Possession = useItem(id);
-  const [values, setValues] = useState<Partial<Possession>>({
+  useFirebaseConnect([`/characters/${characterKey}/items/${id}`]);
+  const item: Item = useTypedSelector(state=>state.firebase.data?.characters?.[characterKey]?.items?.[id])
+  const [values, setValues] = useState<Partial<Item>>({
                                                               armourPiercing: false,
                                                               characters    : undefined,
                                                               charges       : {
@@ -95,7 +98,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                                                             });
 
   useEffect(() => {
-    if (isLoaded(item)) setValues(item);
+    if (isLoaded(item) && !isEmpty(item)) setValues(item);
   }, [item]);
   const [expanded, setExpanded] = useState<KeyList>({
                                                       damage        : false,
@@ -103,39 +106,43 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                                                       charges       : false,
                                                       customSize    : false,
     settings: false,
-                                                      sectionToggles: values.name ==
-                                                                      "New Item",
+                                                      sectionToggles: false,
                                                     });
 
-  const toggle = (section: string) => {
+  const toggle = useCallback((section: string) => {
     setExpanded({
                   ...expanded,
                   [section]: !expanded[section],
                 });
-  };
+  }, [expanded]);
 
-  const handleChange: FormValueChangeHandler = async (updates) => {
+  const handleChange: FormValueChangeHandler = useCallback(async (updates) => {
 
-    const update = updates.reduce<Partial<Possession>>((prev, curr, index) => {
+    const update = updates.reduce<Partial<Item>>((prev, curr, index) => {
       const sizeOverride = calculateSize(item, curr);
 
       return {
         ...prev,
         [curr.id]: curr.value, ...sizeOverride,
+
       };
     }, {});
 
-    const result = await firebase.ref(`/items/${id}`).update(update);
+    const result = await firebase.ref(`/characters/${characterKey}/items/${id}`).update(update);
 
-  };
+  }, [characterKey, id]);
 
   return (
-      <Grid item
-            xs={12}><Card>
-        <CardHeader avatar={<DragHandle />}
+      <Draggable draggableId={id} index={index}>{(provided, snapshot)=>(
+      <Grid item xs={12}
+            innerRef={provided.innerRef}
+            {...provided.draggableProps}
+            >
+          <Card>
+            <CardHeader avatar={<Avatar>{values?.size}</Avatar>}
                     className={classes.cardHeader}
                     titleTypographyProps={{variant: "h6"}}
-                    title={item?.name}
+                    title={`${item?.name}${item?.hasCharges ? ` - ${item.charges?.initial} / ${item.charges?.max}` : ""}`}
                     subheader={values?.description}
                     subheaderTypographyProps={{
                       variant: "body1",
@@ -145,7 +152,9 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                                               control={
                                                 <Switch color="primary" />}
                                               label="Equip"
-                                              labelPlacement="bottom" />} />
+                                              labelPlacement="bottom" />}
+                        {...provided.dragHandleProps}
+            />
 
         <CardActions className={classes.cardActions}>
           <div className={classes.sectionToggles}>
@@ -246,27 +255,10 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
               </Collapse>
          </>
          : ""}
-      </Card></Grid>);
-};
+          </Card>
+      </Grid>)}</Draggable>);
+});
 
-const SectionToggleIcon = ({
-                             section,
-                             activeIcon,
-                             inactiveIcon,
-                             expanded,
-                             onToggle,
-                             show,
-                           }: SectionToggleIconProps) => {
-
-  return show
-         ? <IconButton onClick={() => onToggle(section)}>
-           {expanded
-            ? activeIcon
-            : inactiveIcon}
-         </IconButton>
-         : <></>;
-
-};
 
 const useStyles = makeStyles((theme: Theme) => (
     {

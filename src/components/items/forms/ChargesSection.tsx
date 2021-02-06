@@ -55,17 +55,6 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
     };
 
 
-    if (id == "initial" && newCharges?.initial && newCharges?.max &&
-        newCharges.initial > newCharges.max)
-    {
-      newCharges.max = newCharges.initial;
-    }
-
-    if (id == "max" && newCharges?.initial && newCharges?.max &&
-        newCharges.max < newCharges.initial)
-    {
-      newCharges.initial = newCharges.max;
-    }
 
     onChange([
                {

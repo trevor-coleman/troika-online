@@ -44,7 +44,15 @@ const extraArgument = {
 
 const middleware = [
   ...getDefaultMiddleware({
-    serializableCheck: {
+    immutableCheck: {
+      ignoredActions: [
+        // just ignore every redux-firebase and react-redux-firebase action type
+        ...Object.keys(rrfActionTypes)
+                 .map(type => `@@reactReduxFirebase/${type}`)
+      ],
+      ignoredPaths  : ['firebase']
+    },
+                            serializableCheck: {
       ignoredActions: [
         // just ignore every redux-firebase and react-redux-firebase action type
         ...Object.keys(rrfActionTypes)

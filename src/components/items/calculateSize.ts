@@ -1,8 +1,8 @@
 import { FormValueChange } from './forms/FormValueChange';
-import { Possession } from '../../store/Schema';
+import { Item } from '../../store/Schema';
 
-export function calculateSize(values: Possession, update: FormValueChange<any>) {
-  const sizeOverride: Partial<Possession> = {};
+export function calculateSize(values: Item, update: FormValueChange<any>) {
+  const sizeOverride: Partial<Item> = {};
   const {
     id,
     value,
