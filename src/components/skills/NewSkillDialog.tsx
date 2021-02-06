@@ -1,4 +1,8 @@
-import React, { FunctionComponent, useState, ChangeEvent } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  ChangeEvent, useCallback,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -36,33 +40,30 @@ const NewSkillDialog: FunctionComponent<NewSkillDialogProps> = (props: NewSkillD
     name: '',
   });
 
-  function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
+  const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>)=> {
     setValues({
       ...values,
       [e.target.id]: e.target.value,
     });
-  }
+  }, [values]);
 
   async function saveSkill() {
 
     const characterKeys =  character ? {
       [character]:true
     } : null;
-    const skillRef = await firebase.ref('/skills')
+    const skillRef = await firebase.ref(`/characters/${character}/skills/`)
                              .push({
                                ...values,
                                owner: srd? "srd" : auth.uid,
                                characters: characterKeys,
                              });
-    if (skillRef.key && character) {
-      await firebase.ref(`/characters/${character}/skills/${skillRef.key}`).set(true);
-    }
+
     setValues({
       description: '',
       name: ''})
 
     onClose();
-
   }
 
   const isValid = values.name?.length && values.name.length > 0;

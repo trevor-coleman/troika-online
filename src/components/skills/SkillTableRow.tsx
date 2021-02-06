@@ -1,5 +1,5 @@
 import React, {
-  FunctionComponent, useEffect, useState, ChangeEvent,
+  FunctionComponent, useEffect, useState, ChangeEvent, useCallback,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -21,6 +21,7 @@ import {
   ExpandMore, ChatBubbleOutline, ExpandLess, DeleteOutline, EditOutlined, Casino
 } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
+import { useTypedSelector } from '../../store';
 
 
 interface SkillTableRowProps {
@@ -41,11 +42,10 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
   } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
-  useFirebaseConnect([`/skills/${skillKey}`]);
-  useFirebaseConnect([`/characters/${characterKey}/skillValues/${skillKey}`]);
+  useFirebaseConnect([`/characters/${characterKey}/skill/${skillKey}`,
+                      `/characters/${characterKey}/skillValues/${skillKey}`]);
 
-  const skill = useSkill(skillKey);
-  const character = useCharacter(characterKey);
+  const skill = useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.skills?.[skillKey])
   const skillValues = useCharacterSkillValues(characterKey, skillKey);
   const firebase = useFirebase();
   const auth = useAuth();
@@ -56,8 +56,8 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
     skill: 0,
   });
 
-  async function handleChecked(e: ChangeEvent<HTMLInputElement>,
-                               used: boolean)
+  const  handleChecked = useCallback((e: ChangeEvent<HTMLInputElement>,
+                               used: boolean) =>
   {
     const newValues = {
       ...values,
@@ -65,11 +65,11 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
     };
     setValues(newValues);
 
-    await firebase.ref(`/characters/${characterKey}/skillValues/${skillKey}`)
+    firebase.ref(`/characters/${characterKey}/skillValues/${skillKey}`)
                   .set(newValues);
-  }
+  }, [characterKey, skillKey, values])
 
-  async function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+  const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
     let intValue: number = parseInt(e.target.value);
     const newValue = intValue > 0
@@ -83,25 +83,16 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
 
     setValues(newValues);
 
-    await firebase.ref(`/characters/${characterKey}/skillValues/${skillKey}`)
+    firebase.ref(`/characters/${characterKey}/skillValues/${skillKey}`)
                   .set(newValues);
-  }
+  }, [values, characterKey, skillKey])
 
   const [expand, setExpand] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
-  const toggleExpand = () => {
+  const toggleExpand = useCallback(() => {
     setExpand(!expand);
-  };
+  },[expand]);
 
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-  const open = Boolean(anchorEl);
 
   useEffect(() => {
     if (isLoaded(skillValues)) {
@@ -113,6 +104,8 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
     }
 
   }, [skillValues]);
+
+  console.log(skill);
 
   return (
       isLoaded(skill)

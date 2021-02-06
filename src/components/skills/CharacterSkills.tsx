@@ -53,13 +53,10 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
                    : newState);
   }
 
-  async function removeSkill(selectedSkill: string) {
-    await Promise.all([
-      firebase.ref(`/skills/${selectedSkill}/characters/${characterKey}`)
-              .set(null),
-      firebase.ref(`/characters/${characterKey}/skills/${selectedSkill}`)
-              .set(null),
-    ])
+  function removeSkill(selectedSkill: string) {
+    firebase.ref(`/characters/${characterKey}/skills/${selectedSkill}`)
+              .set(null)
+
   }
 
   return (
