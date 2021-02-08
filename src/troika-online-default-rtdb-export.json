@@ -1,0 +1,2843 @@
+{
+  "character" : {
+    "-MSVsIsgxJNjkguuZwwb" : {
+      "inventory" : {
+        "-MSoFQseyz1FtbpN-19W" : "-MSoFQ_-xsVsi84E-KJW",
+        "-MSoFVWebfLfQfVbRAs9" : "-MSoFUWQF-1Pd1Pctd-4",
+        "-MSoFVWjhRxI0XbbPSGF" : "-MSoFUgGS6C6m-FqAK5q",
+        "-MSoFVWkO_htfWz0dzB6" : "-MSoFUm9bT6AloN1FMDH",
+        "-MSoFVWmjnvZTchuX7uh" : "-MSoFUpR_K-BRS9sd_uW",
+        "-MSoFVWnaaeM-5jD69Vr" : "-MSoFUtSk4cvoV-kc1iy",
+        "-MSoFVWsNWttUQYhEVKy" : "-MSoFUwvAW80JH3ohQ77"
+      },
+      "items" : {
+        "-MSoFQ_-xsVsi84E-KJW" : true,
+        "-MSoFUWQF-1Pd1Pctd-4" : true,
+        "-MSoFUgGS6C6m-FqAK5q" : true,
+        "-MSoFUm9bT6AloN1FMDH" : true,
+        "-MSoFUpR_K-BRS9sd_uW" : true,
+        "-MSoFUtSk4cvoV-kc1iy" : true,
+        "-MSoFUwvAW80JH3ohQ77" : true
+      }
+    },
+    "-MSoG88z4tVJBCl-Iefk" : {
+      "inventory" : {
+        "-MSoGEM8BiSTs0hIAn3t" : [ "-MSoGDqGMaADnlV8bfbE" ],
+        "-MSoGEMNRPY_QK38o4iJ" : [ "-MSoGDvQfdOgQPQU5DsZ" ]
+      },
+      "items" : {
+        "-MSoGDqGMaADnlV8bfbE" : true,
+        "-MSoGDvQfdOgQPQU5DsZ" : true
+      }
+    }
+  },
+  "characters" : {
+    "-MSU1ZGhsdnyYB-2c3X8" : {
+      "game" : "-MSU1YvwB3Xa1gJGDx1f",
+      "inventory" : [ "-MStDhOVjrU5FcknYEiL", "-MStFFy4k520bzTeJ04y" ],
+      "items" : {
+        "-MStDhOVjrU5FcknYEiL" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 5,
+            "max" : 8
+          },
+          "customSize" : false,
+          "damage" : [ "6", 2, 4, 4, 6, 12, 16 ],
+          "damagesAs" : "custom",
+          "description" : "A pistolet is a hand held energy Weapon. Holds enough energy for 8 shots.",
+          "doesDamage" : true,
+          "hasCharges" : true,
+          "hasModifiers" : false,
+          "name" : "Pistolet",
+          "owner" : "srd",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : false,
+          "size" : 1,
+          "sort_name" : "pistolet",
+          "twoHanded" : false
+        },
+        "-MStFFy4k520bzTeJ04y" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 5,
+            "max" : 6
+          },
+          "customSize" : false,
+          "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+          "damagesAs" : "unarmed",
+          "description" : "",
+          "doesDamage" : false,
+          "hasCharges" : true,
+          "hasModifiers" : false,
+          "name" : "Silver Pence",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : false,
+          "size" : 1,
+          "twoHanded" : false
+        }
+      },
+      "luck_current" : "12",
+      "luck_max" : "12",
+      "name" : "Sir Gary",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+      "skill" : "14",
+      "skillList" : [ "-MStTgx_McTFp7vXOlrj" ],
+      "skillValues" : {
+        "-MSQq10U0DofCRkiVWCs" : {
+          "rank" : 0,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MSTCpsOBRZX3rCnn0Rx" : {
+          "rank" : 0,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MStNsFkx7jtEnYEoZtq" : {
+          "rank" : 3,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MStTgx_McTFp7vXOlrj" : {
+          "rank" : 4,
+          "skill" : 3,
+          "used" : false
+        }
+      },
+      "skills" : {
+        "-MStNsFkx7jtEnYEoZtq" : {
+          "characters" : {
+            "-MSU1ZGhsdnyYB-2c3X8" : true
+          },
+          "description" : "Here it is!",
+          "name" : "Test Skill",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+        },
+        "-MStS0TbJ69pxsjL1k8Q" : {
+          "characters" : {
+            "-MSU1ZGhsdnyYB-2c3X8" : true
+          },
+          "description" : "Test",
+          "name" : "Test",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+        },
+        "-MStSTL3rqvDccGiChFY" : {
+          "characters" : {
+            "-MSU1ZGhsdnyYB-2c3X8" : true
+          },
+          "description" : "fsdf",
+          "name" : "fsdf",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+        },
+        "-MStTgx_McTFp7vXOlrj" : {
+          "characters" : {
+            "-MSU1ZGhsdnyYB-2c3X8" : true
+          },
+          "description" : "fjkdjls",
+          "name" : "Yest",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+        }
+      },
+      "sort_name" : "new npc",
+      "stamina_current" : "13",
+      "stamina_max" : "13"
+    },
+    "-MSVoO3m4DAUin9OHWwa" : {
+      "game" : "-MSVoNOfjO1CHCxlTkI5",
+      "luck_current" : "11",
+      "name" : "New NPC",
+      "owner" : "B5PMkqqReBgyM5QcHdjVetuG29l1",
+      "skill" : "6",
+      "skills" : {
+        "-MSVCAGjXHjAVve2Lhn7" : true,
+        "-MSVCE_F5z8TAillYH6O" : true,
+        "-MSVCUfJpW2r9Rc6Fn9b" : true,
+        "-MSVD1RjhILusTOcHY2B" : true
+      },
+      "sort_name" : "new npc",
+      "stamina_current" : "8"
+    },
+    "-MSVp1OF_anYMCkcAjEi" : {
+      "game" : "-MSVp0dV9kC_KiNqKJcl",
+      "luck_current" : "7",
+      "luck_max" : "12",
+      "name" : "New NPC",
+      "owner" : "B5PMkqqReBgyM5QcHdjVetuG29l1",
+      "skill" : "5",
+      "skillValues" : {
+        "-MSVpDw3hpab_qiwXsUi" : {
+          "rank" : 3,
+          "skill" : 5,
+          "used" : false
+        }
+      },
+      "skills" : {
+        "-MSVpDw3hpab_qiwXsUi" : true
+      },
+      "sort_name" : "new npc",
+      "stamina_current" : "5",
+      "stamina_max" : "22"
+    },
+    "-MSVq1b4zv-a11gWQcTK" : {
+      "game" : "-MSVq19Vsm2IYsMCmrBx",
+      "name" : "New NPC",
+      "owner" : "B5PMkqqReBgyM5QcHdjVetuG29l1",
+      "sort_name" : "new npc"
+    },
+    "-MSVsIsgxJNjkguuZwwb" : {
+      "game" : "-MSU1YvwB3Xa1gJGDx1f",
+      "inventory" : [ "-MSoFQ_-xsVsi84E-KJW" ],
+      "luck_current" : "5",
+      "luck_max" : "4",
+      "name" : "New NPC",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+      "skill" : "5",
+      "skillValues" : {
+        "-MSQdGCpaJTo00Je27sS" : {
+          "rank" : 3,
+          "skill" : 4,
+          "used" : false
+        }
+      },
+      "skills" : {
+        "-MSQdGCpaJTo00Je27sS" : true,
+        "-MSQhxmRF9AkKzkvPfXN" : true,
+        "-MSQq10U0DofCRkiVWCs" : true,
+        "-MSVCAGjXHjAVve2Lhn7" : true,
+        "-MSVCE_F5z8TAillYH6O" : true
+      },
+      "sort_name" : "new npc",
+      "stamina_current" : "4",
+      "stamina_max" : "3"
+    },
+    "-MSYuD2W2xrlOZCRy_Ez" : {
+      "background" : "Close-talking Hugger",
+      "game" : "-MSU1YvwB3Xa1gJGDx1f",
+      "inventory" : [ "-MT2DKB_FP9jt_BVLlGI", "-MT2DU3hOwUkJ7k2-87p" ],
+      "items" : {
+        "-MT2DKB_FP9jt_BVLlGI" : {
+          "doesDamage" : true,
+          "size" : 1
+        }
+      },
+      "luck_current" : "4",
+      "luck_max" : "4",
+      "name" : "Gerald, the Disquieting",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+      "portrait" : "portraits/-MSYuD2W2xrlOZCRy_Ez.jpg",
+      "portraits" : {
+        "-MSZpW_g5-AVaVMbf5Cx" : {
+          "bucket" : "troika-online.appspot.com",
+          "contentDisposition" : "inline; filename*=utf-8''-MSYuD2W2xrlOZCRy_Ez.jpg",
+          "contentEncoding" : "identity",
+          "contentType" : "image/jpeg",
+          "fullPath" : "portraits/-MSYuD2W2xrlOZCRy_Ez.jpg",
+          "generation" : "1612304488711091",
+          "md5Hash" : "iuEzkEvIH3oJg9sJv+IjtQ==",
+          "metageneration" : "1",
+          "name" : "-MSYuD2W2xrlOZCRy_Ez.jpg",
+          "size" : 45382,
+          "timeCreated" : "2021-02-02T22:21:28.712Z",
+          "type" : "file",
+          "updated" : "2021-02-02T22:21:28.712Z"
+        }
+      },
+      "skill" : "6",
+      "skillValues" : {
+        "-MSQdBp9FA8S01sMr9S8" : {
+          "rank" : 3,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MSQdGCpaJTo00Je27sS" : {
+          "rank" : 0,
+          "skill" : 3,
+          "used" : false
+        },
+        "-MSQhxmRF9AkKzkvPfXN" : {
+          "rank" : 3,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MSVBfs7016bM1A1TrUK" : {
+          "rank" : 3,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MSVC435O9WrGZEJDKCO" : {
+          "rank" : 0,
+          "skill" : 2,
+          "used" : true
+        },
+        "-MSVCAGjXHjAVve2Lhn7" : {
+          "rank" : 3,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MSVCE_F5z8TAillYH6O" : {
+          "rank" : 0,
+          "skill" : 0,
+          "used" : true
+        }
+      },
+      "skills" : {
+        "-MSQhxmRF9AkKzkvPfXN" : true,
+        "-MSVBfs7016bM1A1TrUK" : true,
+        "-MSVC435O9WrGZEJDKCO" : true,
+        "-MSVCAGjXHjAVve2Lhn7" : true,
+        "-MSVCE_F5z8TAillYH6O" : true,
+        "-MSVCJediRtFYIP1zhmj" : true
+      },
+      "sort_name" : "new npc",
+      "special" : "",
+      "stamina_current" : "3",
+      "stamina_max" : "3"
+    },
+    "-MSoG88z4tVJBCl-Iefk" : {
+      "game" : "-MSU1YvwB3Xa1gJGDx1f",
+      "inventory" : [ "-MSt7E-IXt2HkQ_i6adt", "-MSt7DyP0Wm-dTqY-1y3", "-MSt7DzPz9wj0Hmyt1Ue" ],
+      "items" : {
+        "-MSt7DyP0Wm-dTqY-1y3" : {
+          "armourPiercing" : false,
+          "character" : {
+            "-MSYykH2Yql7mcYYlwmT" : true
+          },
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 2, 2, 6, 6, 8, 10, 12 ],
+          "damagesAs" : "axe",
+          "description" : "Melee Weapon",
+          "doesDamage" : true,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Axe",
+          "owner" : "srd",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : false,
+          "size" : 1,
+          "sort_name" : "axe",
+          "twoHanded" : false
+        },
+        "-MSt7DzPz9wj0Hmyt1Ue" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 2, 4, 6, 8, 8, 10, 12 ],
+          "damagesAs" : "bow",
+          "description" : "",
+          "doesDamage" : true,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Bow",
+          "owner" : "srd",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : true,
+          "size" : 2,
+          "sort_name" : "bow",
+          "twoHanded" : true
+        },
+        "-MSt7E-IXt2HkQ_i6adt" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 1, 1, 2, 3, 6, 8, 10 ],
+          "damagesAs" : "club",
+          "description" : "",
+          "doesDamage" : true,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Club",
+          "owner" : "srd",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : false,
+          "size" : 1,
+          "sort_name" : "club",
+          "twoHanded" : false
+        }
+      },
+      "name" : "Test Character",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+      "sort_name" : "new npc"
+    },
+    "-MStU0o8eUFcwB7sRFy0" : {
+      "background" : "Questing Knight",
+      "game" : "-MStU-vZFmT-4kSiEgCL",
+      "inventory" : [ "-MStWK87GIvWK0f2zsGJ", "-MStWqc1FK0TO326dFaP", "-MStWnFFCt-ExmuU7Nsy", "-MStXH7hAXRocKLbSOHK", "-MStXRsoe5CWtFaKzQiD", "-MSuSn4E5MuU1hK26Ra7", "-MStUeOdBqtlFAgaFGVx", "-MSuUdRaI06Db4By8jkn" ],
+      "items" : {
+        "-MStUeOdBqtlFAgaFGVx" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+          "damagesAs" : "unarmed",
+          "description" : "",
+          "doesDamage" : false,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Inkleton Family Plate Armour",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+          "protection" : -3,
+          "protects" : true,
+          "protectsAs" : -3,
+          "ranged" : false,
+          "size" : 6,
+          "twoHanded" : false
+        },
+        "-MStWK87GIvWK0f2zsGJ" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 2, 2, 2, 4, 4, 6, 8 ],
+          "damagesAs" : "shield",
+          "description" : "",
+          "doesDamage" : true,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Shield",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+          "protection" : -3,
+          "protects" : false,
+          "protectsAs" : -3,
+          "ranged" : false,
+          "size" : 1,
+          "twoHanded" : false
+        },
+        "-MStWnFFCt-ExmuU7Nsy" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 4, 4, 6, 6, 8, 8, 10 ],
+          "damagesAs" : "spear",
+          "description" : "",
+          "doesDamage" : true,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Lance",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+          "protection" : -3,
+          "protects" : false,
+          "protectsAs" : -3,
+          "ranged" : false,
+          "size" : 1,
+          "twoHanded" : false
+        },
+        "-MStWqc1FK0TO326dFaP" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 4, 6, 6, 6, 6, 8, 10 ],
+          "damagesAs" : "sword",
+          "description" : "",
+          "doesDamage" : true,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Sword",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+          "protection" : -3,
+          "protects" : false,
+          "protectsAs" : -3,
+          "ranged" : false,
+          "size" : 1,
+          "twoHanded" : false
+        },
+        "-MStXH7hAXRocKLbSOHK" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 2,
+            "max" : 2
+          },
+          "customSize" : false,
+          "damage" : [ 4, 6, 6, 6, 6, 8, 10 ],
+          "damagesAs" : "sword",
+          "description" : "",
+          "doesDamage" : false,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Lantern",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+          "protection" : -3,
+          "protects" : false,
+          "protectsAs" : -3,
+          "ranged" : false,
+          "size" : 1,
+          "twoHanded" : false
+        },
+        "-MStXRsoe5CWtFaKzQiD" : {
+          "armourPiercing" : false,
+          "character" : {
+            "-MSYykH2Yql7mcYYlwmT" : true
+          },
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 2, 2, 2, 2, 4, 8, 10 ],
+          "damagesAs" : "knife",
+          "description" : "",
+          "doesDamage" : true,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Knife",
+          "owner" : "srd",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : false,
+          "size" : 1,
+          "sort_name" : "knife",
+          "twoHanded" : false
+        },
+        "-MSuSn4E5MuU1hK26Ra7" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 6,
+            "max" : 6
+          },
+          "customSize" : true,
+          "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+          "damagesAs" : "unarmed",
+          "description" : "",
+          "doesDamage" : false,
+          "hasCharges" : true,
+          "hasModifiers" : false,
+          "name" : "Provisions",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : false,
+          "size" : "6",
+          "twoHanded" : false
+        },
+        "-MSuUdRaI06Db4By8jkn" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 6,
+            "max" : 6
+          },
+          "customSize" : false,
+          "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+          "damagesAs" : "unarmed",
+          "description" : "Obtained from the Mandril. Has billing policies and maps / emergency exits.",
+          "doesDamage" : false,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Hotel Information Pamphlet",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : false,
+          "size" : 1,
+          "twoHanded" : false
+        }
+      },
+      "luck_current" : "11",
+      "luck_max" : "12",
+      "name" : "Sir Gary of House Inkleton",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+      "portrait" : "portraits/-MStU0o8eUFcwB7sRFy0.jpg",
+      "portraits" : {
+        "-MStZpSexMChso4TTT-E" : {
+          "bucket" : "troika-online.appspot.com",
+          "contentDisposition" : "inline; filename*=utf-8''-MStU0o8eUFcwB7sRFy0.jpg",
+          "contentEncoding" : "identity",
+          "contentType" : "image/jpeg",
+          "fullPath" : "portraits/-MStU0o8eUFcwB7sRFy0.jpg",
+          "generation" : "1612652435050230",
+          "md5Hash" : "hnIXWroFJf68EEnqN9UG6g==",
+          "metageneration" : "1",
+          "name" : "-MStU0o8eUFcwB7sRFy0.jpg",
+          "size" : 113404,
+          "timeCreated" : "2021-02-06T23:00:35.051Z",
+          "type" : "file",
+          "updated" : "2021-02-06T23:00:35.051Z"
+        }
+      },
+      "skill" : "5",
+      "skillList" : [ "-MStUs3JYCD5x2mLgOHj", "-MStUxZRAXC6FAyX6yEQ", "-MStV2NLmEHR-lgcSKgV", "-MStVawVqcTyj9NnjH93", "-MStVi645X6q-wnw4BFa" ],
+      "skillValues" : {
+        "-MStUs3JYCD5x2mLgOHj" : {
+          "rank" : 3,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MStUxZRAXC6FAyX6yEQ" : {
+          "rank" : 2,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MStV2NLmEHR-lgcSKgV" : {
+          "rank" : 4,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MStVawVqcTyj9NnjH93" : {
+          "rank" : 1,
+          "skill" : 0,
+          "used" : false
+        },
+        "-MStVi645X6q-wnw4BFa" : {
+          "rank" : 1,
+          "skill" : 0,
+          "used" : false
+        }
+      },
+      "skills" : {
+        "-MStUs3JYCD5x2mLgOHj" : {
+          "characters" : {
+            "-MStU0o8eUFcwB7sRFy0" : true
+          },
+          "description" : "",
+          "name" : "Jousting",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+        },
+        "-MStUxZRAXC6FAyX6yEQ" : {
+          "characters" : {
+            "-MStU0o8eUFcwB7sRFy0" : true
+          },
+          "description" : "",
+          "name" : "Sword Fighting",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+        },
+        "-MStV2NLmEHR-lgcSKgV" : {
+          "characters" : {
+            "-MStU0o8eUFcwB7sRFy0" : true
+          },
+          "description" : "",
+          "name" : "Spear Fighting",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+        },
+        "-MStVawVqcTyj9NnjH93" : {
+          "characters" : {
+            "-MStU0o8eUFcwB7sRFy0" : true
+          },
+          "description" : "",
+          "name" : "Awareness",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+        },
+        "-MStVi645X6q-wnw4BFa" : {
+          "characters" : {
+            "-MStU0o8eUFcwB7sRFy0" : true
+          },
+          "description" : "",
+          "name" : "Etiquette",
+          "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+        }
+      },
+      "sort_name" : "new npc",
+      "special" : "My p",
+      "stamina_current" : "14",
+      "stamina_max" : "14"
+    },
+    "-MT1zo9BfFVSQkTetrhb" : {
+      "game" : "-MSu7-IeGg6kq6kcCuSS",
+      "inventory" : [ "-MT28H5dkG0EtCWhrE87" ],
+      "items" : {
+        "-MT25aetpsEc5nebhxUj" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+          "damagesAs" : "unarmed",
+          "description" : "Requires twenty minutes to set up and use but doesn’t need to be outside. Consists of a ruby specular, charms against reciprocal observation, and complicated charts of the spheres. Grants +1 to Astrology.",
+          "doesDamage" : false,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Astrological Equipment",
+          "owner" : "srd",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : false,
+          "size" : 1,
+          "sort_name" : "astrological equipment",
+          "twoHanded" : false
+        }
+      },
+      "name" : "New NPC Character",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+      "skills" : {
+        "-MT28H5dkG0EtCWhrE87" : {
+          "armourPiercing" : false,
+          "charges" : {
+            "initial" : 0,
+            "max" : 0
+          },
+          "customSize" : false,
+          "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+          "damagesAs" : "unarmed",
+          "description" : "Requires twenty minutes to set up and use but doesn’t need to be outside. Consists of a ruby specular, charms against reciprocal observation, and complicated charts of the spheres. Grants +1 to Astrology.",
+          "doesDamage" : false,
+          "hasCharges" : false,
+          "hasModifiers" : false,
+          "name" : "Astrological Equipment",
+          "owner" : "srd",
+          "protection" : 0,
+          "protects" : false,
+          "ranged" : false,
+          "size" : 1,
+          "sort_name" : "astrological equipment",
+          "twoHanded" : false
+        }
+      },
+      "sort_name" : "new npc",
+      "special" : "This should be isolated"
+    }
+  },
+  "games" : {
+    "-MSU1YvwB3Xa1gJGDx1f" : {
+      "characters" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true,
+        "-MSVsIsgxJNjkguuZwwb" : true,
+        "-MSYuD2W2xrlOZCRy_Ez" : true,
+        "-MSnyqbB5w9KwKxCBYfB" : true,
+        "-MSoG88z4tVJBCl-Iefk" : true
+      },
+      "invited" : {
+        "RAX7pFmE1eUaP2PJr3zi35Ex0fB3" : true,
+        "bZp75rtl8xhTt19WQt6pTWUm0ra2" : true
+      },
+      "name" : "My Test Game",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+      "sort_name" : "my test game"
+    },
+    "-MSVoNOfjO1CHCxlTkI5" : {
+      "characters" : {
+        "-MSVoO3m4DAUin9OHWwa" : true,
+        "-MSYykH2Yql7mcYYlwmT" : true
+      },
+      "name" : "New Game",
+      "owner" : "B5PMkqqReBgyM5QcHdjVetuG29l1",
+      "sort_name" : "new game"
+    },
+    "-MSVp0dV9kC_KiNqKJcl" : {
+      "characters" : {
+        "-MSVp1OF_anYMCkcAjEi" : true
+      },
+      "name" : "New Game",
+      "owner" : "B5PMkqqReBgyM5QcHdjVetuG29l1",
+      "sort_name" : "new game"
+    },
+    "-MSVq19Vsm2IYsMCmrBx" : {
+      "characters" : {
+        "-MSVq1b4zv-a11gWQcTK" : true
+      },
+      "name" : "New Game",
+      "owner" : "B5PMkqqReBgyM5QcHdjVetuG29l1",
+      "sort_name" : "new game"
+    },
+    "-MStU-vZFmT-4kSiEgCL" : {
+      "characters" : {
+        "-MStU0o8eUFcwB7sRFy0" : true
+      },
+      "name" : "Troikamania",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+      "sort_name" : "troikamania"
+    },
+    "-MSu7-IeGg6kq6kcCuSS" : {
+      "characters" : {
+        "-MT1zo9BfFVSQkTetrhb" : true
+      },
+      "name" : "New Game",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2",
+      "sort_name" : "new game"
+    },
+    "-MSuCtwcnwLOyyegU0WK" : {
+      "name" : "New Game",
+      "owner" : "1V9Gr4AeC2enn5MP6GYkcxXcU0q1",
+      "sort_name" : "new game"
+    }
+  },
+  "profiles" : {
+    "1V9Gr4AeC2enn5MP6GYkcxXcU0q1" : {
+      "avatarUrl" : "https://lh3.googleusercontent.com/a-/AOh14GgUiLMZ9wBU5CLzsu-ab09NPRtficepQE3XxbYmhQ=s96-c",
+      "displayName" : "James Fraser",
+      "email" : "jamfraser@gmail.com",
+      "games" : {
+        "-MSuCtwcnwLOyyegU0WK" : true
+      },
+      "providerData" : [ {
+        "displayName" : "James Fraser",
+        "email" : "jamfraser@gmail.com",
+        "photoURL" : "https://lh3.googleusercontent.com/a-/AOh14GgUiLMZ9wBU5CLzsu-ab09NPRtficepQE3XxbYmhQ=s96-c",
+        "providerId" : "google.com",
+        "uid" : "115004432809439009589"
+      } ]
+    },
+    "B5PMkqqReBgyM5QcHdjVetuG29l1" : {
+      "avatarUrl" : "https://lh3.googleusercontent.com/a-/AOh14GjWH1R8HOLjl1IEuhOEQnciX0rIuQ0Z4-PFhDkW=s96-c",
+      "displayName" : "Evan Dickson",
+      "email" : "dickson.evan@gmail.com",
+      "games" : {
+        "-MSVoNOfjO1CHCxlTkI5" : true,
+        "-MSVp0dV9kC_KiNqKJcl" : true,
+        "-MSVq19Vsm2IYsMCmrBx" : true
+      },
+      "providerData" : [ {
+        "displayName" : "Evan Dickson",
+        "email" : "dickson.evan@gmail.com",
+        "photoURL" : "https://lh3.googleusercontent.com/a-/AOh14GjWH1R8HOLjl1IEuhOEQnciX0rIuQ0Z4-PFhDkW=s96-c",
+        "providerId" : "google.com",
+        "uid" : "115456589707884688474"
+      } ],
+      "receivedRequests" : {
+        "B7ILUsB2usNeWTYgBSSsmm5YAgy2" : true
+      }
+    },
+    "B7ILUsB2usNeWTYgBSSsmm5YAgy2" : {
+      "displayName" : "Trevor Coleman",
+      "email" : "trevor@trevorcoleman.design",
+      "friends" : {
+        "RAX7pFmE1eUaP2PJr3zi35Ex0fB3" : true,
+        "bZp75rtl8xhTt19WQt6pTWUm0ra2" : true
+      },
+      "games" : {
+        "-MSU1YvwB3Xa1gJGDx1f" : true,
+        "-MStU-vZFmT-4kSiEgCL" : true,
+        "-MSu7-IeGg6kq6kcCuSS" : true
+      },
+      "items" : {
+        "-MSncZDKi8GHNVi1mTQ8" : true,
+        "-MSngZsIOlPlcsjgGK8j" : true,
+        "-MSngqVGSskeV-0WsWow" : true,
+        "-MSnh9ERZL50Qe9-YFLI" : true,
+        "-MSniCw22cA6EtPuEeM9" : true,
+        "-MSniwcJZmGnR7ltmZRa" : true,
+        "-MSnjfbvtlnl5axuj3uF" : true,
+        "-MSnjnD7LlYtLg5zC9OA" : true,
+        "-MSnk7g1_CTPDeqr2imc" : true,
+        "-MSnpA2TeolBEJj1Ca7L" : true,
+        "-MSnpU-UySSAruK9ZUY3" : true,
+        "-MStERhQOKweT7mFRg7U" : true,
+        "-MStFFy4k520bzTeJ04y" : true,
+        "-MStUeOdBqtlFAgaFGVx" : true,
+        "-MStWK87GIvWK0f2zsGJ" : true,
+        "-MStWUq7orTvC-jmJQF9" : true,
+        "-MStWnFFCt-ExmuU7Nsy" : true,
+        "-MStWqc1FK0TO326dFaP" : true,
+        "-MStX7ztiRknoGKXOVQy" : true,
+        "-MStX94Q8UW1iH_oJQuN" : true,
+        "-MStXH7hAXRocKLbSOHK" : true,
+        "-MSuSn4E5MuU1hK26Ra7" : true,
+        "-MSuUT0Az5iNbqOeuK_l" : true,
+        "-MSuUdRaI06Db4By8jkn" : true
+      },
+      "sentRequests" : {
+        "B5PMkqqReBgyM5QcHdjVetuG29l1" : true
+      },
+      "sort__name" : "trevor coleman"
+    },
+    "RAX7pFmE1eUaP2PJr3zi35Ex0fB3" : {
+      "displayName" : "Billy",
+      "email" : "billy@billy.com",
+      "friends" : {
+        "B7ILUsB2usNeWTYgBSSsmm5YAgy2" : true,
+        "bZp75rtl8xhTt19WQt6pTWUm0ra2" : true
+      },
+      "invitations" : {
+        "-MSU1YvwB3Xa1gJGDx1f" : true
+      },
+      "sort__name" : "billy"
+    },
+    "bZp75rtl8xhTt19WQt6pTWUm0ra2" : {
+      "displayName" : "TrevorTrevor",
+      "email" : "trevor@trevor.com",
+      "friends" : {
+        "B7ILUsB2usNeWTYgBSSsmm5YAgy2" : true,
+        "RAX7pFmE1eUaP2PJr3zi35Ex0fB3" : true
+      },
+      "invitations" : {
+        "-MSU1YvwB3Xa1gJGDx1f" : true
+      },
+      "sort__name" : "trevortrevor"
+    }
+  },
+  "rolls" : {
+    "testGame" : {
+      "-MSVoYKlhRXe8CXs73rS" : {
+        "dice" : [ 6, 6 ],
+        "roll" : [ 3, 2 ],
+        "title" : "Test Roll - -MSVoYKlhRXe8CXs73rS",
+        "total" : 5
+      },
+      "-MSVoYn0x0H4Y25nvBwT" : {
+        "dice" : [ 6, 6 ],
+        "roll" : [ 4, 4 ],
+        "title" : "Test Roll - -MSVoYn0x0H4Y25nvBwT",
+        "total" : 5
+      },
+      "-MSVoZFtzadNVxfeooW_" : {
+        "dice" : [ 6, 6 ],
+        "roll" : [ 0, 0 ],
+        "title" : "Test Roll - -MSVoZFtzadNVxfeooW_",
+        "total" : 5
+      },
+      "-MSVoZh18XSKGqtNkyIw" : {
+        "dice" : [ 6, 6 ],
+        "roll" : [ 3, 3 ],
+        "title" : "Test Roll - -MSVoZh18XSKGqtNkyIw",
+        "total" : 5
+      },
+      "-MSVo_60LS8O2AqXnH0D" : {
+        "dice" : [ 6, 6 ],
+        "roll" : [ 3, 3 ],
+        "title" : "Test Roll - -MSVo_60LS8O2AqXnH0D",
+        "total" : 5
+      },
+      "-MSVoa8WQwMrY7-DCD_J" : {
+        "dice" : [ 6, 6 ],
+        "roll" : [ 4, 3 ],
+        "title" : "Test Roll - -MSVoa8WQwMrY7-DCD_J",
+        "total" : 5
+      },
+      "-MSVpy6afS7xofnYlXw4" : {
+        "dice" : [ 6, 6 ],
+        "roll" : [ 0, 1 ],
+        "title" : "Test Roll - -MSVpy6afS7xofnYlXw4",
+        "total" : 5
+      },
+      "-MSVpyf_N2VGJjWw-8MD" : {
+        "dice" : [ 6, 6 ],
+        "roll" : [ 1, 4 ],
+        "title" : "Test Roll - -MSVpyf_N2VGJjWw-8MD",
+        "total" : 5
+      }
+    }
+  },
+  "skills" : {
+    "-MSQdBp9FA8S01sMr9S8" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true,
+        "-MSYuD2W2xrlOZCRy_Ez" : true,
+        "-MSnyqbB5w9KwKxCBYfB" : true
+      },
+      "description" : "fjdskjklds",
+      "name" : "This wallabee has no life",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSQdGCpaJTo00Je27sS" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true,
+        "-MSVsIsgxJNjkguuZwwb" : true,
+        "-MSYuD2W2xrlOZCRy_Ez" : true,
+        "-MSnyqbB5w9KwKxCBYfB" : true
+      },
+      "description" : "fjdskjklds",
+      "name" : "We all regret what happened",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSQhxmRF9AkKzkvPfXN" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true,
+        "-MSVsIsgxJNjkguuZwwb" : true,
+        "-MSYuD2W2xrlOZCRy_Ez" : true
+      },
+      "description" : "fsfsd",
+      "name" : "Untimely Demise",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSQq10U0DofCRkiVWCs" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true,
+        "-MSVsIsgxJNjkguuZwwb" : true
+      },
+      "description" : "This is changing the skill for everyone.",
+      "name" : "This is a new skill",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSTCpsOBRZX3rCnn0Rx" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true
+      },
+      "description" : "Selling of fish.",
+      "name" : "Fishmongering",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSTosfZB_TgoeXo-fG1" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true
+      },
+      "description" : "Volkswagen",
+      "name" : "Farfenhuegen",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSU1cwORr9C8y59oP53" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true
+      },
+      "description" : "The usefulness of the ability to clamber up things cannot be overstated. Most climbs should be single rolls though longer or more difficult climbs\nmay require multiple rolls. On these climbs consider requiring a number or total or repeated failures to fall off unless it is a particularly merciless\nascent. The GM should use their discretion.",
+      "name" : "Cherries",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSUCNVlEybelsUznhRL" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true
+      },
+      "description" : "An essential Skill for anyone intent on travelling the stars. Can be used to identify stars and constellations, to gather hints on the destination of interdimensional portals, and to make star charts.",
+      "name" : "Astrology",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSUhLW04OEdwIbGZdVZ" : {
+      "description" : "Hunting Walrus",
+      "name" : "Walrus Hunting",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSUhuPSYEnWFITccS5s" : {
+      "description" : "It makes the money for the weekend.",
+      "name" : "Value Proposition Design",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSUiJvVv3XUwXfEipU5" : {
+      "description" : "Smile like the whole world is watching.",
+      "name" : "Charm Offensive",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSVAoM39CmBztXLRIcF" : {
+      "characters" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true
+      },
+      "description" : "Used for rolling, balancing, falling, jumping, etc.",
+      "name" : "Acrobatics",
+      "owner" : "B7ILUsB2usNeWTYgBSSsmm5YAgy2"
+    },
+    "-MSVBfs7016bM1A1TrUK" : {
+      "character" : {
+        "-MSYuD2W2xrlOZCRy_Ez" : true
+      },
+      "description" : "Used for rolling, balancing, falling, jumping, etc.",
+      "name" : "Acrobatics",
+      "owner" : "srd"
+    },
+    "-MSVC435O9WrGZEJDKCO" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true,
+        "-MSYuD2W2xrlOZCRy_Ez" : true
+      },
+      "description" : "An essential Skill for anyone intent on travelling the stars. Can be used to identify stars and constellations, to gather hints on the destination of interdimensional portals, and to make star charts.\n",
+      "name" : "Astrology",
+      "owner" : "srd"
+    },
+    "-MSVCAGjXHjAVve2Lhn7" : {
+      "character" : {
+        "-MSU1ZGhsdnyYB-2c3X8" : true,
+        "-MSVoO3m4DAUin9OHWwa" : true,
+        "-MSVsIsgxJNjkguuZwwb" : true,
+        "-MSYuD2W2xrlOZCRy_Ez" : true
+      },
+      "description" : "Anything worth having is well hidden so one must look very carefully. Use this to spot traps, things normally hidden, or things out of the ordinary.",
+      "name" : "Awareness",
+      "owner" : "srd"
+    },
+    "-MSVCE_F5z8TAillYH6O" : {
+      "character" : {
+        "-MSVoO3m4DAUin9OHWwa" : true,
+        "-MSVsIsgxJNjkguuZwwb" : true,
+        "-MSYuD2W2xrlOZCRy_Ez" : true,
+        "-MSYykH2Yql7mcYYlwmT" : true
+      },
+      "description" : "The usefulness of the ability to clamber up things cannot be overstated. Most climbs should be single rolls though longer or more difficult climbs may require multiple rolls. On these climbs consider requiring a number or total or repeated failures to fall off unless it is a particularly  merciless ascent. The GM should use their discretion. ",
+      "name" : "Climb",
+      "owner" : "srd"
+    },
+    "-MSVCJediRtFYIP1zhmj" : {
+      "character" : {
+        "-MSYuD2W2xrlOZCRy_Ez" : true
+      },
+      "description" : "This includes any Skill you might think of that comes under the heading of arts and crafts. Blacksmithing, carpentry, painting, opera singing, anything like that. Roll Under the Skill if you want to do something that knowledge of this Skill would reasonably cover. A carpenter might be able to spot a weak bridge while a blacksmith could shoe a horse or an opera singer could identify an aria. Be flexible and reasonable. ",
+      "name" : "Crafting Skills",
+      "owner" : "srd"
+    },
+    "-MSVCMolud1nALL4XoOd" : {
+      "description" : "Covers the use of props to change your appearance. When in disguise you must Roll Under this when someone is liable to see through it. Opposed by Awareness when under scrutiny. ",
+      "name" : "Disguise",
+      "owner" : "srd"
+    },
+    "-MSVCRlMf1lQjgcsM0ya" : {
+      "description" : "When making a good impression is important Roll Versus your host’s Etiquette. Represents a mechanical understanding of social conduct and those who are better at it are more discerning. ",
+      "name" : "Etiquette",
+      "owner" : "srd"
+    },
+    "-MSVCUfJpW2r9Rc6Fn9b" : {
+      "character" : {
+        "-MSVoO3m4DAUin9OHWwa" : true
+      },
+      "description" : "Test this to get an idea of how much something is worth.",
+      "name" : "Evaluate",
+      "owner" : "srd"
+    },
+    "-MSVCY9mQX3lu_l4SeFW" : {
+      "description" : "Use Fly much as you would Run. In normal situations this doesn’t need testing, only in chases or high winds, maybe. Anyone attempting to Fly without this Skill must Test every Round to make sure they don’t crash or lose control.",
+      "name" : "Fly",
+      "owner" : "srd"
+    },
+    "-MSVCaCY-0TXQFPdQa0S" : {
+      "description" : "Test this to navigate between the stars on a ship with golden mirror sails. ",
+      "name" : "Golden Barge Pilot",
+      "owner" : "srd"
+    },
+    "-MSVCdQ-FpV7bE4kLxJu" : {
+      "description" : "Used to stitch wounds and apply ointments, stop bleeding, slow poison and the like. Also used for stabilising dying people. ",
+      "name" : "Healing",
+      "owner" : "srd"
+    },
+    "-MSVCg6dTfOoGfV_CxxM" : {
+      "description" : "Represents relative competence in specific languages and would only need to be Tested if trying to understand something incredibly arcane or technical. It’s assumed that once you have one point in a language you can understand it passably. You get one tick in a language for every month of intense tuition or complete submersion in it.",
+      "name" : "Languages",
+      "owner" : "srd"
+    },
+    "-MSVCj5hcq8vYM_NCHd2" : {
+      "description" : "This allows a character to examine and open locks but does not detect traps. Roll Versus an imaginary locksmith whose Skill is somewhere between 6 and 12 with 6 being easy and 12 being very hard. ",
+      "name" : "Locks",
+      "owner" : "srd"
+    },
+    "-MSVCmDlZKfjIKlcmR23" : {
+      "description" : "Use this to gain insight into angles, pressures, numbers, and other such arcane arts. You could, for instance, Test your Mathmology to get a good idea of the surface tension of a ball of inert plasmic goo or to find the fulcrum for tripping a giant.",
+      "name" : "Mathmology",
+      "owner" : "srd"
+    },
+    "-MSVCopuy_LUfautihT5" : {
+      "description" : "You may Test this Skill during down time to create a single dose of poison. Pick which kind it is when you make it. This list is not exhaustive — more exotic ones may be available if you possess the knowledge and ingredients. 1d3 Common Poisons of Troika: 1 Causes anyone ingesting it to Test their Luck (or Skill for Enemies) or lose 4d6 Stamina. 2 Add 1 to all Damage Rolls while this is applied to piercing or edged Weapons. If you Roll a 1 for Damage the poison has worn off. 3 Causes anyone ingesting it to fall unconscious for 1d6 hours. ",
+      "name" : "Poison",
+      "owner" : "srd"
+    },
+    "-MSVCsTemyfkcTq12dV6" : {
+      "description" : "Everyone is assumed to have basic animal riding Skill though anything more than trotting slowly will require some kind of roll to avoid trouble. ",
+      "name" : "Ride",
+      "owner" : "srd"
+    },
+    "-MSVCv4TrpAHwptrFYxP" : {
+      "description" : "When it matters how fast you are, or if you can reach somewhere in time, use this. A basic chase is an Roll Versus. ",
+      "name" : "Run",
+      "owner" : "srd"
+    },
+    "-MSVCyGH28FC-UHAq_Jk" : {
+      "description" : "Use of this allows the detection of magic. On a successful Test you focus your inner eye and all sorcerous activity glows faintly for a moment. ",
+      "name" : "Second Sight",
+      "owner" : "srd"
+    },
+    "-MSVD1RjhILusTOcHY2B" : {
+      "character" : {
+        "-MSVoO3m4DAUin9OHWwa" : true
+      },
+      "description" : "Used to identify marks, handshakes, code words, etc. of one specific society. You would, for example, be able to read the secret marks left on people’s door posts by fellow hobos. ",
+      "name" : "Secret Signs",
+      "owner" : "srd"
+    },
+    "-MSVD4i1I_p3DnwrBIGj" : {
+      "description" : "Steal or hide small things. This is Tested only if someone is actively looking for them. A character may simply declare they are hiding something, only rolling this when the hiddenness is questioned.",
+      "name" : "Sleight of Hand",
+      "owner" : "srd"
+    },
+    "-MSVD8B6hXhpEWbet5zg" : {
+      "description" : "The art of remaining unseen. This is Tested only when someone or something is actively trying to detect you. The sneaker would Roll Versus the Awareness of those searching for them; anyone beating the sneaker’s score detects them. ",
+      "name" : "Sneak",
+      "owner" : "srd"
+    },
+    "-MSVDBbgjthYIB9qeuTa" : {
+      "description" : "Used for lifting and breaking things. May also be used to grapple people if no grappling-appropriate Weapon Skill is possessed, though it counts for half rounded up. ",
+      "name" : "Strength",
+      "owner" : "srd"
+    },
+    "-MSVDLBxTHP_BOs8MebZ" : {
+      "description" : "Use this while swimming in dangerous waters, diving, holding your breath for long periods, and so on. If you have this Skill you don’t need to roll it for normal conditions. Characters without it are assumed to not be able to swim and need to test Swimming every round they remain in the water or start Drowning (7.9). Receive a penalty to this Skill equal to half the number of item slots filled. ",
+      "name" : "Swim",
+      "owner" : "srd"
+    },
+    "-MSVDO-S-GiqRIpD-iPG" : {
+      "description" : "Used to stalk prey and find tracks. When stalking a quarry this is treated as an opposed Roll Versus the opponent’s Tracking or Sneaking.",
+      "name" : "Tracking",
+      "owner" : "srd"
+    },
+    "-MSVDR3b3R_lafRqzEt1" : {
+      "description" : "Use this to set and disarm traps. When setting traps Roll Under your Trapping Skill and describe how the trap is made with the materials at hand. When someone wishes to disarm a trap they must Roll Versus the original trap-setter’s Trapping Skill. If the GM doesn’t know what that number should be assume 6 to be pretty simple while 12 is incredibly hard. Scale it between those as appropriate. ",
+      "name" : "Trapping",
+      "owner" : "srd"
+    },
+    "-MSVDTwUoBCPT1uY80EO" : {
+      "description" : "You may use this Skill in place of your Weapon Skill while fighting in confined spaces where you would otherwise be unable to swing your Weapon about. You ignore all penalties the GM might associate with fighting in such a situation. ",
+      "name" : "Tunnel Fighting",
+      "owner" : "srd"
+    },
+    "-MSVDX0WCuZRzZasQ2ci" : {
+      "description" : "Choose what general category of Weapons this covers when you take this Skill. Roll Versus during combat when using the appropriate method of assault. The GM is encouraged to allow Weapon categories to be broadly applicable, such as Glaive Fighting being equivalent to Polearm Fighting.",
+      "name" : "Weapon Fighting",
+      "owner" : "srd"
+    },
+    "-MSVDZro_1ai2jkKiuaw" : {
+      "description" : "If a Skill isn’t listed here then make it up. Anything can be a Skill, from Jousting to Gambling to Eating. Skills are primarily used as flavour and the occasional fun instance where your incredibly specific and heretofore useless ability helps you and your friends out is priceless. ",
+      "name" : "Other",
+      "owner" : "srd"
+    },
+    "-MSVpDw3hpab_qiwXsUi" : {
+      "character" : {
+        "-MSVoO3m4DAUin9OHWwa" : true
+      },
+      "characters" : {
+        "-MSVp1OF_anYMCkcAjEi" : true
+      },
+      "description" : "Doing things.",
+      "name" : "Stuff",
+      "owner" : "B5PMkqqReBgyM5QcHdjVetuG29l1"
+    }
+  },
+  "srdItems" : {
+    "-MSnwsMLBAJkg3CrKAbw" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 2, 2, 4, 8, 10 ],
+      "damagesAs" : "knife",
+      "description" : "A bale hook counts as a Knife for Damage and grants +1 on rolls to lift heavy objects.",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Bale Hook",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "bale hook",
+      "twoHanded" : false
+    },
+    "-MSnx6tPr01CUflrMLHt" : {
+      "armourPiercing" : false,
+      "character" : {
+        "-MSYykH2Yql7mcYYlwmT" : true
+      },
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "The star maps of Corda hold the secrets of travel between the spheres. Every juncture in space and time can be found on its many square metred face if one is sufficiently educated in its use. Test Astrology to tell the precise destination of any portal.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Blue Star maps of Corda",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "blue star maps of corda",
+      "twoHanded" : false
+    },
+    "-MSnxGa-Ksf4jb-05qTa" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 4, 4, 6, 8 ],
+      "damagesAs" : "staff",
+      "description" : "An Epopt’s Staff is a tool, an advert, and, in a pinch, a Weapon. In its head is set a cloudy ruby, like a useless magnifying glass, which grants the user +1 Second Sight while peering through it. \n",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Epopt's Staff",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "epopt's staff",
+      "twoHanded" : false
+    },
+    "-MSnxUyvM58_yvRzUZu7" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 1,
+        "max" : 6
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 6, 12, 18, 24 ],
+      "damagesAs" : "fusil",
+      "description" : "A fusil is a long Weapon that looks like a rifle and can be used in melee as a Club. A Fusil holds 6 charges before the plasmic core needs replacing. ",
+      "doesDamage" : true,
+      "hasCharges" : true,
+      "hasModifiers" : false,
+      "name" : "Fusil (Ranged)",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 2,
+      "sort_name" : "fusil (ranged)",
+      "twoHanded" : true
+    },
+    "-MSnxgVM8W834_jxE_ag" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 2, 3, 6, 8, 10 ],
+      "damagesAs" : "club",
+      "description" : "A Fusil can also be used as a club.",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Fusil (Melee)",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "fusil (melee)",
+      "twoHanded" : false
+    },
+    "-MSnxl2x-SyvW2ir0sI9" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Knuckle dice are made from the nimble, petal shaped knuckle bones of goblins and make excellent two sided dice. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Knuckle Dice",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "knuckle dice",
+      "twoHanded" : false
+    },
+    "-MSnxqQGSkj_y6KsyqEk" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 8,
+        "max" : 8
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 4, 4, 6, 12, 16 ],
+      "damagesAs" : "pistolet",
+      "description" : "A pistolet is a hand held energy Weapon. Holds enough energy for 8 shots.",
+      "doesDamage" : true,
+      "hasCharges" : true,
+      "hasModifiers" : false,
+      "name" : "Pistolet",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : true,
+      "size" : 1,
+      "sort_name" : "pistolet",
+      "twoHanded" : false
+    },
+    "-MSnxxKLyDUhqJS8Xoet" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 1,
+        "max" : 1
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Plasmic cores are crystalised starlight cast in metal. Or astral vapours captured in glass. Or maybe hard-ghosts? Whatever it is, it’s pretty and used as a fuel source for exotic Weapons and reckless magicians. A plasmic core can be cracked open and huffed by a wizard in place of spending Stamina on a Spell. However, if an Oops! Table roll is called for the wizard has overdosed and drops dead, foaming at the mouth.",
+      "doesDamage" : false,
+      "hasCharges" : true,
+      "hasModifiers" : false,
+      "name" : "Plasmic Core",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "plasmic core",
+      "twoHanded" : false
+    },
+    "-MSny0yElB9py1TIwDwJ" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "The pocket barometer is part of a fashionable affectation for the metropolitan Troikan. Though the city has no discernable weather it is considered polite to check it intermittently and comment on the present clemency and hope for it to continue into the future. Examining its quartz face will inform you of future weather with 5 in 6 accuracy. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Pocket Barometer",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "pocket barometer",
+      "twoHanded" : false
+    },
+    "-MSny7fUM6FLjTe0rSwc" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Pocket gods are little cloth puppets made in the image of your numerous gods. If you whisper a secret to one and throw it away you regain 1 Luck. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Pocket Gods",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "pocket gods",
+      "twoHanded" : false
+    },
+    "-MSnyDrunYxyV0wJED0k" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Ruby lorgnettes are collapsable spectacles made with ruby lenses that require a free hand to use. While wearing them your sight is impaired but you can see sorcerous activity clearly (+2 Second Sight).",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Ruby Lorgnettes",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "ruby lorgnettes",
+      "twoHanded" : false
+    },
+    "-MSnyHKEw87WNH7tAOYC" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Salt is the poor man’s Silver. Where Silver kills the demonic and the dead Salt merely harms or bars.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Salt",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "salt",
+      "twoHanded" : false
+    },
+    "-MSnyMEX8UfOSUdAwX1x" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Silver is the star metal, the most untouched material fallen from the hump-backed sky. Weapons made from it may inflict Damage to creatures normally immune to material harm. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Silver",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "silver",
+      "twoHanded" : false
+    },
+    "-MSnyVgC4vAgAC8sTtfo" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "A tea set grants +1 to Etiquette when you have the time to sit down and make tea for those you are trying to impress.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Tea Set",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "tea set",
+      "twoHanded" : false
+    },
+    "-MSnyc2IE9GP4KK3TvCR" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 1,
+        "max" : 1
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "The Velare, when inactive, looks like an ornate piece of costume jewellery, usually a brooch or a circlet. When active it produces a full body disguise on the wearer formed from hard-light. Grants +4 Disguise. Lasts for 24 hours before needing to be recharged with a plasmic core. \n",
+      "doesDamage" : false,
+      "hasCharges" : true,
+      "hasModifiers" : false,
+      "name" : "Velare",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "velare",
+      "twoHanded" : false
+    },
+    "-MSnyhtYRHyWh4AfPcQi" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Witch-hair ropes are immune to manipulation via magical means",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Witch-Hair Rope",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "witch-hair rope",
+      "twoHanded" : false
+    },
+    "-MSnyktqRrOT_UxgjoNT" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "A yoke gives you +4 carry capacity while worn but you can’t use your hands while wearing it.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Yoke",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "yoke",
+      "twoHanded" : false
+    },
+    "-MSnz2Z3qLz7OH6TIPG3" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 4, 6, 6, 6, 6, 8, 10 ],
+      "damagesAs" : "sword",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Sword",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "sword",
+      "twoHanded" : false
+    },
+    "-MSo5UapcW9B59ShzGl4" : {
+      "armourPiercing" : false,
+      "character" : {
+        "-MSYykH2Yql7mcYYlwmT" : true
+      },
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 2, 2, 4, 8, 10 ],
+      "damagesAs" : "knife",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Knife",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "knife",
+      "twoHanded" : false
+    },
+    "-MSo7MK6-fwA4SUV3-F6" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 4, 4, 6, 8 ],
+      "damagesAs" : "staff",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Staff",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "staff",
+      "twoHanded" : false
+    },
+    "-MSo7O8uPaGPalYyY9_O" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 2, 4, 6, 8, 10, 12 ],
+      "damagesAs" : "hammer",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Hammer",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "hammer",
+      "twoHanded" : false
+    },
+    "-MSo7PyUyhZqYJ_8EHpF" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 4, 4, 6, 6, 8, 8, 10 ],
+      "damagesAs" : "spear",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Spear",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "spear",
+      "twoHanded" : false
+    },
+    "-MSo7RlwNmhSZgLZsaw9" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 4, 6, 8, 8, 10, 12, 14 ],
+      "damagesAs" : "longsword",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Longsword",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "longsword",
+      "twoHanded" : false
+    },
+    "-MSo7TbgaSCaEh1htTLo" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 6, 6, 8, 10 ],
+      "damagesAs" : "mace",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Mace",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "mace",
+      "twoHanded" : false
+    },
+    "-MSo7VgyXgOqUKUxzGAD" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 8, 12, 14, 18 ],
+      "damagesAs" : "polearm",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Polearm",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 2,
+      "sort_name" : "polearm",
+      "twoHanded" : true
+    },
+    "-MSo7XGgQtOoZe5uI4M7" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 2, 3, 6, 12, 13, 14 ],
+      "damagesAs" : "maul",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Maul",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 2,
+      "sort_name" : "maul",
+      "twoHanded" : true
+    },
+    "-MSo7ZSItGMNAEJz8JWo" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 8, 10, 12, 14, 18 ],
+      "damagesAs" : "greatsword",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Greatsword",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 2,
+      "sort_name" : "greatsword",
+      "twoHanded" : true
+    },
+    "-MSo7am6TcF6nVqvZGox" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 2, 3, 6, 8, 10 ],
+      "damagesAs" : "club",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Club",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "club",
+      "twoHanded" : false
+    },
+    "-MSo7ciD6fjPSbeUlnTP" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 2, 4, 4, 6, 8 ],
+      "damagesAs" : "shield",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Shield",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "shield",
+      "twoHanded" : false
+    },
+    "-MSo7fKhAqifuuwTwQ0O" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 6, 12, 18, 24 ],
+      "damagesAs" : "fusil",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Fusil",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : true,
+      "size" : 2,
+      "sort_name" : "fusil",
+      "twoHanded" : true
+    },
+    "-MSo7hB06FyB7EbNpNPz" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 6, 8, 8, 10, 12 ],
+      "damagesAs" : "bow",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Bow",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : true,
+      "size" : 2,
+      "sort_name" : "bow",
+      "twoHanded" : true
+    },
+    "-MSo7j2Cj-kfjHst8eV1" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 4, 4, 6, 8, 8, 8, 10 ],
+      "damagesAs" : "crossbow",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Crossbow",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : true,
+      "size" : 2,
+      "sort_name" : "crossbow",
+      "twoHanded" : true
+    },
+    "-MSoCZclB5Yop3IOpEEk" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Knuckle dice are made from the nimble, petal shaped knuckle bones of goblins and make excellent two sided dice. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Knuckle Dice",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "knuckle dice",
+      "twoHanded" : false
+    },
+    "-MSoD-1gYXOUUPtWf3R2" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Requires twenty minutes to set up and use but doesn’t need to be outside. Consists of a ruby specular, charms against reciprocal observation, and complicated charts of the spheres. Grants +1 to Astrology.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Astrological Equipment",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "astrological equipment",
+      "twoHanded" : false
+    },
+    "-MSoD-34oRXXXgg7y2fB" : {
+      "armourPiercing" : false,
+      "character" : {
+        "-MSYykH2Yql7mcYYlwmT" : true
+      },
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 6, 6, 8, 10, 12 ],
+      "damagesAs" : "axe",
+      "description" : "Melee Weapon",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Axe",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "axe",
+      "twoHanded" : false
+    }
+  },
+  "srdSkills" : {
+    "-MSnrElI_sMhRJZHLVhI" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Requires twenty minutes to set up and use but doesn’t need to be outside. Consists of a ruby specular, charms against reciprocal observation, and complicated charts of the spheres. Grants +1 to Astrology.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Astrological Equipment",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "astrological equipment",
+      "twoHanded" : false
+    },
+    "-MSnwsMLBAJkg3CrKAbw" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 2, 2, 4, 8, 10 ],
+      "damagesAs" : "knife",
+      "description" : "A bale hook counts as a Knife for Damage and grants +1 on rolls to lift heavy objects.",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Bale Hook",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "bale hook",
+      "twoHanded" : false
+    },
+    "-MSnx6tPr01CUflrMLHt" : {
+      "armourPiercing" : false,
+      "character" : {
+        "-MSYykH2Yql7mcYYlwmT" : true
+      },
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "The star maps of Corda hold the secrets of travel between the spheres. Every juncture in space and time can be found on its many square metred face if one is sufficiently educated in its use. Test Astrology to tell the precise destination of any portal.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Blue Star maps of Corda",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "blue star maps of corda",
+      "twoHanded" : false
+    },
+    "-MSnxGa-Ksf4jb-05qTa" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 4, 4, 6, 8 ],
+      "damagesAs" : "staff",
+      "description" : "An Epopt’s Staff is a tool, an advert, and, in a pinch, a Weapon. In its head is set a cloudy ruby, like a useless magnifying glass, which grants the user +1 Second Sight while peering through it. \n",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Epopt's Staff",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "epopt's staff",
+      "twoHanded" : false
+    },
+    "-MSnxUyvM58_yvRzUZu7" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 1,
+        "max" : 6
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 6, 12, 18, 24 ],
+      "damagesAs" : "fusil",
+      "description" : "A fusil is a long Weapon that looks like a rifle and can be used in melee as a Club. A Fusil holds 6 charges before the plasmic core needs replacing. ",
+      "doesDamage" : true,
+      "hasCharges" : true,
+      "hasModifiers" : false,
+      "name" : "Fusil (Ranged)",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 2,
+      "sort_name" : "fusil (ranged)",
+      "twoHanded" : true
+    },
+    "-MSnxgVM8W834_jxE_ag" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 2, 3, 6, 8, 10 ],
+      "damagesAs" : "club",
+      "description" : "A Fusil can also be used as a club.",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Fusil (Melee)",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "fusil (melee)",
+      "twoHanded" : false
+    },
+    "-MSnxl2x-SyvW2ir0sI9" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Knuckle dice are made from the nimble, petal shaped knuckle bones of goblins and make excellent two sided dice. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Knuckle Dice",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "knuckle dice",
+      "twoHanded" : false
+    },
+    "-MSnxqQGSkj_y6KsyqEk" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 8,
+        "max" : 8
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "A pistolet is a hand held energy Weapon. Holds enough energy for 8 shots.",
+      "doesDamage" : false,
+      "hasCharges" : true,
+      "hasModifiers" : false,
+      "name" : "Pistolet",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "pistolet",
+      "twoHanded" : false
+    },
+    "-MSnxxKLyDUhqJS8Xoet" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 1,
+        "max" : 1
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Plasmic cores are crystalised starlight cast in metal. Or astral vapours captured in glass. Or maybe hard-ghosts? Whatever it is, it’s pretty and used as a fuel source for exotic Weapons and reckless magicians. A plasmic core can be cracked open and huffed by a wizard in place of spending Stamina on a Spell. However, if an Oops! Table roll is called for the wizard has overdosed and drops dead, foaming at the mouth.",
+      "doesDamage" : false,
+      "hasCharges" : true,
+      "hasModifiers" : false,
+      "name" : "Plasmic Core",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "plasmic core",
+      "twoHanded" : false
+    },
+    "-MSny0yElB9py1TIwDwJ" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "The pocket barometer is part of a fashionable affectation for the metropolitan Troikan. Though the city has no discernable weather it is considered polite to check it intermittently and comment on the present clemency and hope for it to continue into the future. Examining its quartz face will inform you of future weather with 5 in 6 accuracy. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Pocket Barometer",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "pocket barometer",
+      "twoHanded" : false
+    },
+    "-MSny7fUM6FLjTe0rSwc" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Pocket gods are little cloth puppets made in the image of your numerous gods. If you whisper a secret to one and throw it away you regain 1 Luck. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Pocket Gods",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "pocket gods",
+      "twoHanded" : false
+    },
+    "-MSnyDrunYxyV0wJED0k" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Ruby lorgnettes are collapsable spectacles made with ruby lenses that require a free hand to use. While wearing them your sight is impaired but you can see sorcerous activity clearly (+2 Second Sight).",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Ruby Lorgnettes",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "ruby lorgnettes",
+      "twoHanded" : false
+    },
+    "-MSnyHKEw87WNH7tAOYC" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Salt is the poor man’s Silver. Where Silver kills the demonic and the dead Salt merely harms or bars.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Salt",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "salt",
+      "twoHanded" : false
+    },
+    "-MSnyMEX8UfOSUdAwX1x" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Silver is the star metal, the most untouched material fallen from the hump-backed sky. Weapons made from it may inflict Damage to creatures normally immune to material harm. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Silver",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "silver",
+      "twoHanded" : false
+    },
+    "-MSnyVgC4vAgAC8sTtfo" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "A tea set grants +1 to Etiquette when you have the time to sit down and make tea for those you are trying to impress.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Tea Set",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "tea set",
+      "twoHanded" : false
+    },
+    "-MSnyc2IE9GP4KK3TvCR" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 1,
+        "max" : 1
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "The Velare, when inactive, looks like an ornate piece of costume jewellery, usually a brooch or a circlet. When active it produces a full body disguise on the wearer formed from hard-light. Grants +4 Disguise. Lasts for 24 hours before needing to be recharged with a plasmic core. \n",
+      "doesDamage" : false,
+      "hasCharges" : true,
+      "hasModifiers" : false,
+      "name" : "Velare",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "velare",
+      "twoHanded" : false
+    },
+    "-MSnyhtYRHyWh4AfPcQi" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Witch-hair ropes are immune to manipulation via magical means",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Witch-Hair Rope",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "witch-hair rope",
+      "twoHanded" : false
+    },
+    "-MSnyktqRrOT_UxgjoNT" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "A yoke gives you +4 carry capacity while worn but you can’t use your hands while wearing it.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Yoke",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "yoke",
+      "twoHanded" : false
+    },
+    "-MSnz2Z3qLz7OH6TIPG3" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 4, 6, 6, 6, 6, 8, 10 ],
+      "damagesAs" : "sword",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Sword",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "sword",
+      "twoHanded" : false
+    },
+    "-MSnz5qRXIgkiwFn0AlI" : {
+      "armourPiercing" : false,
+      "character" : {
+        "-MSYykH2Yql7mcYYlwmT" : true
+      },
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 6, 6, 8, 10, 12 ],
+      "damagesAs" : "axe",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Axe",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "axe",
+      "twoHanded" : false
+    },
+    "-MSo5UapcW9B59ShzGl4" : {
+      "armourPiercing" : false,
+      "character" : {
+        "-MSYykH2Yql7mcYYlwmT" : true
+      },
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 2, 2, 4, 8, 10 ],
+      "damagesAs" : "knife",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Knife",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "knife",
+      "twoHanded" : false
+    },
+    "-MSo7MK6-fwA4SUV3-F6" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 4, 4, 6, 8 ],
+      "damagesAs" : "staff",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Staff",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "staff",
+      "twoHanded" : false
+    },
+    "-MSo7O8uPaGPalYyY9_O" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 2, 4, 6, 8, 10, 12 ],
+      "damagesAs" : "hammer",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Hammer",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "hammer",
+      "twoHanded" : false
+    },
+    "-MSo7PyUyhZqYJ_8EHpF" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 4, 4, 6, 6, 8, 8, 10 ],
+      "damagesAs" : "spear",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Spear",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "spear",
+      "twoHanded" : false
+    },
+    "-MSo7RlwNmhSZgLZsaw9" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 4, 6, 8, 8, 10, 12, 14 ],
+      "damagesAs" : "longsword",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Longsword",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "longsword",
+      "twoHanded" : false
+    },
+    "-MSo7TbgaSCaEh1htTLo" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 6, 6, 8, 10 ],
+      "damagesAs" : "mace",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Mace",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "mace",
+      "twoHanded" : false
+    },
+    "-MSo7VgyXgOqUKUxzGAD" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 8, 12, 14, 18 ],
+      "damagesAs" : "polearm",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Polearm",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 2,
+      "sort_name" : "polearm",
+      "twoHanded" : true
+    },
+    "-MSo7XGgQtOoZe5uI4M7" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 2, 3, 6, 12, 13, 14 ],
+      "damagesAs" : "maul",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Maul",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 2,
+      "sort_name" : "maul",
+      "twoHanded" : true
+    },
+    "-MSo7ZSItGMNAEJz8JWo" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 8, 10, 12, 14, 18 ],
+      "damagesAs" : "greatsword",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Greatsword",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 2,
+      "sort_name" : "greatsword",
+      "twoHanded" : true
+    },
+    "-MSo7am6TcF6nVqvZGox" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 2, 3, 6, 8, 10 ],
+      "damagesAs" : "club",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Club",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "club",
+      "twoHanded" : false
+    },
+    "-MSo7ciD6fjPSbeUlnTP" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 2, 4, 4, 6, 8 ],
+      "damagesAs" : "shield",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Shield",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "shield",
+      "twoHanded" : false
+    },
+    "-MSo7fKhAqifuuwTwQ0O" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 4, 6, 12, 18, 24 ],
+      "damagesAs" : "fusil",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Fusil",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : true,
+      "size" : 2,
+      "sort_name" : "fusil",
+      "twoHanded" : true
+    },
+    "-MSo7hB06FyB7EbNpNPz" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 4, 6, 8, 8, 10, 12 ],
+      "damagesAs" : "bow",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Bow",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : true,
+      "size" : 2,
+      "sort_name" : "bow",
+      "twoHanded" : true
+    },
+    "-MSo7j2Cj-kfjHst8eV1" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 4, 4, 6, 8, 8, 8, 10 ],
+      "damagesAs" : "crossbow",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Crossbow",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : true,
+      "size" : 2,
+      "sort_name" : "crossbow",
+      "twoHanded" : true
+    },
+    "-MSo7mo_a1-0x1yWaGDj" : {
+      "armourPiercing" : true,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 4, 4, 6, 12, 16 ],
+      "damagesAs" : "pistolet",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Pistolet",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : true,
+      "size" : 1,
+      "sort_name" : "pistolet",
+      "twoHanded" : false
+    },
+    "-MSoCZclB5Yop3IOpEEk" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Knuckle dice are made from the nimble, petal shaped knuckle bones of goblins and make excellent two sided dice. ",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Knuckle Dice",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "knuckle dice",
+      "twoHanded" : false
+    },
+    "-MSoD-1gYXOUUPtWf3R2" : {
+      "armourPiercing" : false,
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 1, 1, 1, 2, 2, 3, 4 ],
+      "damagesAs" : "unarmed",
+      "description" : "Requires twenty minutes to set up and use but doesn’t need to be outside. Consists of a ruby specular, charms against reciprocal observation, and complicated charts of the spheres. Grants +1 to Astrology.",
+      "doesDamage" : false,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Astrological Equipment",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "astrological equipment",
+      "twoHanded" : false
+    },
+    "-MSoD-34oRXXXgg7y2fB" : {
+      "armourPiercing" : false,
+      "character" : {
+        "-MSYykH2Yql7mcYYlwmT" : true
+      },
+      "charges" : {
+        "initial" : 0,
+        "max" : 0
+      },
+      "customSize" : false,
+      "damage" : [ 2, 2, 6, 6, 8, 10, 12 ],
+      "damagesAs" : "axe",
+      "description" : "",
+      "doesDamage" : true,
+      "hasCharges" : false,
+      "hasModifiers" : false,
+      "name" : "Axe",
+      "owner" : "srd",
+      "protection" : 0,
+      "protects" : false,
+      "ranged" : false,
+      "size" : 1,
+      "sort_name" : "axe",
+      "twoHanded" : false
+    }
+  }
+}
