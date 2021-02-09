@@ -2,13 +2,22 @@ import {
   Skill, OtherItem, Weapon, Spell, InventoryItem,
 } from '../types/troika';
 import { Profile } from './index';
+import { WeaponsState } from '../components/CharacterWeapons';
+import { CharacterItemsState } from '../components/items/CharacterItems';
+import { KeyList } from './KeyList';
+import { Item } from './Item';
+import { WeaponTableRowState } from '../components/weapons/WeaponTableRow';
 
 export default interface Schema {
   [key:string]: any,
-  characterItems: {inventory: string[]},
+  characterItems: CharacterItemsState,
   editSkill: {name:string, description:string}
   skillTableRow: {[key:string]: {skill:Skill, skillValues: SkillValues}},
-  damageSection: { damage:number[], doesDamage:boolean, damagesAs:string, twoHanded:boolean, ranged: boolean, armourPiercing: boolean },
+  skillSelectItem: Skill,
+  addItemsDialog: {inventory: string[], weapons:[]},
+  weaponTableRow: WeaponTableRowState,
+  damageSection: { damage:number[], doesDamage:boolean, damagesAs:string, twoHanded:boolean, ranged: boolean, armourPiercing: boolean, weapons: string[] },
+  weapons: WeaponsState,
   addSrdItems: Item,
   queryTest: any,
   addFriendResult: any,
@@ -51,9 +60,6 @@ export interface Game {
   [key: string]: any,
 }
 
-export interface KeyList {
-  [key: string]: boolean;
-}
 
 export interface NullableKeyList {
   [key: string]: boolean|null;
@@ -108,29 +114,6 @@ export interface Skill {
   description: string,
 }
 
-export interface Item {
-  [key:string]: any,
-  armourPiercing: boolean,
-  characters?: KeyList,
-  charges?: {
-    initial: number; max: number
-  };
-  customSize: boolean,
-  damage?: number[],
-  damagesAs?: string
-  description: string,
-  doesDamage: boolean,
-  hasModifiers: boolean,
-  name: string,
-  protection?: number,
-  protects: boolean
-  size: number,
-  ranged: boolean
-  modifiers: KeyList,
-  hasCharges: boolean,
-  twoHanded: boolean,
-
-}
 
 
 

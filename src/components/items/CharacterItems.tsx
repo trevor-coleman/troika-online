@@ -44,13 +44,23 @@ const initialState: { add: boolean; new: boolean; edit: boolean; remove: boolean
   remove: false,
 };
 
+export interface CharacterItemsState {
+  inventory: string[],
+  weapons: string[]
+}
+
 const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: CharacterItemsProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
   const {character} = useContext(CharacterContext)
-  useFirebaseConnect({path:`/characters/${character}/inventory`, storeAs:`characterItems/${character}/inventory`});
-  const inventory = useTypedSelector(state=>state.firebase.data?.characterItems?.[character]?.inventory)
+  useFirebaseConnect([
+      {path:`/characters/${character}/inventory`, storeAs:`characterItems/${character}/inventory`},
+      {path:`/characters/${character}/weapons`, storeAs:`characterItems/${character}/weapons`},
+                     ]);
+  const inventory = useTypedSelector(state=>state.firebase.data?.characterItems?.[character]?.inventory) ?? []
+  const weapons = useTypedSelector(state=>state.firebase.data?.characterItems?.[character]?.weapons) ?? []
+
 
   const firebase = useFirebase();
 
@@ -67,8 +77,6 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
                    : newState);
   }
 
-  const setInventory = (inventory: string[]) => {
-    console.log(inventory);}
 
   async function handleDragEnd(result: DropResult,
                                provided: ResponderProvided): Promise<void> {
@@ -89,19 +97,15 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
     const newItemArray: string[] = [...inventory];
     newItemArray.splice(source.index, 1);
     newItemArray.splice(destination.index, 0, draggableId);
-    setInventory(newItemArray);
     await firebase.ref(`/characters/${character}/inventory`)
                   .set(newItemArray);
   }
 
   const removeItem = (id: string) => {
-    const newInventory = [...inventory];
+    let newInventory = inventory.filter(item=>item!==id);
+    let newWeapons = weapons.filter(item=>item!==id);
 
-    const index = newInventory.indexOf(id);
-    if (index > -1) {
-      newInventory.splice(index, 1);
-    }
-
+    firebase.ref(`/characters/${character}/weapons`).set(newWeapons);
     firebase.ref(`/characters/${character}/inventory`).set(newInventory);
     firebase.ref(`/items/${character}/${id}`).set(null);
   };
@@ -140,10 +144,8 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
           </Droppable></div>
         </DragDropContext>
         <AddItemsDialog open={dialogState.add}
-                        inventory={inventory}
-                        setInventory={setInventory}
                         onClose={() => showDialog()}
-                        characterKey={character} />
+                        />
       </div>);
 };
 

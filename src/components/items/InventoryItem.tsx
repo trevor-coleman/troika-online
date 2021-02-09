@@ -13,7 +13,6 @@ import {
   Switch,
   FormControlLabel,
   SvgIcon,
-  Collapse,
   Avatar,
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -28,7 +27,8 @@ import {
   Edit,
   EditOutlined,
 } from '@material-ui/icons';
-import { Item, KeyList } from '../../store/Schema';
+import {KeyList} from '../../store/KeyList';
+import {Item} from '../../store/Item';
 import { ReactComponent as SwordIconOutline } from './sword-outline-svgrepo-com.svg';
 import { ReactComponent as SwordIconFilled } from './sword-filled-svgrepo-com.svg';
 import { ReactComponent as LightningOutline } from './lightning-outline-svgrepo-com.svg';
@@ -74,8 +74,23 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
   const firebase = useFirebase();
   const auth = useAuth();
   const {character} = useContext(CharacterContext);
-  useFirebaseConnect([`/items/${character}/${id}`]);
-  const item: Item = useTypedSelector(state => state.firebase.data?.items?.[character]?.[id]);
+  useFirebaseConnect([
+                       {
+                         path   : `/items/${character}/${id}`,
+                         storeAs: `/inventoryItem/${id}`,
+                       },
+                     ]);
+  const item: Item = useTypedSelector(state => state.firebase.data?.inventoryItem?.[id]);
+  const {
+    name = "",
+    description = "",
+    size = 1,
+    hasCharges = false,
+    doesDamage = false,
+    hasModifiers = false,
+    protects = false,
+    customSize = false,
+  }: Item = item ?? {};
 
   const [expanded, setExpanded] = useState<KeyList>({
                                                       basic         : false,
@@ -102,13 +117,10 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
       return {
         ...prev,
         [curr.id]: curr.value, ...sizeOverride,
-
       };
     }, {});
 
     firebase.ref(`/items/${character}/${id}`).update(update);
-    console.log(update);
-
   };
 
   if (!isLoaded(item)) return <Card><CardContent>Loading</CardContent></Card>;
@@ -123,11 +135,11 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                 {...provided.draggableProps}
           >
             <Card>
-              <CardHeader avatar={<Avatar>{item.size ?? 1}</Avatar>}
+              <CardHeader avatar={<Avatar>{size}</Avatar>}
                           className={classes.cardHeader}
                           titleTypographyProps={{variant: "h6"}}
-                          title={`${item?.name}`}
-                          subheader={item.description}
+                          title={`${name}`}
+                          subheader={description}
                           subheaderTypographyProps={{
                             variant: "body1",
                             color  : 'textPrimary',
@@ -156,13 +168,12 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                   <SectionToggleIcon section={"armour"}
                                      expanded={expanded.armour}
                                      onToggle={toggle}
-                                     show={item.protects ||
-                                           expanded.sectionToggles}
+                                     show={protects || expanded.sectionToggles}
                                      activeIcon={<SecurityTwoTone />}
                                      inactiveIcon={<SecurityOutlined />} />
                   <SectionToggleIcon section={"damage"}
                                      onToggle={toggle}
-                                     show={item.doesDamage ||
+                                     show={doesDamage ||
                                            expanded.sectionToggles}
                                      expanded={expanded.damage}
                                      activeIcon={
@@ -173,7 +184,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                                                 viewBox={"0 0 57 57"} />} />
                   <SectionToggleIcon section={"customSize"}
                                      onToggle={toggle}
-                                     show={item.customSize ||
+                                     show={customSize ||
                                            expanded.sectionToggles}
                                      expanded={expanded.customSize}
                                      activeIcon={
@@ -185,7 +196,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
 
                   <SectionToggleIcon section={"charges"}
                                      onToggle={toggle}
-                                     show={item.hasCharges ||
+                                     show={hasCharges ||
                                            expanded.sectionToggles}
                                      expanded={expanded.charges}
                                      activeIcon={
@@ -204,8 +215,8 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
 
                 </div>
                 <div className={classes.rolls}>
-                  <Button variant={"contained"}
-                          startIcon={<Casino />}>Attack</Button>
+                  <Button disabled variant={"contained"}
+                          startIcon={<Casino />}>Roll</Button>
                 </div>
               </CardActions>
               <CollapsingSection expand={expanded.basic}>
@@ -213,13 +224,13 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                   <BasicInfoSection onChange={handleChange} />
                 </CardContent>
               </CollapsingSection>
-               <CollapsingSection expand={expanded.armour}>
-                 <CardContent>
-                   <ArmourSection character={character}
-                                  item={id}
-                                  onChange={handleChange} />
-                 </CardContent>
-               </CollapsingSection>
+              <CollapsingSection expand={expanded.armour}>
+                <CardContent>
+                  <ArmourSection character={character}
+                                 item={id}
+                                 onChange={handleChange} />
+                </CardContent>
+              </CollapsingSection>
               <CollapsingSection expand={expanded.damage}>
                 <CardContent>
                   <DamageSection onChange={handleChange} />

@@ -17,7 +17,7 @@ import {
 import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
 import { ExpandMore } from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
-import { Item } from '../../store/Schema';
+import { Item } from '../../store/Item';
 import Typography from '@material-ui/core/Typography';
 
 interface ItemsListProps {

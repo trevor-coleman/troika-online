@@ -93,7 +93,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
       <div>
         <Typography variant={"h5"}>
           Skills </Typography>
-        <Button onClick={() => showDialog("add")}>Import Skill</Button>
+        <Button disabled onClick={() => showDialog("add")}>Import Skill</Button>
         <Button onClick={() => showDialog("new")}>New Skill</Button>
 
         <TableContainer component={Paper}>

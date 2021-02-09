@@ -1,7 +1,8 @@
 import { useTypedSelector, RootState } from './index';
 import { useFirebase } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
-import { Game, KeyList, Character } from './Schema';
+import { Game, Character } from './Schema';
+import {KeyList} from './KeyList';
 
 export const useGame = (gameKey: string) => useSelector<RootState, Partial<Game> | undefined>(
     state => state.firebase.data.games

@@ -1,23 +1,26 @@
-import React, { FunctionComponent, ChangeEvent, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ChangeEvent,
+  useState, useContext,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   DialogTitle, DialogContent, Dialog, DialogActions, TextField,
 } from '@material-ui/core';
-import { useFirebase } from 'react-redux-firebase';
+import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 import { useAuth } from '../../store/selectors';
 import SrdItemsList from './SrdItemsList';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import { Item } from '../../store/Schema';
+import { Item } from '../../store/Item';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { CharacterContext } from '../../views/CharacterContext';
+import { useTypedSelector } from '../../store';
 
 interface AddItemsDialogProps {
   open: boolean,
-  characterKey: string,
   onClose: () => void,
-  inventory: string[],
-  setInventory: (i: string[]) => void;
 }
 
 function a11yProps(index: any) {
@@ -38,48 +41,63 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
   const {
     open,
     onClose,
-    characterKey,
-    inventory,
-    setInventory,
   } = props;
   const classes = useStyles();
   const firebase = useFirebase();
+  const {character} = useContext(CharacterContext);
 
   const [search, setSearch] = useState("");
   const [selection, setSelection] = useState<{ [key: string]: Item }>({});
   const [isAdding, setIsAdding] = useState(false);
 
+  useFirebaseConnect([
+                       {path: `/characters/${character}/inventory`, storeAs: `/addItemsDialog/${character}/inventory` },
+                       {path: `/characters/${character}/weapons`, storeAs: `/addItemsDialog/${character}/weapons` }
+                     ])
+
+  const { inventory = [], weapons=[] } = useTypedSelector(state => state.firebase.data?.addItemsDialog?.[character]) ?? {};
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value.toLowerCase());
   };
 
-  const addSelectedItemsToCharacter = async () => {
+  const addSelectedItemsToCharacter =  () => {
     setIsAdding(true);
-    const newKeys = [];
-    const itemsRef = firebase.ref(`/characters/${characterKey}/items`);
+    const newKeys:string[] = [];
+    const newWeaponKeys: string[] = []
+    const itemsRef = firebase.ref(`/items/${character}`);
     for (let selectedKey in selection) {
       const newKey = itemsRef.push().key;
       if (!newKey) {
         console.error("Failed to create item",
                       selectedKey,
                       selection[selectedKey]);
-        return;
+        continue;
+      }
+      if(selection[selectedKey].doesDamage) {
+        newWeaponKeys.push(newKey);
       }
       newKeys.push(newKey);
       itemsRef.child(newKey).set(selection[selectedKey]);
     }
 
-    const newInventory = inventory.concat(newKeys);
-    setInventory(newInventory);
-    await firebase.ref(`/characters/${characterKey}/inventory`)
+
+    let newInventory = (inventory ?? []).filter((item:string) => newKeys.indexOf(item) === -1)
+    newInventory = newInventory.concat(newKeys);
+    let newWeapons:string[] = (weapons ?? []).filter((item:string) => newWeaponKeys.indexOf(item) === -1)
+    newWeapons = newWeapons.concat(newWeaponKeys);
+
+    firebase.ref(`/characters/${character}/inventory`)
                   .set(newInventory);
+
+    firebase.ref(`/characters/${character}/weapons`)
+                  .set(newWeapons);
 
     setSelection({});
     setSearch("");
     onClose();
     setIsAdding(false);
   };
-
   return (
       <Dialog open={open}
               onClose={onClose}
@@ -113,9 +131,11 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
 
           </div>
         </DialogContent>
-        <DialogActions><Button variant={"contained"}
-                               onClick={addSelectedItemsToCharacter}>Add to
-                                                                     Character</Button></DialogActions>
+        <DialogActions>
+          <Button variant={"contained"}
+                               onClick={addSelectedItemsToCharacter}>
+            Add to Character</Button>
+        </DialogActions>
       </Dialog>);
 };
 

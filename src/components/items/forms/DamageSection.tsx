@@ -17,7 +17,7 @@ import {
 import { Damage } from '../../../store/Schema';
 import { FormValueChangeHandler, FormValueChange } from './FormValueChange';
 import Grid from '@material-ui/core/Grid';
-import { useFirebaseConnect } from 'react-redux-firebase';
+import { useFirebaseConnect, useFirebase } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
 import { CharacterContext } from '../../../views/CharacterContext';
 import { ItemContext } from '../../../contexts/ItemContext';
@@ -131,10 +131,12 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
   const classes = useStyles();
   const {character} = useContext(CharacterContext);
   const item = useContext(ItemContext);
+  const firebase = useFirebase();
 
   useFirebaseConnect([
       {path: `/items/${character}/${item}/damage`, storeAs:`/damageSection/${item}/damage`},
       {path: `/items/${character}/${item}/doesDamage`, storeAs:`/damageSection/${item}/doesDamage`},
+      {path: `/characters/${character}/weapons`, storeAs:`/damageSection/${item}/weapons`},
       {path: `/items/${character}/${item}/damagesAs`, storeAs:`/damageSection/${item}/damagesAs`},
       {path: `/items/${character}/${item}/twoHanded`, storeAs:`/damageSection/${item}/twoHanded`},
       {path: `/items/${character}/${item}/ranged`, storeAs:`/damageSection/${item}/ranged`},
@@ -142,7 +144,8 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
                      ])
 
   const sectionInfo = useTypedSelector(state => state.firebase.data?.damageSection?.[item]) ?? {};
-  const {damage = [0,0,0,0,0,0,0], doesDamage = false, damagesAs ="unarmed", twoHanded = false, ranged = false, armourPiercing = false} = sectionInfo;
+
+  const {damage = [0,0,0,0,0,0,0], weapons=[], doesDamage = false, damagesAs ="unarmed", twoHanded = false, ranged = false, armourPiercing = false} = sectionInfo;
 
 
 
@@ -152,6 +155,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
       name   : id,
       checked: value,
     } = event.target;
+
     id = id.slice(5);
 
     const updates: FormValueChange<number | boolean>[] = [
@@ -160,6 +164,17 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
         value,
       },
     ];
+
+    if(id=="doesDamage") {
+      const newWeapons = weapons?.filter(weapon => weapon !== item) ?? [];
+      console.log(newWeapons);
+
+      if (value) {
+        newWeapons.push(item);
+      }
+
+      firebase.ref(`/characters/${character}/weapons`).set(newWeapons);
+    }
 
     onChange(updates);
   };
@@ -301,8 +316,9 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
                               label="Armour Piercing" />
           </FormGroup>
         </Grid>
-      </Grid>);
-};
+      </Grid>
+  )
+}
 
 const useStyles = makeStyles((theme: Theme) => (
     {

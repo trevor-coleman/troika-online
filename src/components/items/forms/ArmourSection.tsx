@@ -8,6 +8,7 @@ import { FormValueChange, FormValueChangeHandler } from './FormValueChange';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
 
+
 interface IArmourSectionProps {
   character: string, item:string,
   onChange: FormValueChangeHandler,
@@ -39,6 +40,7 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
   } = props;
   const classes = useStyles();
   const selectOptions = ["Unarmoured", "Light", "Medium", "Heavy"];
+  const [isTooHigh, setIsTooHigh] = useState(false);
 
   useFirebaseConnect([
                        {
@@ -106,9 +108,8 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
   }
 
   function handleProtectionChange(e: ChangeEvent<HTMLInputElement>) {
-    console.log("protection change", e.target.value);
-
     let value: number = parseInt(e.target.value);
+    setIsTooHigh(value===1);
     value =
         value <= 0
         ? value
@@ -152,10 +153,11 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
             </Select>
           </FormControl>
             <TextField disabled={!protects || !custom}
+                       error={isTooHigh}
                        variant={"outlined"}
-                       label={"Damage Reduction"}
+                       label={isTooHigh ? "Negative Values Only":"Damage Reduction"}
                        type={"number"}
-                       value={customValue ?? 0}
+                       value={customValue}
                        onChange={handleProtectionChange} />
           </FormGroup>
         </Grid></Grid>);

@@ -1,5 +1,11 @@
 import React, {
-  FunctionComponent, ChangeEvent, FocusEvent, useContext, useState, useEffect,
+  FunctionComponent,
+  ChangeEvent,
+  KeyboardEvent,
+  FocusEvent,
+  useContext,
+  useState,
+  useEffect, useRef,
 } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
@@ -16,6 +22,11 @@ interface IChargesSectionProps {
   onChange: FormValueChangeHandler
 }
 
+interface EventTarget {
+  value: any;
+  id: string;
+}
+
 type ChargesSectionProps = IChargesSectionProps;
 
 const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: IChargesSectionProps) => {
@@ -25,6 +36,8 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
   const item=useContext(ItemContext);
   const {character} = useContext(CharacterContext)
   const [values, setValues] = useState({name:"", description:""})
+  const nameRef = useRef(null);
+  const descriptionRef = useRef(null);
   useFirebaseConnect([
                        {
                          path   : `/items/${character}/${item}/name`,
@@ -44,7 +57,6 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
     setValues(sectionInfo);
   },[sectionInfo]);
 
-  console.log(sectionInfo);
   const {
     name="New Item",
       description = ""
@@ -62,13 +74,39 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
 
 
   function handleBlur(e:FocusEvent<HTMLInputElement>): any {
-    console.log(e.target.id, e.target.value);
+    console.log("blur");
+
     onChange([
                {
                  id   : e.target.id.slice(6),
                  value: e.target.value,
                },
              ]);
+  }
+
+
+
+  function handleKey(e:React.KeyboardEvent<HTMLInputElement>): void {
+    if(e.key  == "Escape"){
+      // @ts-ignore
+      document.activeElement?.blur();
+    }
+
+    if (e.key == "Enter") {
+      // @ts-ignore
+      const {id, value}:{id:string, value:string} = e.target;
+      onChange([{
+                 id: id.slice(6),
+               value
+               }])
+
+      if(id.includes("name")) { // @ts-ignore
+        document.activeElement?.blur();
+      }
+
+
+    }
+
   }
 
   return (
@@ -82,16 +120,20 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
             <TextField
                 fullWidth
                 value={values.name ?? ""}
+                inputRef={nameRef}
                        id={"basic-name"}
                        variant={"outlined"}
                        onChange={handleChange}
                        label={"Name"}
                        type={"text"}
                        InputLabelProps={{shrink: true}}
-                      onBlur={handleBlur}/>
+                      onBlur={handleBlur}
+                  onKeyDown={handleKey}/>
           </Grid>
           <Grid item>
-            <TextField value={values.description ?? ""}
+            <TextField
+                ref={descriptionRef}
+                value={values.description ?? ""}
                        fullWidth
                        multiline
                        rows={4}
@@ -100,7 +142,10 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
                        onChange={handleChange}
                        label={"Description"}
                        type={"text"}
-                       InputLabelProps={{shrink: true}} />
+                       InputLabelProps={{shrink: true}}
+                       onBlur={handleBlur}
+                       onKeyDown={handleKey}
+            />
           </Grid>
         </Grid></Grid>);
 };

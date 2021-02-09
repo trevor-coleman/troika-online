@@ -1,5 +1,5 @@
 import { FormValueChange } from './forms/FormValueChange';
-import { Item } from '../../store/Schema';
+import { Item } from '../../store/Item';
 
 export function calculateSize(values: Item, update: FormValueChange<any>) {
   const sizeOverride: Partial<Item> = {};
@@ -25,15 +25,7 @@ export function calculateSize(values: Item, update: FormValueChange<any>) {
   }
 
   function protectionSize(protects: boolean, protection: number) {
-    console.log(protects, Math.max(1,
 
-                                   values.doesDamage && values.twoHanded
-                                   ? 2
-                                   : 0,
-
-                                   protects && protection
-                                   ? protection * -2
-                                   : 0))
     return protects
            ? Math.max(1,
 

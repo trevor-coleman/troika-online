@@ -10,6 +10,7 @@ import Bio from '../components/bio/Bio';
 import CharacterItems from '../components/items/CharacterItems';
 import CharacterTitle from '../components/characters/CharacterTitle';
 import { CharacterContext } from './CharacterContext';
+import CharacterWeapons from '../components/CharacterWeapons';
 
 
 
@@ -80,6 +81,15 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
               <Grid item
                     xs={12}>
                 <CharacterSkills />
+              </Grid>
+            </Grid>
+            <Grid container
+                  spacing={2}
+                  item
+                  xs={12}>
+              <Grid item
+                    xs={12}>
+                <CharacterWeapons />
               </Grid>
             </Grid>
             <Grid container
