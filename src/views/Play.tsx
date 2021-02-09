@@ -154,7 +154,7 @@ const Play: FunctionComponent<SessionProps> = (props: SessionProps) => {
             <Dummy>
               <Bio characterKey={characterKey} />
               <Stats characterKey={characterKey} />
-              <CharacterSkills characterKey={characterKey} />
+              <CharacterSkills />
             </Dummy>
           </Grid>
 

@@ -1,4 +1,8 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  useEffect, useContext,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import {
@@ -6,7 +10,6 @@ import {
 } from 'react-beautiful-dnd';
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import AddItemsDialog from './AddItemsDialog';
-import NewItemDialog from './NewItemDialog';
 import Button from '@material-ui/core/Button';
 import {
   useFirebaseConnect, isLoaded, useFirebase, isEmpty,
@@ -15,9 +18,10 @@ import { useInventory, useItems } from '../../store/selectors';
 import InventoryItem from './InventoryItem';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
+import { useTypedSelector } from '../../store';
+import { CharacterContext } from '../../views/CharacterContext';
 
 interface CharacterItemsProps {
-  characterKey: string,
 }
 
 const tempItems: {
@@ -41,22 +45,14 @@ const initialState: { add: boolean; new: boolean; edit: boolean; remove: boolean
 };
 
 const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: CharacterItemsProps) => {
-  const {
-    characterKey,
-  } = props;
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
-  useFirebaseConnect([
-                       `/characters/${characterKey}/inventory`]);
-  const inv = useInventory(characterKey);
-  const [inventory, setInventory] = useState<string[]>([]);
-  const firebase = useFirebase();
+  const {character} = useContext(CharacterContext)
+  useFirebaseConnect({path:`/characters/${character}/inventory`, storeAs:`characterItems/${character}/inventory`});
+  const inventory = useTypedSelector(state=>state.firebase.data?.characterItems?.[character]?.inventory)
 
-  useEffect(() => {
-    if (isLoaded(inv)) setInventory(inv ?? []);
-    console.log("inventory changed")
-  }, [inv]);
+  const firebase = useFirebase();
 
   const [dialogState, setDialogState] = useState<{ [key: string]: boolean }>(
       initialState);
@@ -70,6 +66,9 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
         }
                    : newState);
   }
+
+  const setInventory = (inventory: string[]) => {
+    console.log(inventory);}
 
   async function handleDragEnd(result: DropResult,
                                provided: ResponderProvided): Promise<void> {
@@ -91,7 +90,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
     newItemArray.splice(source.index, 1);
     newItemArray.splice(destination.index, 0, draggableId);
     setInventory(newItemArray);
-    await firebase.ref(`/characters/${characterKey}/inventory`)
+    await firebase.ref(`/characters/${character}/inventory`)
                   .set(newItemArray);
   }
 
@@ -103,21 +102,28 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
       newInventory.splice(index, 1);
     }
 
-    firebase.ref(`/characters/${characterKey}/inventory`).set(newInventory);
-    firebase.ref(`/characters/${characterKey}/items/${id}`).set(null);
-
-    setInventory(newInventory);
-
+    firebase.ref(`/characters/${character}/inventory`).set(newInventory);
+    firebase.ref(`/items/${character}/${id}`).set(null);
   };
+
+  const newItem = ()=> {
+    const newItem = firebase.ref(`/items/${character}`).push({
+      name: "New Item",
+      owner: character,
+                                                }).key;
+
+    const newInventory = inventory ? [...inventory, newItem] : [newItem];
+    firebase.ref(`/characters/${character}/inventory`).set(newInventory);
+  }
 
   return (
       <div>
         <Typography variant={"h5"}>
           Inventory </Typography>
         <Button onClick={() => showDialog("add")}>Import Item</Button>
-        <Button onClick={() => showDialog("new")}>New Item</Button>
+        <Button onClick={newItem}>New Item</Button>
         <DragDropContext onDragEnd={handleDragEnd}>
-          <div><Droppable droppableId={`${characterKey}-inventory`}>{(provided) =>
+          <div><Droppable droppableId={`${character}-inventory`}>{(provided) =>
               <Grid container spacing={2}
                   innerRef={provided.innerRef}
                   {...provided.droppableProps}>
@@ -126,7 +132,6 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
                               <InventoryItem key={key}
                                              index={index}
                                              id={key}
-                                             characterKey={characterKey}
                                              onRemove={removeItem} />))
 
                  : <div />}
@@ -138,11 +143,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
                         inventory={inventory}
                         setInventory={setInventory}
                         onClose={() => showDialog()}
-                        characterKey={characterKey} />
-        <NewItemDialog open={dialogState.new}
-                       character={characterKey}
-                       inventory={inventory}
-                       onClose={() => showDialog()} />
+                        characterKey={character} />
       </div>);
 };
 

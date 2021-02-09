@@ -17,17 +17,17 @@ import {
 import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
 import { ExpandMore } from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
-import { Item } from '../../store/Schema';
+import { Skill } from '../../store/Schema';
 import Typography from '@material-ui/core/Typography';
 
-interface ItemsListProps {
+interface SkillsListProps {
   search: string;
-  setValues: (values: { [key: string]: Item }) => void;
-  values: { [key: string]: Item };
+  setValues: (values: { [key: string]: Skill }) => void;
+  values: { [key: string]: Skill };
 }
 
 //COMPONENT
-const SrdItemsList: FunctionComponent<ItemsListProps> = (props: ItemsListProps) => {
+const SrdSkillsList: FunctionComponent<SkillsListProps> = (props: SkillsListProps) => {
   const {
     search,
     values,
@@ -36,42 +36,45 @@ const SrdItemsList: FunctionComponent<ItemsListProps> = (props: ItemsListProps) 
 
   useFirebaseConnect([
                        {
-                         path       : '/srdItems',
-                         storeAs    : '/addSrdItems',
-                         queryParams: ['orderByChild=sort_name', `startAt=${search}`, `endAt=${search+"\uf8ff"}`],
+                         path       : '/srdSkills',
+                         storeAs    : '/addSrdSkills',
+                         queryParams: [
+                           'orderByChild=sort_name',
+                           `startAt=${search}`,
+                           `endAt=${search + "\uf8ff"}`
+                         ],
                        },
                      ]);
 
-  const items = useTypedSelector(state => state.firebase.ordered.addSrdItems);
-  const itemKeys: string[] = isLoaded(items) && !isEmpty(items)
-                             ? Object.keys(items)
+  const skills = useTypedSelector(state => state.firebase.ordered.addSrdSkills);
+  const skillKeys: string[] = isLoaded(skills) && !isEmpty(skills)
+                             ? Object.keys(skills)
                              : [];
 
-
-
-  const handleChange = (key:string, value: Item|null) => {
+  const handleChange = (key: string, value: Skill | null) => {
     const newValues = {...values};
-    if(value === null) {
+    if (value === null) {
       delete newValues[key];
-    } else {
+    }
+    else {
       newValues[key] = value;
     }
     setValues(newValues);
-    console.log(newValues[key],  Boolean(newValues[key]))
+    console.log(newValues[key], Boolean(newValues[key]))
   };
 
   return (
-      isLoaded(items)
-      ? isEmpty(items)
+      isLoaded(skills)
+      ? isEmpty(skills)
         ? <Typography>No matches</Typography>
         : <List>
-        {items.map(item => <SrdItemsListItem key={item.key}
-                                                    itemKey={item.key}
-                                                    item={item.value}
-                                                    selected={Boolean(values[item.key])}
-                                                    onChange={handleChange} />)}
-      </List>
-      : <List><ListItem><ListItemText primary={"LOADING"}/> </ListItem></List>)
+          {skills.map(skill => <SrdSkillsListItem key={skill.key}
+                                               skillKey={skill.key}
+                                               skill={skill.value}
+                                               selected={Boolean(values[skill.key])}
+                                               onChange={handleChange} />)}
+        </List>
+      : <List><ListItem><ListItemText primary={"LOADING"} /> </ListItem></List>)
 };
 
 const useStyles = makeStyles((theme: Theme) => (
@@ -89,54 +92,57 @@ const useStyles = makeStyles((theme: Theme) => (
       },
     }));
 
-export default SrdItemsList;
+export default SrdSkillsList;
 
-interface SrdItemsListItemProps {
-  itemKey: string,
-  item: Item,
-  onChange: (key:string, value:Item|null) => void;
+interface SrdSkillsListItemProps {
+  skillKey: string,
+  skill: Skill,
+  onChange: (key: string, value: Skill | null) => void;
   selected: boolean;
 }
 
-const SrdItemsListItem = ({
-                            itemKey,
-                            item,
+const SrdSkillsListItem = ({
+                            skillKey,
+                            skill,
                             onChange,
                             selected,
-                          }: SrdItemsListItemProps) => {
-  useFirebaseConnect([`srdItems/${itemKey}`]);
+                          }: SrdSkillsListItemProps) => {
+  useFirebaseConnect([`srdSkills/${skillKey}`]);
   const classes = useStyles();
-  const itemInfo = useTypedSelector(state => {
-    return state.firebase.data?.srdItems?.[itemKey];
+  const skillInfo = useTypedSelector(state => {
+    return state.firebase.data?.srdSkills?.[skillKey];
   });
-  const [itemValues, setItemValues] = useState<Partial<Item>>({});
+  const [skillValues, setSkillValues] = useState<Partial<Skill>>({});
   useEffect(() => {
-    if (isLoaded(itemInfo)) setItemValues(itemInfo);
-  }, [itemInfo]);
+    if (isLoaded(skillInfo)) setSkillValues(skillInfo);
+  }, [skillInfo]);
 
   const [expand, setExpand] = useState(false);
 
   const toggleExpand = () => setExpand(!expand);
 
   function handleCheck(e: ChangeEvent<HTMLInputElement>): void {
-    onChange(itemKey, e.target.checked ? item : null);
+    onChange(skillKey,
+             e.target.checked
+             ? skill
+             : null);
   }
 
   return (
-      isLoaded(itemInfo)
+      isLoaded(skillInfo)
       ? <><ListItem dense>
-        <ListItemAvatar><Checkbox id={itemKey}
+        <ListItemAvatar><Checkbox id={skillKey}
                                   onChange={handleCheck}
                                   checked={selected ??
                                            false} /></ListItemAvatar>
-        <ListItemText primary={itemValues?.name ?? ""} />
+        <ListItemText primary={skillValues?.name ?? ""} />
         <ListItemSecondaryAction onClick={toggleExpand}><ExpandMore /></ListItemSecondaryAction>
       </ListItem>
         <Collapse in={expand}>
           <ListItem dense
                     className={classes.listDescription}>
             <ListItemText inset
-                          secondary={itemValues?.description} /></ListItem>
+                          secondary={skillValues?.description} /></ListItem>
         </Collapse>
         <Divider /></>
       : <ListItem />);

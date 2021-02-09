@@ -1,5 +1,5 @@
 import React, {
-  FunctionComponent, useState, ChangeEvent, useEffect,
+  FunctionComponent, useState, ChangeEvent, useEffect, useContext,
 } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -12,12 +12,13 @@ import { useAuth, useSkill } from '../../store/selectors';
 import {
   useFirebase, useFirebaseConnect, isLoaded,
 } from 'react-redux-firebase';
+import { CharacterContext } from '../../views/CharacterContext';
+import { useTypedSelector } from '../../store';
 
 interface EditSkillDialogProps {
   open: boolean;
   onClose: () => void;
-  skillKey: string;
-  character: string | null;
+  skill: string;
 }
 
 //COMPONENT
@@ -25,59 +26,29 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
   const {
     open,
     onClose,
-    character,
-      skillKey
+      skill
   } = props;
   const auth = useAuth();
   const firebase = useFirebase();
-  useFirebaseConnect([`skills/${skillKey}`]);
-  const skill = useSkill(skillKey)
+  const {character} = useContext(CharacterContext);
+  useFirebaseConnect([
+      {path:`skills/${character}/${skill}`,
+        storeAs: `editSkill/${skill}`
+      }]);
 
-  const [values, setValues] = useState<Partial<Skill>>({
-    description: '',
-    name: '',
-  });
-
-  const [oldValues, setOldValues] = useState<Partial<Skill>>({
-    description: '',
-    name: '',
-  });
-
-  const [firstLoad, setFirstLoad] = useState(true);
-
-
-  useEffect(()=> {
-    if (isLoaded(skill)) {
-      if(firstLoad) {
-        setOldValues(skill);
-        setFirstLoad(false);
-      };
-      setValues(skill);
-
-    }
-  }, [skill, firstLoad])
+  const {name = "", description = ""} = useTypedSelector(state=> state.firebase.data.editSkill?.[skill]) ?? {}
 
 
   const handleClose = async (undo?:boolean)=> {
-    setFirstLoad(true);
-    if(undo) {
-      await firebase.ref(`/skills/${skillKey}`)
-                    .update(oldValues);
-    }
     onClose();
   }
 
   async function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    setValues({
-      ...values,
-      [e.target.id]: e.target.value,
-    });
-
-    await firebase.ref(`/skills/${skillKey}/${e.target.id}`).set(e.target.value);
+    await firebase.ref(`/skills/${character}/${skill}/${e.target.id}`).set(e.target.value);
   }
 
 
-  const isValid = values.name?.length && values.name.length > 0;
+  const isValid = name?.length && name.length > 0;
 
   return (
       <Dialog open={open}
@@ -93,7 +64,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
               <TextField variant={"outlined"}
                          label={"Name"}
                          id={"name"}
-                         value={values.name}
+                         value={name}
                          onChange={handleChange}
                          placeholder={"New Skill"}
                          fullWidth />
@@ -102,7 +73,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
               <TextField variant={"outlined"}
                          multiline
                          id={"description"}
-                         value={values.description}
+                         value={description}
                          onChange={handleChange}
                          label={"description"}
                          rows={4}

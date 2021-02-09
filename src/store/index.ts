@@ -1,21 +1,25 @@
-import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import {
+  combineReducers, configureStore, getDefaultMiddleware,
+} from '@reduxjs/toolkit';
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/storage';
-import { firebaseReducer, FirebaseReducer, getFirebase, actionTypes as rrfActionTypes } from 'react-redux-firebase';
+import {
+  firebaseReducer, FirebaseReducer, getFirebase, actionTypes as rrfActionTypes,
+} from 'react-redux-firebase';
 import Schema, { Profile } from './Schema';
 
 // noinspection SpellCheckingInspection
 const fbConfig = {
-  apiKey: "AIzaSyD8_nUxyjBAvGId93tYDK0O1v88A8Tgm7Q",
-  authDomain: "troika-online.firebaseapp.com",
-  projectId: "troika-online",
-  storageBucket: "troika-online.appspot.com",
+  apiKey           : "AIzaSyD8_nUxyjBAvGId93tYDK0O1v88A8Tgm7Q",
+  authDomain       : "troika-online.firebaseapp.com",
+  projectId        : "troika-online",
+  storageBucket    : "troika-online.appspot.com",
   messagingSenderId: "616277408442",
-  appId: "1:616277408442:web:1fef19d4d2d69e6e6f2083",
-  measurementId: "G-7QFHN3RXPP",
+  appId            : "1:616277408442:web:1fef19d4d2d69e6e6f2083",
+  measurementId    : "G-7QFHN3RXPP",
 };
 
 const rrfConfig = {
@@ -28,56 +32,47 @@ firebase.initializeApp(fbConfig);
 // firebase.functions() // <- needed if using httpsCallable
 
 const rootReducer = combineReducers({
-  firebase: firebaseReducer,
-});
-
-
-
+                                      firebase: firebaseReducer,
+                                    });
 
 export interface RootState {
   firebase: FirebaseReducer.Reducer<Profile, Schema>
 }
 
 const extraArgument = {
-  getFirebase
-}
+  getFirebase,
+};
 
 const middleware = [
   ...getDefaultMiddleware({
-    immutableCheck: {
-      ignoredActions: [
-        // just ignore every redux-firebase and react-redux-firebase action type
-        ...Object.keys(rrfActionTypes)
-                 .map(type => `@@reactReduxFirebase/${type}`)
-      ],
-      ignoredPaths  : ['firebase']
-    },
+
                             serializableCheck: {
-      ignoredActions: [
-        // just ignore every redux-firebase and react-redux-firebase action type
-        ...Object.keys(rrfActionTypes)
-                 .map(type => `@@reactReduxFirebase/${type}`)
-      ],
-      ignoredPaths: ['firebase']
-    },
-    thunk: {
-      extraArgument
-    }
-  })
-]
+                              ignoredActions: [
+                                // just ignore every redux-firebase and
+                                // react-redux-firebase action type
+                                ...Object.keys(rrfActionTypes)
+                                         .map(type => `@@reactReduxFirebase/${type}`),
+                              ],
+                              ignoredPaths  : ['firebase'],
+                            },
+                            thunk            : {
+                              extraArgument,
+                            },
+                          }),
+];
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 const store = configureStore({
-  reducer: rootReducer,
-  middleware
-});
+                               reducer: rootReducer,
+                               middleware,
+                             });
 
 export type AppDispatch = typeof store.dispatch;
 
 export const rrfProps = {
   firebase,
-  config: rrfConfig,
+  config  : rrfConfig,
   dispatch: store.dispatch,
 };
 

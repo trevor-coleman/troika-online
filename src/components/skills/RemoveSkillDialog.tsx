@@ -1,4 +1,8 @@
-import React, { FunctionComponent, useState, ChangeEvent } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  ChangeEvent, useContext,
+} from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   DialogTitle,
@@ -10,43 +14,39 @@ import { useAuth, useSkill } from '../../store/selectors';
 import {
   useFirebase, useFirebaseConnect, isLoaded,
 } from 'react-redux-firebase';
+import { CharacterContext } from '../../views/CharacterContext';
+import { useTypedSelector } from '../../store';
 
 interface EditSkillDialogProps {
   open: boolean;
   onClose: (remove: boolean) => void;
   skillKey: string;
-  character: string | null;
 }
 
 //COMPONENT
-const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSkillDialogProps) => {
+const RemoveSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSkillDialogProps) => {
   const {
     open,
     onClose,
-    character,
     skillKey,
   } = props;
   const auth = useAuth();
   const firebase = useFirebase();
   const classes = useStyles();
-  useFirebaseConnect([`skills/${skillKey}`]);
-  const skill = useSkill(skillKey);
-
-  const [removeFromLibrary, setRemoveFromLibrary] = useState<boolean>(false);
+  const {character} = useContext(CharacterContext);
+  useFirebaseConnect([{path:`skills/${character}/${skillKey}/name`, storeAs:`editSkill/${skillKey}/name`}]);
+  const name = useTypedSelector(state => state.firebase.data?.editSkill?.[character]?.name) ?? ""
 
   const handleClose = async (remove?: boolean) => {
     onClose(remove ?? false);
   };
 
-  const handleCheck = (e: ChangeEvent<HTMLInputElement>) => {
-
-  };
 
   return (
       <Dialog open={open}
               onClose={() => handleClose(false)}>
-        {isLoaded(skill)
-         ? <> <DialogTitle>Remove {skill.name ?? ""}?</DialogTitle>
+        {isLoaded(name)
+         ? <> <DialogTitle>Remove {name ?? ""}?</DialogTitle>
 
          <DialogActions>
            <Button onClick={() => handleClose(false)}
@@ -68,4 +68,4 @@ const useStyles = makeStyles((theme: Theme) => (
       buttons: {marginRight: theme.spacing(2)},
     }));
 
-export default EditSkillDialog;
+export default RemoveSkillDialog;

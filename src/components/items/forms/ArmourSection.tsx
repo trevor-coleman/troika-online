@@ -5,10 +5,11 @@ import {
   FormControlLabel, Switch, FormControl, Select, MenuItem, TextField, FormGroup,
 } from '@material-ui/core';
 import { FormValueChange, FormValueChangeHandler } from './FormValueChange';
+import { useFirebaseConnect } from 'react-redux-firebase';
+import { useTypedSelector } from '../../../store';
 
 interface IArmourSectionProps {
-  protects: boolean;
-  protection: number | undefined;
+  character: string, item:string,
   onChange: FormValueChangeHandler,
 }
 
@@ -32,12 +33,30 @@ const useStyles = makeStyles((theme: Theme) => (
 
 const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSectionProps) => {
   const {
-    protects,
-    protection,
+    character,
+      item,
     onChange,
   } = props;
   const classes = useStyles();
   const selectOptions = ["Unarmoured", "Light", "Medium", "Heavy"];
+
+  useFirebaseConnect([
+                       {
+                         path   : `/items/${character}/${item}/protects`,
+                         storeAs: `/armourSection/${item}/protects`
+                       },
+                       {
+                         path   : `/items/${character}/${item}/protection`,
+                         storeAs: `/armourSection/${item}/protection`
+                       },
+                     ])
+
+  const sectionInfo = useTypedSelector(state => state.firebase.data?.armourSection?.[item]) ??
+                      {};
+  const {
+    protects,
+      protection = 0,
+  } = sectionInfo;
 
   const [selected, setSelected] = useState(typeof protection === 'undefined' ||
                                            protection > 0 || protection < -3
@@ -111,7 +130,7 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
       <Grid container direction={"row"}><Grid item
               xs={3}>
         <FormControlLabel labelPlacement={"start"}
-                          control={<Switch checked={protects}
+                          control={<Switch checked={protects ?? false}
                                            onChange={handleEnabled}
                                            id={"item-protects"}
                                            name="item-protects" />}

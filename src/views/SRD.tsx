@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import NewSkillDialog from '../components/skills/NewSkillDialog';
+
 import { useParams } from 'react-router-dom';
-import NewItemDialog from '../components/items/NewItemDialog';
+
 
 interface SRDProps {
 }
@@ -20,8 +20,8 @@ const SRD: FunctionComponent<SRDProps> = (props: SRDProps) => {
   return (
       <div className={classes.root}>
         SRD
-        {type == "skill" ? <NewSkillDialog open={true} onClose={()=>{}} character={null} srd/>:""}
-        {type == "item" ? <NewItemDialog open={true} onClose={()=>{}} character={null} srd/>:""}
+        {/*{type == "skill" ? <NewSkillDialog open={true} onClose={()=>{}} character={null} srd/>:""}*/}
+        {/*{type == "item" ? <NewItemDialog open={true} onClose={()=>{}} character={null} srd/>:""}*/}
       </div>);
 };
 

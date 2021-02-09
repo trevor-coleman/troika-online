@@ -20,6 +20,7 @@ const SectionToggleIcon = ({
                              show,
                            }: SectionToggleIconProps) => {
 
+
   return show
          ? <IconButton onClick={() => onToggle(section)}>
            {expanded

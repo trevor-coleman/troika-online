@@ -16,6 +16,7 @@ import Friends from '../components/friends/Friends';
 import { useTypedSelector } from '../store';
 import Games from '../components/game/Games';
 import GameInvitations from '../components/game/GameInvitations';
+import {ReactComponent as MainIcon} from '../svg/knowledge-svgrepo-com.svg';
 
 interface HomeProps {
 }
@@ -26,8 +27,9 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
 
   return (
       <div>
+        <Box width={100}><MainIcon/></Box>
         <Typography variant={"h1"}>
-          Home
+          Troika Online
         </Typography>
         <Grid container spacing={2}>
           <Grid item container spacing={1} xs={12} sm={7} md={8}>

@@ -1,7 +1,5 @@
 import React, {
-  FunctionComponent,
-  useState,
-  ChangeEvent, useCallback,
+  FunctionComponent, useState, ChangeEvent, useCallback, useContext,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -13,13 +11,12 @@ import Button from '@material-ui/core/Button';
 import { Skill } from '../../store/Schema';
 import { useAuth } from '../../store/selectors';
 import { useFirebase } from 'react-redux-firebase';
+import { CharacterContext } from '../../views/CharacterContext';
 
 interface NewSkillDialogProps {
   open: boolean;
   onClose: () => void;
-  skillKey?: string;
-  character: string | null;
-  srd?: boolean;
+  onCreate: (newSkill:Partial<Skill>)=> void,
 }
 
 //COMPONENT
@@ -27,44 +24,25 @@ const NewSkillDialog: FunctionComponent<NewSkillDialogProps> = (props: NewSkillD
   const {
     open,
     onClose,
-    character,
-      srd
+      onCreate,
   } = props;
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const auth = useAuth();
-  const firebase = useFirebase();
 
   const [values, setValues] = useState<Partial<Skill>>({
     description: '',
     name: '',
   });
 
-  const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>)=> {
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>)=> {
     setValues({
       ...values,
       [e.target.id]: e.target.value,
     });
-  }, [values]);
+  };
 
-  async function saveSkill() {
-
-    const characterKeys =  character ? {
-      [character]:true
-    } : null;
-    const skillRef = await firebase.ref(`/characters/${character}/skills/`)
-                             .push({
-                               ...values,
-                               owner: srd? "srd" : auth.uid,
-                               characters: characterKeys,
-                             });
-
-    setValues({
-      description: '',
-      name: ''})
-
-    onClose();
-  }
+  function saveSkill() {
+      onCreate(values);
+      onClose();
+    }
 
   const isValid = values.name?.length && values.name.length > 0;
 

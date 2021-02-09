@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ChangeEvent } from 'react';
+import React, { FunctionComponent, ChangeEvent, useContext } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
   Table,
@@ -17,6 +17,10 @@ import {
 import { Damage } from '../../../store/Schema';
 import { FormValueChangeHandler, FormValueChange } from './FormValueChange';
 import Grid from '@material-ui/core/Grid';
+import { useFirebaseConnect } from 'react-redux-firebase';
+import { useTypedSelector } from '../../../store';
+import { CharacterContext } from '../../../views/CharacterContext';
+import { ItemContext } from '../../../contexts/ItemContext';
 
 export const weaponNames: { [key: string]: string } = {
   sword        : "Sword",
@@ -115,29 +119,32 @@ const weaponAttributes: { [key: string]: { ranged?: boolean, armourPiercing?: bo
 };
 
 interface IDamageSectionProps {
-  damage?: number[],
-  doesDamage?: boolean,
-  damagesAs?: string,
-  twoHanded:boolean,
-  armourPiercing: boolean,
-  ranged:boolean,
-  onChange: FormValueChangeHandler,
+  onChange:FormValueChangeHandler
 }
 
 type DamageSectionProps = IDamageSectionProps;
 
 const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSectionProps) => {
   const {
-    damage,
-    doesDamage,
-    damagesAs,
-    onChange,
-      ranged,
-      twoHanded,
-      armourPiercing
-
+    onChange
   } = props;
   const classes = useStyles();
+  const {character} = useContext(CharacterContext);
+  const item = useContext(ItemContext);
+
+  useFirebaseConnect([
+      {path: `/items/${character}/${item}/damage`, storeAs:`/damageSection/${item}/damage`},
+      {path: `/items/${character}/${item}/doesDamage`, storeAs:`/damageSection/${item}/doesDamage`},
+      {path: `/items/${character}/${item}/damagesAs`, storeAs:`/damageSection/${item}/damagesAs`},
+      {path: `/items/${character}/${item}/twoHanded`, storeAs:`/damageSection/${item}/twoHanded`},
+      {path: `/items/${character}/${item}/ranged`, storeAs:`/damageSection/${item}/ranged`},
+      {path: `/items/${character}/${item}/armourPiercing`, storeAs:`/damageSection/${item}/armourPiercing`},
+                     ])
+
+  const sectionInfo = useTypedSelector(state => state.firebase.data?.damageSection?.[item]) ?? {};
+  const {damage = [0,0,0,0,0,0,0], doesDamage = false, damagesAs ="unarmed", twoHanded = false, ranged = false, armourPiercing = false} = sectionInfo;
+
+
 
   const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -220,7 +227,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
         <Grid item
               xs={3}>
           <FormControlLabel labelPlacement={"start"}
-                            control={<Switch checked={doesDamage}
+                            control={<Switch checked={doesDamage??false}
                                              onChange={handleChecked}
                                              id={"item-doesDamage"}
                                              name="item-doesDamage" />}
@@ -232,7 +239,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
                        disabled={!doesDamage}>
             <Select variant="outlined"
                     id="damagesAs"
-                    value={damagesAs ?? 0}
+                    value={damagesAs ?? "unarmed"}
                     name={"damagesAs"}
                     onChange={handleDamageChoice}>
               {Object.keys(weaponDamage)
@@ -247,8 +254,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
           <Table size="small">
             <TableBody>
               <TableRow>
-                {(
-                    damage ?? Array(7))
+                {[0,0,0,0,0,0,0]
                     .map((_, index) => (
                         <TableCell padding={"none"}
                                    key={`damage-cell-${index}`}>

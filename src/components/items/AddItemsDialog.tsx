@@ -33,31 +33,6 @@ interface TabPanelProps {
   value: any;
 }
 
-function TabPanel(props: TabPanelProps) {
-
-  const classes = useStyles();
-
-  const {
-    children,
-    value,
-    index,
-    ...other
-  } = props;
-
-  return (
-      <div role="tabpanel"
-           hidden={value !== index}
-           id={`items-tabpanel-${index}`}
-           aria-labelledby={`items-tab-${index}`}
-           {...other}
-           className={classes.scrollList}>
-        {value === index && (
-            <Box p={3}>
-              {children}
-            </Box>)}
-      </div>);
-}
-
 //COMPONENT
 const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsDialogProps) => {
   const {
@@ -68,18 +43,11 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
     setInventory,
   } = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const auth = useAuth();
   const firebase = useFirebase();
 
-  const [value, setValue] = useState(0);
   const [search, setSearch] = useState("");
   const [selection, setSelection] = useState<{ [key: string]: Item }>({});
   const [isAdding, setIsAdding] = useState(false);
-
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
-  };
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value.toLowerCase());

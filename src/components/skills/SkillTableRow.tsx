@@ -1,5 +1,5 @@
 import React, {
-  FunctionComponent, useEffect, useState, ChangeEvent, useCallback,
+  FunctionComponent, useEffect, useState, ChangeEvent, useCallback, useContext,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -22,11 +22,10 @@ import {
 } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import { useTypedSelector } from '../../store';
-
+import { CharacterContext } from '../../views/CharacterContext';
 
 interface SkillTableRowProps {
-  skillKey: string,
-  characterKey: string,
+  skill: string,
   onEdit: (key: string) => void,
   onRemove: (key: string) => void,
 
@@ -35,41 +34,40 @@ interface SkillTableRowProps {
 //COMPONENT
 const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableRowProps) => {
   const {
-    skillKey,
-    characterKey,
+    skill,
     onEdit,
       onRemove,
   } = props;
+  const {character} = useContext(CharacterContext);
   const classes = useStyles();
   const dispatch = useDispatch();
-  useFirebaseConnect([`/characters/${characterKey}/skill/${skillKey}`,
-                      `/characters/${characterKey}/skillValues/${skillKey}`]);
+  useFirebaseConnect([
+      {path:`/skills/${character}/${skill}`, storeAs: `skillTableRow/${character}/${skill}/skill`},
+      {path:`/skillValues/${character}/${skill}`, storeAs: `skillTableRow/${character}/${skill}/skillValues`}])
 
-  const skill = useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.skills?.[skillKey])
-  const skillValues = useCharacterSkillValues(characterKey, skillKey);
+
+  const {skill:skillInfo, skillValues } = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]) ?? {}
+
+  const {skill:skillSkill = 0, rank: skillRank = 0, used: skillUsed = false} = skillValues ?? {};
+  const {name = "", description = "", owner=""} = skillInfo ?? {};
+
+
   const firebase = useFirebase();
   const auth = useAuth();
 
-  const [values, setValues] = useState<SkillValues>({
-    used: false,
-    rank: 0,
-    skill: 0,
-  });
-
-  const  handleChecked = useCallback((e: ChangeEvent<HTMLInputElement>,
+  const  handleChecked =(e: ChangeEvent<HTMLInputElement>,
                                used: boolean) =>
   {
     const newValues = {
-      ...values,
+      ...skillValues,
       used,
     };
-    setValues(newValues);
 
-    firebase.ref(`/characters/${characterKey}/skillValues/${skillKey}`)
+    firebase.ref(`/skillValues/${character}/${skill}`)
                   .set(newValues);
-  }, [characterKey, skillKey, values])
+  }
 
-  const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 
     let intValue: number = parseInt(e.target.value);
     const newValue = intValue > 0
@@ -77,15 +75,13 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
                      : 0;
 
     const newValues = {
-      ...values,
+      ...skillValues,
       [e.target.id]: newValue,
     };
 
-    setValues(newValues);
-
-    firebase.ref(`/characters/${characterKey}/skillValues/${skillKey}`)
+    firebase.ref(`/skillValues/${character}/${skill}`)
                   .set(newValues);
-  }, [values, characterKey, skillKey])
+  }
 
   const [expand, setExpand] = useState(false);
 
@@ -93,32 +89,18 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
     setExpand(!expand);
   },[expand]);
 
-
-  useEffect(() => {
-    if (isLoaded(skillValues)) {
-      setValues(skillValues ?? {
-        used: false,
-        rank: 0,
-        skill: 0,
-      });
-    }
-
-  }, [skillValues]);
-
-  console.log(skill);
-
   return (
-      isLoaded(skill)
-      ? <React.Fragment><TableRow key={skillKey}>
+
+      <React.Fragment><TableRow key={skill}>
         <TableCell padding={"checkbox"}>
           <Checkbox id="used"
-                    checked={values.used}
+                    checked={skillUsed ?? false}
                     onChange={handleChecked} />
         </TableCell>
         <TableCell className={classes.nameCell} onClick={toggleExpand}>
           <Typography component={"span"}
                       className={classes.nameText}>
-            {skill.name}
+            {name}
           </Typography>
           <IconButton onClick={toggleExpand}
                       className={classes.expandButton}>
@@ -139,7 +121,7 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
                          input: classes.rankSkillInput,
                        },
                      }}
-                     value={values.rank}
+                     value={skillRank}
                      id={"rank"}
                      onChange={handleChange} />
         </TableCell>
@@ -153,7 +135,7 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
                          input: classes.rankSkillInput,
                        },
                      }}
-                     value={values.skill}
+                     value={skillSkill ?? 0}
                      onChange={handleChange} />
         </TableCell>
         <TableCell align={'center'}
@@ -167,8 +149,8 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
                        },
                      }}
                      value={(
-                                values?.rank ?? 0) + (
-                                values?.skill ?? 0)}
+                                skillRank) + (
+                                skillSkill)}
                      type={"number"} />
         </TableCell>
         <TableCell>
@@ -183,17 +165,17 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
               <Box p={2}>
                 <div>
                   <Typography paragraph
-                              variant={"body2"}>{skill.description}</Typography>
+                              variant={"body2"}>{description ?? ""}</Typography>
                 </div>
                 <div>
 
-                  {skill.owner == auth.uid ? <Button className={classes.descriptionButton}
+                  {owner == auth.uid ? <Button className={classes.descriptionButton}
                           startIcon={<EditOutlined />}
-                          onClick={() => onEdit(skillKey)}
+                          onClick={() => onEdit(skill)}
                           >Edit</Button>:""}
                   <Button className={classes.descriptionButton}
                           startIcon={<DeleteOutline />}
-                          onClick={()=>onRemove(skillKey)}
+                          onClick={()=>onRemove(skill)}
                           >Remove</Button>
 
                 </div>
@@ -207,9 +189,7 @@ const SkillTableRow: FunctionComponent<SkillTableRowProps> = (props: SkillTableR
             </Collapse>
           </TableCell>
         </TableRow>
-      </React.Fragment>
-
-      : <TableRow />);
+      </React.Fragment>)
 };
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -259,8 +239,7 @@ const useStyles = makeStyles((theme: Theme) => {
           fontWeight: "bold",
           marginLeft: theme.spacing(1),
           background: theme.palette.grey['400'],
-          color: theme.palette.primary.dark, // borderLeft: "1px solid grey",
-          // borderRight: "1px solid grey",
+          color: theme.palette.primary.dark,
         },
       });
 });

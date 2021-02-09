@@ -1,14 +1,16 @@
-import React, { FunctionComponent, ChangeEvent } from 'react';
+import React, { FunctionComponent, ChangeEvent, useContext } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import {
   FormControlLabel, Switch, FormGroup, TextField,
 } from '@material-ui/core';
 import { FormValueChangeHandler, FormValueChange } from './FormValueChange';
+import { useFirebaseConnect } from 'react-redux-firebase';
+import { useTypedSelector } from '../../../store';
+import { ItemContext } from '../../../contexts/ItemContext';
+import { CharacterContext } from '../../../views/CharacterContext';
 
 interface IChargesSectionProps {
-  charges?: { initial?: number, max?: number },
-  hasCharges?: boolean,
   onChange: FormValueChangeHandler
 }
 
@@ -16,11 +18,33 @@ type ChargesSectionProps = IChargesSectionProps;
 
 const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: IChargesSectionProps) => {
   const {
-    hasCharges,
-    charges,
     onChange,
   } = props;
-  const classes = useStyles();
+  const item=useContext(ItemContext);
+  const {character} = useContext(CharacterContext)
+
+  useFirebaseConnect([
+                       {
+                         path   : `/items/${character}/${item}/hasCharges`,
+                         storeAs: `/chargesSection/${item}/hasCharges`
+                       },
+                       {
+      path   : `/items/${character}/${item}/charges`,
+      storeAs: `/chargesSection/${item}/charges`
+    },
+
+                     ])
+
+  const sectionInfo = useTypedSelector(state => state.firebase.data?.chargesSection?.[item]) ??
+                      {};
+
+  console.log(sectionInfo);
+  const {
+    hasCharges = false,
+      charges = {initial: 0, max: 0}
+  } = sectionInfo;
+
+  const {max = 0, initial = 0} = charges ?? {};
 
   const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -37,23 +61,26 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
       },
     ];
 
+    console.log(updates);
     onChange(updates);
   };
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
+
+    const charges = {initial, max};
 
     let {
       id,
       value,
     } = e.target;
     id = id.slice(8);
-    const intValue = parseInt(value);
+    let intValue = parseInt(value);
+    intValue = intValue < 0 ? 0 : intValue;
 
     const newCharges = {
       ...charges,
       [id]: intValue,
     };
-
 
 
     onChange([
@@ -62,7 +89,6 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
                  value: newCharges,
                },
              ]);
-
   }
 
   return (
@@ -71,7 +97,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
             spacing={2}><Grid item
                               xs={3}>
         <FormControlLabel labelPlacement={"start"}
-                          control={<Switch checked={hasCharges}
+                          control={<Switch checked={hasCharges ?? false}
                                            onChange={handleChecked}
                                            id={"item-hasCharges"}
                                            name="item-hasCharges" />}
@@ -80,7 +106,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
         <Grid item
               xs={9}>
           <FormGroup row>
-            <TextField value={charges?.initial ?? 0}
+            <TextField value={initial ?? 0}
                        disabled={!hasCharges}
                        id={"charges-initial"}
                        variant={"outlined"}
@@ -88,7 +114,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
                        label={"Initial"}
                        type={"number"}
                        InputLabelProps={{shrink: true}} />
-            <TextField value={charges?.max ?? 0}
+            <TextField value={max ?? 0}
                        variant={"outlined"}
                        id={"charges-max"}
                        onChange={handleChange}

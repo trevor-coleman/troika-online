@@ -5,6 +5,10 @@ import { Profile } from './index';
 
 export default interface Schema {
   [key:string]: any,
+  characterItems: {inventory: string[]},
+  editSkill: {name:string, description:string}
+  skillTableRow: {[key:string]: {skill:Skill, skillValues: SkillValues}},
+  damageSection: { damage:number[], doesDamage:boolean, damagesAs:string, twoHanded:boolean, ranged: boolean, armourPiercing: boolean },
   addSrdItems: Item,
   queryTest: any,
   addFriendResult: any,
@@ -77,6 +81,7 @@ export interface Character {
   background: string;
   special: string;
   skill: number;
+  skillList: string[];
   stamina_current: number;
   stamina_max: number;
   luck_current: number;
