@@ -13,6 +13,7 @@ export default interface Schema {
   characterItems: CharacterItemsState,
   editSkill: {name:string, description:string}
   skillTableRow: {[key:string]: {skill:Skill, skillValues: SkillValues}},
+  skillText: SkillValues,
   skillSelectItem: Skill,
   addItemsDialog: {inventory: string[], weapons:[]},
   weaponTableRow: WeaponTableRowState,
