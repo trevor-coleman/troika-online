@@ -22,13 +22,14 @@ const Layout: FunctionComponent<LayoutProps> = (props:LayoutProps  ) => {
         <nav><Link to={"/home"}><Button>Home</Button></Link>
           <Link to={"/roll"}><Button>Roll</Button></Link>
           <Button onClick={firebase.logout}>Sign Out</Button></nav>
-        <Container>{props.children ?? ""}</Container>
+        <div>{props.children ?? ""}</div>
       </Container>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
       root: {paddingBottom: 150},
+
     }));
 
 export default Layout;

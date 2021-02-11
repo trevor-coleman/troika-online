@@ -45,11 +45,7 @@ const Bio = (props: BioAndInfoProps) => {
   };
 
   return (
-      <div><Typography variant={"h5"}>
-        Bio & Info
-      </Typography>
-        <Button onClick={() => {}}>Random BG</Button>
-
+      <div>
         <Paper>
           <Box p={2}>
             <form noValidate

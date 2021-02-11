@@ -74,14 +74,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                          0 && values.skill === 0;
   return (
       <div>
-        <Typography variant={"h5"}>
-          Stats
-        </Typography>
-        <Button disabled={!allowRollStats}
-                onClick={() => {}}>Roll Stats</Button>
-
         <Paper>
-
           <Box p={2}>
             <Grid container
                   direction={"row"}>

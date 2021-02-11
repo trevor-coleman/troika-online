@@ -60,11 +60,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
           <CharacterTitle id={id} />
           <Grid container
                 direction={'column'}
-                spacing={4}>
-            <Grid container
-                  spacing={2}
-                  item
-                  xs={12}>
+                spacing={0}>
               <Grid item
                     xs={12}>
                 <Bio characterKey={id} />
@@ -73,7 +69,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
                     xs={12}>
                 <Stats characterKey={id} />
               </Grid>
-            </Grid>
+
             <Grid container
                   spacing={2}
                   item

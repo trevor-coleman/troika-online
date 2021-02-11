@@ -6,7 +6,14 @@ import {
   useFirebaseConnect, useFirebase, isLoaded,
 } from 'react-redux-firebase';
 import {
-  Paper, Table, TableRow, TableCell, TableContainer, TableBody, TableHead,
+  Paper,
+  Table,
+  TableRow,
+  TableCell,
+  TableContainer,
+  TableBody,
+  TableHead,
+  TextField, CardHeader,
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -19,6 +26,11 @@ import { useTypedSelector } from '../../store';
 import { CharacterContext } from '../../views/CharacterContext';
 import { useAuth } from '../../store/selectors';
 import { Skill } from '../../store/Schema';
+import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import { Add } from '@material-ui/icons';
+import SkillCard from './SkillCard';
+import Grid from '@material-ui/core/Grid';
 
 interface CharacterSkillsProps {
 
@@ -93,49 +105,18 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
       <div>
         <Typography variant={"h5"}>
           Skills </Typography>
-        <Button disabled onClick={() => showDialog("add")}>Import Skill</Button>
-        <Button onClick={() => showDialog("new")}>New Skill</Button>
-
-        <TableContainer component={Paper}>
-          <Table size={'small'}>
-            <TableHead>
-              <TableRow>
-                <TableCell className={classes.checkBoxCol}>Used
-                </TableCell>
-                <TableCell>
-                  Name
-                </TableCell>
-                <TableCell className={classes.skillRankCol}
-                           align={"center"}>
-                  Rank
-                </TableCell>
-                <TableCell className={classes.skillRankCol}
-                           align={"center"}>
-                  Skill
-                </TableCell>
-                <TableCell className={classes.skillRankCol}
-                           align={"center"}>
-                  Total
-                </TableCell>
-                <TableCell className={classes.iconButtonCol} />
-              </TableRow>
-            </TableHead>
-            <TableBody>{skillList
-                .map(skill => <SkillTableRow key={skill}
-                                             skill={skill}
-                                             onEdit={() => {
-                                               setSelectedSkill(skill);
-                                               showDialog("edit");
-                                             }}
-                                             onRemove={() => {
-                                               setSelectedSkill(skill);
-                                               showDialog("remove");
-                                             }} />)}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-
+            <Grid container spacing={0} direction={"column"} className={classes.skillList}>{skillList
+                .map(skill => <Grid item key={skill}><SkillCard
+                       skill={skill}
+                       onEdit={() => {
+                         setSelectedSkill(skill);
+                         showDialog("edit");
+                       }}
+                       onRemove={() => {
+                         setSelectedSkill(skill);
+                         showDialog("remove");
+                       }}/></Grid>
+                )}</Grid>
         <AddSkillsDialog open={dialogState.add}
                          onAdd={addSkills}
                          onClose={() => showDialog()}
@@ -164,7 +145,11 @@ const useStyles = makeStyles((theme: Theme) => {
         checkBoxCol  : {
           paddingLeft: theme.spacing(2),
         },
-        nameCol      : {
+        skillList: {
+          backgroundColor: theme.palette.background.paper,
+          padding: theme.spacing(2),
+        },
+        descriptionCol      : {
           flexGrow: 1,
         },
         skillRankCol : {
@@ -178,6 +163,13 @@ const useStyles = makeStyles((theme: Theme) => {
         iconButtonCol: {
           width: "3rem",
         },
+        newSkillRow: {
+          cursor: "pointer",
+        },
+        newSkillName: {
+          marginTop: theme.spacing(1),
+          marginBottom: theme.spacing(1),
+        }
       });
 });
 
