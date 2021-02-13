@@ -1,18 +1,17 @@
 import React, { FunctionComponent, useState, useContext } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase';
-import AddSkillsDialog from './AddSkillsDialog';
-import NewSkillDialog from './NewSkillDialog';
-import EditSkillDialog from './EditSkillDialog';
-import RemoveSkillDialog from './RemoveSkillDialog';
 import { useTypedSelector } from '../../store';
 import { CharacterContext } from '../../views/CharacterContext';
 import { useAuth } from '../../store/selectors';
 import { Skill } from '../../store/Schema';
 import SkillCard from './SkillCard';
 import Grid from '@material-ui/core/Grid';
-import CharacterSheetSection from '../characterSheet/CharacterSheetSection';
-import { Paper } from '@material-ui/core';
+import { Fade } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import { AddCircleOutline } from '@material-ui/icons';
 
 interface CharacterSkillsProps {
 
@@ -61,7 +60,8 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
         const newKey = firebase.ref(`/skills/${character}`)
                                .push({
                                        ...newSkill,
-                                       owner: auth.uid,
+                                       name     : newSkill.name ?? "New Skill",
+                                       owner    : auth.uid,
                                        character: character,
                                      }).key;
         const newSkillList = [...skillList, newKey];
@@ -95,63 +95,86 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
     firebase.ref(`/characters/${character}/skillList`).set(newInventory);
   };
 
+  const [addVisible, setAddVisible] = useState(false);
+
+  const toggleAdd = () => {
+    setAddVisible(!addVisible);
+  };
+
   return (
-        <><Grid
-            container
-            direction={"column"}>
-          {skillList
-              .map(skill => <Grid
+      <><Grid
+          container
+          direction={"column"}>
+        {skillList
+            .map(skill => <Grid
+                item
+                xs={12}
+                key={skill}>
+              <SkillCard
+                  skill={skill}
+                  onEdit={() => {
+                    setSelectedSkill(skill);
+                    showDialog("edit");
+                  }}
+                  onRemove={() => {
+                    setSelectedSkill(skill);
+                    showDialog("remove");
+                  }} />
+              <Grid
                   item
-                  xs={12}
-                  key={skill}>
-                <SkillCard
-                    skill={skill}
-                    onEdit={() => {
-                      setSelectedSkill(skill);
-                      showDialog("edit");
+                  container
+                  xs={12}>
+                <Grid item></Grid>
+              </Grid>
+            </Grid>)}</Grid>
+        <Grid
+            container
+            className={classes.root}>
+          <Grid
+              item
+              container
+              direction={"row"}
+              alignItems={"center"}
+              spacing={2}
+              xs={12}>
+            <Grid item>
+              <IconButton onClick={toggleAdd}>
+                <AddCircleOutline />
+              </IconButton>
+            </Grid>
+            <>
+              <Grid item>
+                <Fade in={addVisible}><Typography>Add New
+                                                  Item</Typography></Fade>
+              </Grid>
+              <Grid item>
+                <Fade in={addVisible}><Button
+                    onClick={() => {
+                      showDialog("add");
+                      setAddVisible(false);
                     }}
-                    onRemove={() => {
-                      setSelectedSkill(skill);
-                      showDialog("remove");
-                    }} />
-                <Grid item container xs={12}>
-                  <Grid item></Grid>
-                </Grid>
-              </Grid>)}</Grid>
-        {dialogState.add
-         ? <AddSkillsDialog
-             open={dialogState.add}
-             onAdd={addSkills}
-             onClose={() => showDialog()}
-             character={character} />
-         : ""}
-        {dialogState.new
-         ? <NewSkillDialog
-             open={dialogState.new}
-             onCreate={createSkill}
-             onClose={() => showDialog()} />
-         : ""}
-        {dialogState.edit
-         ? <EditSkillDialog
-             open={dialogState.edit}
-             onClose={() => showDialog()}
-             skill={selectedSkill} />
-         : ""}
-        {dialogState.remove
-         ? <RemoveSkillDialog
-             open={dialogState.remove}
-             onClose={(remove: boolean) => {
-               if (remove) removeSkill(selectedSkill);
-               showDialog();
-             }}
-             skillKey={selectedSkill} />
-         : ""}
+                    variant={"contained"}>From SRD</Button></Fade>
+              </Grid>
+              <Grid item>
+                <Fade in={addVisible}><Button
+                    onClick={() => {
+                      createSkill({});
+                      setAddVisible(false);
+                    }}
+                    variant={"contained"}>New</Button></Fade>
+              </Grid>
+            </>
+          </Grid>
+        </Grid>
       </>);
 };
 
 const useStyles = makeStyles((theme: Theme) => {
   return (
       {
+        root        : {
+          paddingLeft: theme.spacing(2),
+        },
         sectionTitle: {
           backgroundColor: theme.palette.background.paper,
           paddingLeft    : theme.spacing(2),

@@ -5,6 +5,7 @@ import { CharacterContext } from '../../views/CharacterContext';
 import { useTypedSelector } from '../../store';
 import Grid from '@material-ui/core/Grid';
 import WeaponCard from './WeaponCard';
+import Button from '@material-ui/core/Button';
 
 interface IWeaponsProps {}
 
@@ -31,20 +32,25 @@ const CharacterWeapons: FunctionComponent<IWeaponsProps> = (props: IWeaponsProps
   console.log(weapons);
 
   return (
-      isLoaded(weapons) && !isEmpty(weapons)
-      ? <Grid container>
-        {weapons.map(weapon => <Grid
-            key={weapon}
-            item
-            xs={12}><WeaponCard
-            weapon={weapon} /></Grid>)}</Grid>
-      : <div />);
+      <Grid container className={classes.root}>
+        {isLoaded(weapons) && !isEmpty(weapons)
+         ? weapons.map(weapon => (
+                <Grid
+                    key={weapon}
+                    item
+                    xs={12}>
+                  <WeaponCard
+                      weapon={weapon} />
+                </Grid>))
+         : <div />}
+      </Grid>)
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
       root: {
         backgroundColor: theme.palette.background.paper,
+        paddingLeft: theme.spacing(2),
       },
     }));
 

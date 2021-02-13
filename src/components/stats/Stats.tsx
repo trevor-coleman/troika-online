@@ -70,17 +70,15 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                          values.stamina_current === 0 && values.stamina_max ===
                          0 && values.skill === 0;
   return (
-
             <Grid container className={classes.container}
-                  direction={"row"}>
+                  direction={"column"} spacing={4}>
               <Grid item
-                    xs={3}
-                    md={3}
+                    xs={12}
                     className={classes.skillGrid}>
+                <Button color={"primary"}>Skill</Button>
                 <TextField value={values.skill ?? 0}
                            id={"skill"}
                            variant={"outlined"}
-                           label={"Skill"}
                            type={"number"}
                            className={classes.skillField}
                            onChange={handleChange}
@@ -96,12 +94,12 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                <div className={"dummy"}/>
               </Grid>
               <Grid item
-                    xs={3}
-                    md={3}
+                    xs={12}
+
                     className={classes.skillGrid}>
+                <Button color={"primary"}>Stamina</Button>
                   <TextField value={values.stamina_current ?? 0}
                              variant={"outlined"}
-                             label={"Stamina"}
                              type={"number"}
                              id={"stamina_current"}
                              onChange={handleChange}
@@ -114,7 +112,6 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                                  input: classes.skillInput,
                                },
                              }} />
-
                 <TextField
                     margin={"dense"}
                     variant={"outlined"}
@@ -135,22 +132,12 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
               </Grid>
               <Grid item
                     container
-                    xs={6}
-                    md={6}
+                    xs={12}
                     className={classes.skillGrid}>
-                <Grid item
-                      container
-                      direction={'row'}
-                      spacing={2}>
-                  <Grid item
-                        xs={2} />
-                  <Grid item
-                        xs={4}
-                        className={classes.skillGrid}>
+                <Button color={"primary"}>Luck</Button>
                     <TextField value={values.luck_current ?? 0}
                                variant={"outlined"}
                                id={"luck_current"}
-                               label={"Luck"}
                                type={"number"}
                                onChange={handleChange}
                                className={classes.skillField}
@@ -179,26 +166,15 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                                    input: classes.skillMaxInput,
                                  },
                                }} />
-                  </Grid>
-                  <Grid item
-                        xs={6}
-                        container
-                        direction={"row"}
-                        spacing={1}>
-                    <Grid item
-                          xs={12}>
+              </Grid>
+                  <Grid item xs={12}>
                       <Button fullWidth disabled
                               variant={"contained"}>Test</Button>
                     </Grid>
-                    <Grid item
-                          xs={12}>
+              <Grid item xs={12}>
                       <Button fullWidth disabled
                               variant={"contained"}>Rest</Button>
                     </Grid>
-
-                  </Grid>
-                </Grid>
-              </Grid>
             </Grid>);
 };
 

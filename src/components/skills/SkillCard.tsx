@@ -60,8 +60,8 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
           {/*Checkbox*/}
           <Grid
               item
-              container
               xs={1}
+              container
               alignItems={"center"}
               justify={"center"}>
             <div><Checkbox
@@ -76,9 +76,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
               alignItems={"center"}
               justify={"flex-start"}>
             <Grid item>
-              <Typography>
-                {name}
-              </Typography>
+              <Typography>{name}</Typography>
             </Grid>
           </Grid>
           <Grid item container xs={1} alignItems={"center"} justify={"center"}>
@@ -87,39 +85,23 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
           {/*Fields*/}
           <Grid
               item
-              xs={4}>
+              xs={5}>
             <SkillValueBoxes />
           </Grid>
           {/*Button*/}
           <Grid
               item
-              xs={3}
+              xs={2}
               alignItems={"center"}
               justify={"center"}
-              container
-              spacing={1}
-              className={classes.buttons}>
-            <Grid
-                item
-                xs={6}>
-              <Button
+              container spacing={1}
+              >
+              <Grid item><Button
                   variant="contained"
                   fullWidth
                   onClick={() => onEdit(skill)}>
                 <Edit />
-              </Button>
-            </Grid>
-            <Grid
-                item
-                xs={6}>
-              <Button
-                  variant={"contained"}
-                  color={"secondary"}
-                  fullWidth
-              >
-                <Casino />
-              </Button>
-            </Grid>
+              </Button></Grid>
           </Grid>
         </Grid>
 
@@ -153,9 +135,7 @@ const useStyles = makeStyles((theme: Theme) => (
 
       expandButton: {},
 
-      buttons: {
-        padding: theme.spacing(1),
-      },
+
       name   : {},
     }));
 

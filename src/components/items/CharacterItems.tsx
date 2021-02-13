@@ -20,6 +20,9 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import { useTypedSelector } from '../../store';
 import { CharacterContext } from '../../views/CharacterContext';
+import IconButton from '@material-ui/core/IconButton';
+import { AddCircleOutline } from '@material-ui/icons';
+import { Fade } from '@material-ui/core';
 
 interface CharacterItemsProps {
 }
@@ -66,6 +69,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
 
   const [dialogState, setDialogState] = useState<{ [key: string]: boolean }>(
       initialState);
+  const [addVisible, setAddVisible] = useState(false);
 
   function showDialog(dialog?: string, key?: string): void {
     const newState = initialState;
@@ -120,10 +124,15 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
     firebase.ref(`/characters/${character}/inventory`).set(newInventory);
   }
 
+  const toggleAdd =()=> {
+    setAddVisible(!addVisible)
+  }
+
   return (
       <>
         <DragDropContext onDragEnd={handleDragEnd}>
-          <div><Droppable droppableId={`${character}-inventory`}>{(provided) =>
+          <div>
+            <Droppable droppableId={`${character}-inventory`}>{(provided) =>
               <Grid container
                   innerRef={provided.innerRef}
                   {...provided.droppableProps}>
@@ -137,8 +146,41 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
                  : <div />}
                 {provided.placeholder}
               </Grid>}
-          </Droppable></div>
+          </Droppable>
+          </div>
         </DragDropContext>
+        <Grid
+            container
+            className={classes.root}>
+          <Grid
+              item
+              container
+              direction={"row"}
+              alignItems={"center"}
+              spacing={2}
+              xs={12}>
+            <Grid item>
+              <IconButton onClick={toggleAdd}>
+                <AddCircleOutline/>
+              </IconButton>
+            </Grid>
+               <>
+                 <Grid item>
+                   <Fade in={addVisible}><Typography>Add New Item</Typography></Fade>
+               </Grid>
+            <Grid item>
+              <Fade in={addVisible}><Button
+                onClick={() => showDialog("add")}
+                variant={"contained"}>From SRD</Button></Fade>
+            </Grid>
+            <Grid item>
+              <Fade in={addVisible}><Button
+                onClick={() => newItem()}
+                variant={"contained"}>New</Button></Fade>
+            </Grid>
+               </>
+          </Grid>
+        </Grid>
         <AddItemsDialog open={dialogState.add}
                         onClose={() => showDialog()}
                         />
@@ -147,7 +189,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root: {},
+      root: {paddingLeft: theme.spacing(2)},
     }));
 
 export default CharacterItems;

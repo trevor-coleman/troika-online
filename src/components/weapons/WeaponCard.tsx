@@ -4,18 +4,15 @@ import { CharacterContext } from '../../views/CharacterContext';
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import {
-  MenuItem, Select, Table, TableRow, TableCell,
-} from '@material-ui/core';
+import { MenuItem, Select } from '@material-ui/core';
 import SkillSelectItem from '../skills/SkillSelectItem';
 import Button from '@material-ui/core/Button';
-import { Casino, FormatListBulletedSharp } from '@material-ui/icons';
+import { FormatListBulletedSharp } from '@material-ui/icons';
 import SkillInfoButton from '../skills/skillSections/SkillInfoButton';
-import DamageTable from './DamageTable';
 import { ItemContext } from '../../contexts/ItemContext';
 import WeaponInfoPopperContent from './WeaponInfoPopperContent';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 
 interface IWeaponCardProps {weapon: string}
 
@@ -79,90 +76,90 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
 
   return (
       <ItemContext.Provider value={weapon}>
-      <Grid container>
-        <Grid item container xs={1} alignItems={"center"} justify={"center"}><Grid item><IconButton><FormatListBulletedSharp/></IconButton></Grid></Grid>
-        <Grid
-            item
-            container
-            className={classes.nameContainer}
-            alignItems={"center"}
-            justify={"flex-start"}
-            xs={3}>
-          <Grid item>
-            <Typography>{name}</Typography>
-          </Grid>
-        </Grid>
-        <Grid
-            item
-            container
-            xs={1}
-            alignItems={"center"}
-            justify={"center"}>
-          <Grid item><SkillInfoButton><WeaponInfoPopperContent/></SkillInfoButton></Grid>
-        </Grid>
-        <Grid
-            item
-            container
-            className={classes.selectContainer}
-            alignItems={"center"}
-            justify={"flex-start"}
-            xs={4}>
-          <Grid item xs={12}>
-            <Select
-                fullWidth
-                onChange={handleSelect}
-                value={weaponSkill}>
-              <MenuItem
-                  value={"none"}>No Skill</MenuItem>
-              {skillKeys.map(skill => <MenuItem
-                  key={skill}
-                  value={skill}>
-                <SkillSelectItem
-                    name={skills[skill].name}
-                    skill={skill} />
-              </MenuItem>)}
-            </Select>
-          </Grid>
-        </Grid>
-        <Grid
-            item
-            xs={3}
-            alignItems={"center"}
-            justify={"center"}
-            container
-            spacing={1}
-            className={classes.buttons}>
-          <Grid item xs={6}/>
+        <Grid container>
           <Grid
               item
-              xs={6}>
-            <Button
-                variant={"contained"}
-                color={"secondary"}
-                fullWidth
-            >
-              <Casino />
-            </Button>
+              container
+              xs={1}
+              alignItems={"center"}
+              justify={"center"}>
+            <Grid item>
+              <IconButton>
+                <FormatListBulletedSharp />
+              </IconButton>
+            </Grid>
+          </Grid>
+          <Grid
+              item
+              xs={3}
+              container
+              alignItems={"center"}
+              justify={"flex-start"}
+          >
+            <Grid item>
+              <Typography>{name}</Typography>
+            </Grid>
+          </Grid>
+          <Grid
+              item
+              xs={1}
+              container
+              alignItems={"center"}
+              justify={"center"}>
+            <Grid item>
+              <SkillInfoButton>
+                <WeaponInfoPopperContent />
+              </SkillInfoButton>
+            </Grid>
+          </Grid>
+          <Grid
+              item
+              xs={5}
+              container
+              className={classes.selectContainer}
+              alignItems={"center"}
+              justify={"flex-start"}
+          >
+            <Grid
+                item
+                xs={12}>
+              <Select
+                  fullWidth
+                  onChange={handleSelect}
+                  value={weaponSkill}>
+                <MenuItem
+                    value={"none"}>No Skill</MenuItem>
+                {skillKeys.map(skill => <MenuItem
+                    key={skill}
+                    value={skill}>
+                  <SkillSelectItem
+                      name={skills[skill].name}
+                      skill={skill} />
+                </MenuItem>)}
+              </Select>
+            </Grid>
           </Grid>
 
         </Grid>
-
-      </Grid>
       </ItemContext.Provider>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      WeaponCard     : {},
-      nameContainer: {
-        paddingLeft: theme.spacing(2),
+      WeaponCard: {},
+      nameButton: {
+        alignItems    : "flex-start",
+        justifyContent: "flex-start",
+      },
+      buttonText: {
+        textAlign: "left",
       },
 
       selectContainer: {
-        paddingRight: theme.spacing(2)
+        paddingRight: theme.spacing(2),
       },
 
-      buttons        : {
+      buttons: {
         padding: theme.spacing(1),
       },
     }));

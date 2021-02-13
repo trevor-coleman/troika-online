@@ -14,8 +14,6 @@ import CharacterWeapons from '../components/weapons/CharacterWeapons';
 import CharacterSheetSection
   from '../components/characterSheet/CharacterSheetSection';
 
-
-
 interface CharacterEditorProps {
   init?: boolean
 }
@@ -30,7 +28,7 @@ function onRender(id: string, // the "id" prop of the Profiler tree that has jus
                   startTime: any, // when React began rendering this update
                   commitTime: any, // when React committed this update
                   interactions: any, // the Set of interactions belonging to
-                                    // this update
+                  // this update
 )
 {
   console.log({
@@ -60,38 +58,54 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
       <CharacterContext.Provider value={{character: characterKey}}>
         <div>
           <CharacterTitle id={id} />
-          <Grid container
-                direction={'column'}
-                spacing={0}>
-              <Grid item
+          <Grid
+              container
+              direction={'column'}
+              spacing={0}>
+            <Grid
+                item
+                xs={12}>
+              <Bio characterKey={id} />
+            </Grid>
+            <Grid
+                item container spacing={2}
+                xs={12}>
+              <Grid
+                  item
+                  container
+                  xs={9}>
+                <Grid
+                    item
                     xs={12}>
-                <Bio characterKey={id} />
+                  <CharacterSheetSection title={"Advanced Skills & Spells"}>
+                    <CharacterSkills />
+                  </CharacterSheetSection>
+                </Grid>
+                <Grid
+                    item
+                    xs={12}>
+                  <CharacterSheetSection title={"Weapons"}>
+                    <CharacterWeapons />
+                  </CharacterSheetSection>
+                </Grid>
+                <Grid
+                    item
+                    xs={12}>
+                  <CharacterSheetSection title={"Inventory"}>
+                    <CharacterItems />
+                  </CharacterSheetSection>
+                </Grid>
               </Grid>
-              <Grid item
-                    xs={12}>
+              <Grid
+                  item
+                  container
+                  xs={3}>
                 <CharacterSheetSection title={"Base Stats"}>
-                <Stats />
-                </CharacterSheetSection>
-              </Grid>
-
-              <Grid item
-                    xs={12}>
-                <CharacterSheetSection title={"Advanced Skills & Spells"}>
-                  <CharacterSkills/>
-                </CharacterSheetSection>
-            </Grid>
-            <Grid item xs={12}>
-              <CharacterSheetSection title={"Weapons"}>
-                <CharacterWeapons />
-              </CharacterSheetSection>
-            </Grid>
-              <Grid item
-                    xs={12}>
-                <CharacterSheetSection title={"Inventory"}>
-                <CharacterItems />
+                  <Stats />
                 </CharacterSheetSection>
               </Grid>
             </Grid>
+          </Grid>
         </div>
       </CharacterContext.Provider>);
 

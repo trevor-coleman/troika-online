@@ -14,7 +14,7 @@ const CharacterSheetSection: FunctionComponent<CharacterSheetSectionProps> = (pr
   const classes = useStyles();
 
   return (
-      <div>
+      <div className={classes.root}>
         {title
          ? <div className={classes.sectionTitle}>
           <Typography variant={"subtitle1"}>
@@ -27,6 +27,9 @@ const CharacterSheetSection: FunctionComponent<CharacterSheetSectionProps> = (pr
 
 const useStyles = makeStyles((theme: Theme) => (
     {
+      root: {
+        width: "100%",
+      },
       container: {
         borderRadius: theme.shape.borderRadius,
         backgroundColor: theme.palette.background.paper,

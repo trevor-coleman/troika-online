@@ -134,14 +134,14 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                 innerRef={provided.innerRef}
                 {...provided.draggableProps}
           >
-            <Card>
+            <Card className={classes.card}>
               <CardHeader avatar={<Avatar>{size}</Avatar>}
                           className={classes.cardHeader}
                           titleTypographyProps={{variant: "h6"}}
                           title={`${name}`}
                           subheader={description}
                           subheaderTypographyProps={{
-                            variant: "body1",
+                            variant: "caption",
                             color  : 'textPrimary',
                           }}
                           action={<FormControlLabel value="bottom"
@@ -260,6 +260,11 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
 const useStyles = makeStyles((theme: Theme) => (
     {
       root           : {},
+      card: {
+        border: "1px solid",
+        borderColor: theme.palette.divider,
+        margin: theme.spacing(1),
+      },
       cardHeader     : {
         paddingTop   : theme.spacing(2),
         paddingBottom: 0,
