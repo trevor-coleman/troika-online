@@ -128,7 +128,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
         <Button onClick={newItem}>New Item</Button>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div><Droppable droppableId={`${character}-inventory`}>{(provided) =>
-              <Grid container spacing={2}
+              <Grid container
                   innerRef={provided.innerRef}
                   {...provided.droppableProps}>
                 {isLoaded(inventory) && !isEmpty(inventory)

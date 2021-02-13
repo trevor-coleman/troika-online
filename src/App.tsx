@@ -16,6 +16,7 @@ import SRD from './views/SRD';
 import Register from './components/auth/Register';
 import Play from './views/Play';
 import Admin from './views/Admin';
+import TestPage from './views/TestPage';
 
 function AuthIsLoaded({children}: PropsWithChildren<any>) {
   const auth = useSelector((state: RootState) => state.firebase.auth);
@@ -40,6 +41,7 @@ function App(props: any) {
                     <PrivateRoute path={"/home"}><Home /></PrivateRoute>
                     <PrivateRoute path={"/roll"}><RollView /></PrivateRoute>
                     <PrivateRoute path={"/game/:gameKey"}><Game /></PrivateRoute>
+                    <PrivateRoute path={"/test"}><TestPage/></PrivateRoute>
                     <PrivateRoute restricted path={"/admin"}><Admin /></PrivateRoute>
                     <PrivateRoute path={"/character/:characterKey/edit"}><CharacterEditor /></PrivateRoute>
                     <PrivateRoute path={"/character/:characterKey/new"}><CharacterEditor init /></PrivateRoute>

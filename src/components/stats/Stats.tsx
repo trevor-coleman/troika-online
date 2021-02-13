@@ -51,12 +51,12 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
     if (isLoaded(character)) {
 
       const {
-        luck_current,
-        luck_max,
-        stamina_current,
-        stamina_max,
-        skill,
-      } = character;
+        luck_current =0 ,
+        luck_max = 0,
+        stamina_current=0,
+        stamina_max=0,
+        skill=0,
+      } = character ?? {};
 
       setValues({
         luck_current,

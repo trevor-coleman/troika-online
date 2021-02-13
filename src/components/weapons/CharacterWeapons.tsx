@@ -14,10 +14,12 @@ import {
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { Casino } from '@material-ui/icons';
-import {WeaponTableRow, WeaponTableHeader } from './weapons/WeaponTableRow';
+import {WeaponTableRow, WeaponTableHeader } from './WeaponTableRow';
 import { useFirebaseConnect, isEmpty, isLoaded } from 'react-redux-firebase';
-import { CharacterContext } from '../views/CharacterContext';
-import { useTypedSelector } from '../store';
+import { CharacterContext } from '../../views/CharacterContext';
+import { useTypedSelector } from '../../store';
+import Grid from '@material-ui/core/Grid';
+import WeaponCard from './WeaponCard';
 
 interface IWeaponsProps {}
 
@@ -40,25 +42,22 @@ const CharacterWeapons: FunctionComponent<IWeaponsProps> = (props: IWeaponsProps
   console.log(weapons);
 
   return (
-      isLoaded(weapons) && !isEmpty(weapons) ? <div>
+      isLoaded(weapons) && !isEmpty(weapons) ? <div className={classes.root}>
         <Typography variant={"h5"}>
           Weapons </Typography>
-        <TableContainer component={Paper}>
-          <Table size={'small'}>
-            <TableHead>
-              <WeaponTableHeader/>
-            </TableHead>
-            <TableBody>
-              {weapons.map(weapon=><WeaponTableRow key={weapon} weapon={weapon}/>)}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Grid container>
+          {weapons.map(weapon => <Grid key={weapon} item xs={12}><WeaponCard
+              weapon={weapon} /></Grid>)
+          }</Grid>
       </div> : <div/>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      Weapons: {},
+      root: {
+        backgroundColor: theme.palette.background.paper,
+        padding:theme.spacing(2),
+      },
     }));
 
 export default CharacterWeapons;

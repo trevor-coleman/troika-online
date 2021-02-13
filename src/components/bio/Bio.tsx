@@ -13,6 +13,7 @@ import {
 } from 'react-redux-firebase';
 import DragAndDropPortrait from './DragAndDropPortrait';
 import { useTypedSelector } from '../../store';
+import { Popper } from '@material-ui/core';
 
 interface BioAndInfoProps {
   characterKey: string;
@@ -67,7 +68,7 @@ const Bio = (props: BioAndInfoProps) => {
                       container
                       xs={12}
                       sm={8}
-                      md={8}
+                      md={6}
                       direction={"row"}
                       spacing={2}>
                   <Grid item

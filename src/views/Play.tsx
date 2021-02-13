@@ -27,6 +27,7 @@ import Stats from '../components/stats/Stats';
 import Bio from '../components/bio/Bio';
 import CharacterSkills from '../components/skills/CharacterSkills';
 import { rollKey } from '../components/rolls/rollKey';
+import { CharacterContext } from './CharacterContext';
 
 interface SessionProps {
 
@@ -152,9 +153,11 @@ const Play: FunctionComponent<SessionProps> = (props: SessionProps) => {
                 sm={6}
                 className={classes.characterSheet}>
             <Dummy>
+              <CharacterContext.Provider value={{character: characterKey}}>
               <Bio characterKey={characterKey} />
               <Stats characterKey={characterKey} />
               <CharacterSkills />
+              </CharacterContext.Provider>
             </Dummy>
           </Grid>
 

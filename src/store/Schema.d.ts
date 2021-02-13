@@ -2,7 +2,7 @@ import {
   Skill, OtherItem, Weapon, Spell, InventoryItem,
 } from '../types/troika';
 import { Profile } from './index';
-import { WeaponsState } from '../components/CharacterWeapons';
+import { WeaponsState } from '../components/weapons/CharacterWeapons';
 import { CharacterItemsState } from '../components/items/CharacterItems';
 import { KeyList } from './KeyList';
 import { Item } from './Item';
@@ -12,7 +12,7 @@ export default interface Schema {
   [key:string]: any,
   characterItems: CharacterItemsState,
   editSkill: {name:string, description:string}
-  skillTableRow: {[key:string]: {skill:Skill, skillValues: SkillValues}},
+  skillTableRow: {[key:string]: Skill},
   skillText: SkillValues,
   skillSelectItem: Skill,
   addItemsDialog: {inventory: string[], weapons:[]},

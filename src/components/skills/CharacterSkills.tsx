@@ -31,6 +31,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { Add } from '@material-ui/icons';
 import SkillCard from './SkillCard';
 import Grid from '@material-ui/core/Grid';
+import { SkillContext } from './context/SkillContext';
 
 interface CharacterSkillsProps {
 
@@ -102,11 +103,11 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
   };
 
   return (
-      <div>
-        <Typography variant={"h5"}>
-          Skills </Typography>
-            <Grid container spacing={0} direction={"column"} className={classes.skillList}>{skillList
-                .map(skill => <Grid item key={skill}><SkillCard
+      <>
+            <Grid container direction={"column"} >
+              <Grid item xs={12} className={classes.sectionTitle}><Typography variant={"h6"}>Advanced Skills & Spells</Typography></Grid>
+              {skillList
+                .map(skill => <Grid item xs={12} key={skill}><SkillCard
                        skill={skill}
                        onEdit={() => {
                          setSelectedSkill(skill);
@@ -117,60 +118,35 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
                          showDialog("remove");
                        }}/></Grid>
                 )}</Grid>
-        <AddSkillsDialog open={dialogState.add}
+        {dialogState.add ? <AddSkillsDialog open={dialogState.add}
                          onAdd={addSkills}
                          onClose={() => showDialog()}
                          character={character} />
-        <NewSkillDialog open={dialogState.new}
+                         : ""}
+        {dialogState.new ? <NewSkillDialog open={dialogState.new}
                         onCreate={createSkill}
                         onClose={() => showDialog()} />
-        <EditSkillDialog open={dialogState.edit}
+         :""}
+        {dialogState.edit ? <EditSkillDialog open={dialogState.edit}
                          onClose={() => showDialog()}
-                         skill={selectedSkill} />
-        <RemoveSkillDialog open={dialogState.remove}
+                         skill={selectedSkill} />:""}
+        {dialogState.remove ? <RemoveSkillDialog open={dialogState.remove}
                            onClose={(remove: boolean) => {
                              if (remove) removeSkill(selectedSkill);
                              showDialog();
                            }}
                            skillKey={selectedSkill} />
-
-
-      </div>);
+         : ""}
+      </>
+);
 };
 
 const useStyles = makeStyles((theme: Theme) => {
   return (
-      {
-        root         : {},
-        checkBoxCol  : {
+      {sectionTitle: {
+        backgroundColor: theme.palette.background.paper,
           paddingLeft: theme.spacing(2),
-        },
-        skillList: {
-          backgroundColor: theme.palette.background.paper,
-          padding: theme.spacing(2),
-        },
-        descriptionCol      : {
-          flexGrow: 1,
-        },
-        skillRankCol : {
-          paddingLeft : 0,
-          paddingRight: 0,
-          width       : "5rem",
-        },
-        centeredInput: {
-          textAlign: "center",
-        },
-        iconButtonCol: {
-          width: "3rem",
-        },
-        newSkillRow: {
-          cursor: "pointer",
-        },
-        newSkillName: {
-          marginTop: theme.spacing(1),
-          marginBottom: theme.spacing(1),
-        }
-      });
+        }});
 });
 
 export default CharacterSkills;
