@@ -11,6 +11,8 @@ import CharacterItems from '../components/items/CharacterItems';
 import CharacterTitle from '../components/characters/CharacterTitle';
 import { CharacterContext } from './CharacterContext';
 import CharacterWeapons from '../components/weapons/CharacterWeapons';
+import CharacterSheetSection
+  from '../components/characterSheet/CharacterSheetSection';
 
 
 
@@ -67,20 +69,27 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
               </Grid>
               <Grid item
                     xs={12}>
-                <Stats characterKey={id} />
+                <CharacterSheetSection title={"Base Stats"}>
+                <Stats />
+                </CharacterSheetSection>
               </Grid>
 
               <Grid item
                     xs={12}>
-                <CharacterSkills />
+                <CharacterSheetSection title={"Advanced Skills & Spells"}>
+                  <CharacterSkills/>
+                </CharacterSheetSection>
+            </Grid>
+            <Grid item xs={12}>
+              <CharacterSheetSection title={"Weapons"}>
+                <CharacterWeapons />
+              </CharacterSheetSection>
             </Grid>
               <Grid item
                     xs={12}>
-                <CharacterWeapons />
-              </Grid>
-              <Grid item
-                    xs={12}>
+                <CharacterSheetSection title={"Inventory"}>
                 <CharacterItems />
+                </CharacterSheetSection>
               </Grid>
             </Grid>
         </div>

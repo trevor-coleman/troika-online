@@ -50,7 +50,8 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
   };
 
   return (
-      <Box p={2}><Grid container className={classes.root}><Grid
+      <Grid container className={classes.root} alignItems={"center"} justify={"center"}>
+        <Grid
           item
           xs={4}>
         <TextField
@@ -98,13 +99,15 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
               classes={{root: classes.totalRoot}}
               type={"number"} />
         </Grid>
-      </Grid></Box>);
+      </Grid>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
       root: {
         width:"100%",
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
       },
       rankSkillInput: {
         margin:"auto",

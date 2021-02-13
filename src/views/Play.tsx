@@ -155,7 +155,7 @@ const Play: FunctionComponent<SessionProps> = (props: SessionProps) => {
             <Dummy>
               <CharacterContext.Provider value={{character: characterKey}}>
               <Bio characterKey={characterKey} />
-              <Stats characterKey={characterKey} />
+              <Stats />
               <CharacterSkills />
               </CharacterContext.Provider>
             </Dummy>

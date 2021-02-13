@@ -121,11 +121,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
   }
 
   return (
-      <div>
-        <Typography variant={"h5"}>
-          Inventory </Typography>
-        <Button onClick={() => showDialog("add")}>Import Item</Button>
-        <Button onClick={newItem}>New Item</Button>
+      <>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div><Droppable droppableId={`${character}-inventory`}>{(provided) =>
               <Grid container
@@ -146,7 +142,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
         <AddItemsDialog open={dialogState.add}
                         onClose={() => showDialog()}
                         />
-      </div>);
+      </>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (

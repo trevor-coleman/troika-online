@@ -14,6 +14,7 @@ import SkillValueBoxes from './skillSections/SkillValueBoxes';
 import IconButton from '@material-ui/core/IconButton';
 import { SkillContext } from './context/SkillContext';
 import SkillInfoButton from './skillSections/SkillInfoButton';
+import SkillInfoPopperContent from './SkillInfoPopperContent';
 
 interface ISkillCardProps {
   skill: string,
@@ -60,8 +61,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
           <Grid
               item
               container
-              xs={2}
-              sm={1}
+              xs={1}
               alignItems={"center"}
               justify={"center"}>
             <div><Checkbox
@@ -82,7 +82,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
             </Grid>
           </Grid>
           <Grid item container xs={1} alignItems={"center"} justify={"center"}>
-            <Grid item><SkillInfoButton/></Grid>
+            <Grid item><SkillInfoButton><SkillInfoPopperContent/></SkillInfoButton></Grid>
           </Grid>
           {/*Fields*/}
           <Grid

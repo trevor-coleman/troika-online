@@ -10,7 +10,12 @@ import {
 } from '@material-ui/core';
 import SkillSelectItem from '../skills/SkillSelectItem';
 import Button from '@material-ui/core/Button';
-import { Casino } from '@material-ui/icons';
+import { Casino, FormatListBulletedSharp } from '@material-ui/icons';
+import SkillInfoButton from '../skills/skillSections/SkillInfoButton';
+import DamageTable from './DamageTable';
+import { ItemContext } from '../../contexts/ItemContext';
+import WeaponInfoPopperContent from './WeaponInfoPopperContent';
+import IconButton from '@material-ui/core/IconButton';
 
 interface IWeaponCardProps {weapon: string}
 
@@ -36,7 +41,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
     ranged = false,
     twoHanded = false,
     armourPiercing = false,
-    skill: weaponSkill = "",
+    skill: weaponSkill = "none",
   } = useTypedSelector(state => state.firebase.data?.weaponTableRow?.[weapon]?.weapon) ??
       {};
 
@@ -73,14 +78,16 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
   }
 
   return (
+      <ItemContext.Provider value={weapon}>
       <Grid container>
+        <Grid item container xs={1} alignItems={"center"} justify={"center"}><Grid item><IconButton><FormatListBulletedSharp/></IconButton></Grid></Grid>
         <Grid
             item
             container
             className={classes.nameContainer}
             alignItems={"center"}
             justify={"flex-start"}
-            xs={2}>
+            xs={3}>
           <Grid item>
             <Typography>{name}</Typography>
           </Grid>
@@ -88,15 +95,25 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
         <Grid
             item
             container
+            xs={1}
+            alignItems={"center"}
+            justify={"center"}>
+          <Grid item><SkillInfoButton><WeaponInfoPopperContent/></SkillInfoButton></Grid>
+        </Grid>
+        <Grid
+            item
+            container
             className={classes.selectContainer}
             alignItems={"center"}
             justify={"flex-start"}
-            xs={3}>
+            xs={4}>
           <Grid item xs={12}>
             <Select
                 fullWidth
                 onChange={handleSelect}
                 value={weaponSkill}>
+              <MenuItem
+                  value={"none"}>No Skill</MenuItem>
               {skillKeys.map(skill => <MenuItem
                   key={skill}
                   value={skill}>
@@ -109,37 +126,13 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
         </Grid>
         <Grid
             item
-            alignItems={"center"}
-            justify={"center"}
-            xs={5}
-        >
-          <Table
-          >
-            <TableRow >{damage.map((item, index) => (
-                <TableCell
-                    className={classes.damageCell}
-                    key={`damage-header-${item}-${index}`}>
-                  <div className={classes.damageRollLabel}>
-                    {index + 1}
-                    {index == 6
-                     ? "+"
-                     : ""}
-                  </div>
-                  <Typography className={classes.damageItem}>
-                    {item}
-                  </Typography>
-                </TableCell>))}
-            </TableRow>
-          </Table>
-        </Grid>
-        <Grid
-            item
-            xs={2}
+            xs={3}
             alignItems={"center"}
             justify={"center"}
             container
             spacing={1}
             className={classes.buttons}>
+          <Grid item xs={6}/>
           <Grid
               item
               xs={6}>
@@ -154,7 +147,8 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
 
         </Grid>
 
-      </Grid>);
+      </Grid>
+      </ItemContext.Provider>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
@@ -163,39 +157,11 @@ const useStyles = makeStyles((theme: Theme) => (
       nameContainer: {
         paddingLeft: theme.spacing(2),
       },
-      damageCell     : {
-        padding      : 0,
-        width        : "1rem",
-        textAlign    : "center",
-        verticalAlign: "baseline",
-        borderBottom: 0,
-      },
+
       selectContainer: {
         paddingRight: theme.spacing(2)
       },
-      damageRollLabel: {
-        fontSize: theme.typography.fontSize - 3,
-        color   : theme.palette.text.hint,
-        padding:0,
-      },
-      damageTable: {
-        border: 0,
-      },
-      damageRow: {
-        border: 0
-      },
-      damageItem     : {
-        border      : "1px solid",
-        borderColor : theme.palette.divider,
-        textAlign   : "center",
-        display     : "inline-block",
-        minWidth    : "1rem",
-        paddingLeft : theme.spacing(0.5),
-        paddingRight: theme.spacing(0.5),
-        marginLeft  : 0,
-        marginRight : 0,
-        color       : theme.palette.text.primary,
-      },
+
       buttons        : {
         padding: theme.spacing(1),
       },

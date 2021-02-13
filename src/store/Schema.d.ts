@@ -15,6 +15,8 @@ export default interface Schema {
   skillTableRow: {[key:string]: Skill},
   skillText: SkillValues,
   skillSelectItem: Skill,
+  skillInfoButton: {[key:string]: Skill}
+  itemInfoButton: {[key:string]: Item}
   addItemsDialog: {inventory: string[], weapons:[]},
   weaponTableRow: WeaponTableRowState,
   damageSection: { damage:number[], doesDamage:boolean, damagesAs:string, twoHanded:boolean, ranged: boolean, armourPiercing: boolean, weapons: string[] },

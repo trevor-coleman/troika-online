@@ -1,7 +1,5 @@
 import React, {
-  FunctionComponent,
-  useEffect,
-  useState, ChangeEvent,
+  FunctionComponent, useEffect, useState, ChangeEvent, useContext,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -15,17 +13,16 @@ import {
 } from 'react-redux-firebase';
 import { useCharacter } from '../../store/selectors';
 import Grid from '@material-ui/core/Grid';
+import { CharacterContext } from '../../views/CharacterContext';
 
-interface StatsProps {
-  characterKey: string
-}
+interface StatsProps {}
 
 //COMPONENT
 const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
-  const {characterKey} = props;
   const classes = useStyles();
   const dispatch = useDispatch();
   const firebase=useFirebase();
+  const {character:characterKey} = useContext(CharacterContext);
   useFirebaseConnect(`/characters/${characterKey}`);
   const character = useCharacter(characterKey);
 
@@ -73,10 +70,8 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                          values.stamina_current === 0 && values.stamina_max ===
                          0 && values.skill === 0;
   return (
-      <div>
-        <Paper>
-          <Box p={2}>
-            <Grid container
+
+            <Grid container className={classes.container}
                   direction={"row"}>
               <Grid item
                     xs={3}
@@ -203,13 +198,8 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
 
                   </Grid>
                 </Grid>
-
               </Grid>
-            </Grid>
-
-          </Box>
-        </Paper>
-      </div>);
+            </Grid>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
@@ -218,6 +208,9 @@ const useStyles = makeStyles((theme: Theme) => (
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+      },
+      container: {
+        paddingTop: theme.spacing(1),
       },
       skillContainer: {
         border: "1px solid grey",

@@ -1,4 +1,8 @@
-import React, { FunctionComponent, useState, useContext } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  useContext, PropsWithChildren,
+} from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import IconButton from '@material-ui/core/IconButton';
 import { Info, Close, ChatBubble, ChatBubbleTwoTone } from '@material-ui/icons';
@@ -19,10 +23,13 @@ import Button from '@material-ui/core/Button';
 
 interface ISkillInfoButtonProps {}
 
-type SkillInfoButtonProps = ISkillInfoButtonProps;
+type SkillInfoButtonProps = PropsWithChildren<ISkillInfoButtonProps>;
 
-const SkillInfoButton: FunctionComponent<ISkillInfoButtonProps> = (props: ISkillInfoButtonProps) => {
-  const {} = props;
+const dummyFunc = () => {}
+export const PopperContext = React.createContext(dummyFunc);
+
+const SkillInfoButton: FunctionComponent<SkillInfoButtonProps> = (props: SkillInfoButtonProps) => {
+  const {children} = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const {character} = useContext(CharacterContext);
@@ -50,13 +57,15 @@ const SkillInfoButton: FunctionComponent<ISkillInfoButtonProps> = (props: ISkill
     setAnchorEl(null)
   }
 
+
+
   const open = Boolean(anchorEl);
   const id = open
              ? 'simple-popper'
              : undefined;
 
   return (
-        <>
+        <PopperContext.Provider value={closePopper}>
           <IconButton onClick={handleClick}>
             <Info />
           </IconButton>
@@ -77,20 +86,10 @@ const SkillInfoButton: FunctionComponent<ISkillInfoButtonProps> = (props: ISkill
               }}
           >
             <Paper className={classes.paper}>
-              <Card>
-                <CardHeader title={name}
-                            titleTypographyProps={{variant:"subtitle2"}}
-                            action={<IconButton size={"small"}
-                                                onClick={closePopper}><Close /></IconButton>}/>
-                <CardContent className={classes.cardContent}><Typography variant={"body2"}>{description}</Typography></CardContent>
-                <CardActions>
-                  <Button startIcon={<ChatBubbleTwoTone/>}>Chat</Button>
-                  <Button startIcon={<Close/>}>Close</Button>
-                </CardActions>
-              </Card>
+              {children}
             </Paper>
           </Popper>
-        </>
+        </PopperContext.Provider>
       );
 };
 
