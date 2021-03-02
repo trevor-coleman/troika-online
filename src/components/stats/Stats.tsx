@@ -37,7 +37,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
   function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
     setValues({
       ...values,
-      [e.target.id]: e.target.value,
+      [e.target.id]: parseInt(e.target.value),
     });
 
     firebase.ref(`/characters/${characterKey}/${e.target.id}`)

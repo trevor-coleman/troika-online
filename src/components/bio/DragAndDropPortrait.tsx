@@ -1,3 +1,4 @@
+import { ReactComponent } from '*.svg';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -9,6 +10,7 @@ import {
 } from 'react-redux-firebase';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { ReactComponent as SirHorse } from './horse-svgrepo-com.svg'
 
 interface DragAndDropAvatarProps {
   characterKey: string,
@@ -24,37 +26,48 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
   const classes = useStyles();
   const dispatch = useDispatch();
   const firebase = useFirebase();
-  useFirebaseConnect([`/portraits/${characterKey}`, `/characters/${characterKey}/portrait`]);
-  const character= useCharacter(characterKey);
+  useFirebaseConnect([
+    `/portraits/${characterKey}`, `/characters/${characterKey}/portrait`,
+  ]);
+  const character = useCharacter(characterKey);
   const portrait = usePortrait(characterKey);
-  const[portraitUrl, setPortraitURL] = useState(
-      "https://yt3.ggpht.com/ytc/AAUvwnjNN87SwFXqcv0Pl21LCRvAd-cmUDmv5uAY6mH8_w=s900-c-k-c0x00ffffff-no-rj")
+  const [portraitUrl, setPortraitURL] = useState("");
 
-  async function getPortrait () {
-    setPortraitURL(character?.portrait ? await firebase.storage().ref(character?.portrait).getDownloadURL() : portraitUrl);
-   }
+  async function getPortrait() {
+    setPortraitURL(character?.portrait
+                   ? await firebase.storage()
+                                   .ref(character?.portrait)
+                                   .getDownloadURL()
+                   : portraitUrl);
+  }
 
-  useEffect(()=>{
+  useEffect(() => {
     getPortrait();
-  }, [portrait, character])
+  }, [portrait, character]);
 
   const handleDrop = async (files: FileList): Promise<void> => {
     if (!isValidFiles(files)) return;
-    const fileExtensions : {[key:string]: string} = {
+    const fileExtensions: { [key: string]: string } = {
       'image/jpeg': 'jpg',
-      'image/png': 'png',
-      'image/gif': 'gif'
+      'image/png' : 'png',
+      'image/gif' : 'gif',
     };
 
-    const name = `${characterKey}.${fileExtensions[files[0].type]}`
+    const name = `${characterKey}.${fileExtensions[files[0].type]}`;
 
     const ref = await firebase.uploadFile('portraits',
-        files[0],`/characters/${characterKey}/portraits`,
+        files[0],
+        `/characters/${characterKey}/portraits`,
         {name});
 
-    if(ref) {
-      if(!isEmpty(character?.portrait)) await firebase.storage().ref(character?.portrait).delete();
-      await firebase.ref(`/characters/${characterKey}/portrait`).set(ref.uploadTaskSnapshot.metadata.fullPath);
+    if (ref) {
+      if (!isEmpty(character?.portrait)) {
+        await firebase.storage()
+                      .ref(character?.portrait)
+                      .delete();
+      }
+      await firebase.ref(`/characters/${characterKey}/portrait`)
+                    .set(ref.uploadTaskSnapshot.metadata.fullPath);
     }
   };
 
@@ -69,34 +82,52 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
   }
 
   return (
-      <Box alignItems={"center"} justifyItems={"center"} className={classes.root}>
+      <Box
+          alignItems={"center"}
+          justifyItems={"center"}
+          className={classes.root}>
 
-          <DragAndDrop handleDrop={handleDrop}><img alt={alt ??
-                                                             "avatar-placeholder"}
-                                                        src={ portraitUrl}
-                                                        className={classes.portrait} /></DragAndDrop>
-        <Typography paragraph align={"center"} className={classes.caption} variant={"caption"}>Drag and Drop to Upload</Typography>
-         </Box>);
+        <DragAndDrop handleDrop={handleDrop}>{portraitUrl == ""
+                                              ? <Box className={classes.placeHolder} ><SirHorse /></Box>
+                                              : <img
+                                                  alt={alt ??
+                                                       "avatar-placeholder"}
+                                                  src={portraitUrl}
+                                                  className={classes.portrait} />}</DragAndDrop>
+        <Typography
+            paragraph
+            align={"center"}
+            className={classes.caption}
+            variant={"caption"}>Drag and Drop to Upload</Typography>
+      </Box>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root: {
-        width: "100%",
-        height: "100%",
-        maxWidth: 175,
-        maxHeight: 250,
-        display:"flex",
-        flexDirection:"column",
+      root    : {
+        width        : "100%",
+        height       : "100%",
+        maxWidth     : 175,
+        maxHeight    : 250,
+        display      : "flex",
+        flexDirection: "column",
       },
       portrait: {
-        maxWidth: 175,
+        minWidth : 175,
+        maxWidth: 225,
+        minHeight: 175,
         maxHeight: 225,
         objectFit: "contain",
       },
-      caption: {
+      placeHolder: {
+        width    : 200,
+        height   : 200,
+        objectFit: "contain",
+        opacity: 0.3,
+      },
+      caption : {
         color: theme.palette.grey['400'],
-      }
+      },
     }));
 
 export default DragAndDropPortrait;

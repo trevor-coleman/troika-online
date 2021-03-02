@@ -5,6 +5,7 @@ import { useTypedSelector } from '../../store';
 import { CharacterContext } from '../../views/CharacterContext';
 import { useAuth } from '../../store/selectors';
 import { Skill } from '../../store/Schema';
+import EditSkillDialog from './EditSkillDialog';
 import SkillCard from './SkillCard';
 import Grid from '@material-ui/core/Grid';
 import { Fade } from '@material-ui/core';
@@ -46,6 +47,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
       initialState);
 
   function showDialog(dialog?: string, key?: string): void {
+    setSelectedSkill(key??"")
     const newState = initialState;
     setDialogState(dialog
                    ? {
@@ -54,7 +56,6 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
         }
                    : newState);
   }
-
   const createSkill = (
       (newSkill: Partial<Skill>) => {
         const newKey = firebase.ref(`/skills/${character}`)
@@ -113,12 +114,11 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
               <SkillCard
                   skill={skill}
                   onEdit={() => {
-                    setSelectedSkill(skill);
-                    showDialog("edit");
+                    console.log("EDIT", skill)
+                    showDialog("edit", skill);
                   }}
                   onRemove={() => {
-                    setSelectedSkill(skill);
-                    showDialog("remove");
+                    showDialog("remove", skill);
                   }} />
               <Grid
                   item
@@ -144,8 +144,11 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
             </Grid>
             <>
               <Grid item>
-                <Fade in={addVisible}><Typography>Add New
-                                                  Item</Typography></Fade>
+                <Fade in={addVisible}>
+                  <Typography>
+                  Add New Item
+                </Typography>
+                </Fade>
               </Grid>
               <Grid item>
                 <Fade in={addVisible}><Button
@@ -166,6 +169,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
             </>
           </Grid>
         </Grid>
+        <EditSkillDialog open={dialogState.edit} onClose={()=>showDialog()} skill={selectedSkill}/>
       </>);
 };
 

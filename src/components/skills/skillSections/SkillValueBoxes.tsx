@@ -19,15 +19,24 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
   const skill=useContext(SkillContext);
   const firebase=useFirebase();
 
+  useFirebaseConnect([
+    {
+      path   : `/characters/${character}/skill`,
+      storeAs: `skillValues/${character}/totalSkill`,
+    },
+  ]);
+
   useFirebaseConnect({
                        path   : `/skillValues/${character}/${skill}`,
                       storeAs:`skillValues/${character}/${skill}`
                      })
 
-  const {
-    rank : skillRank = 0,
-    skill: skillSkill = 0,
-  } = useTypedSelector(state => state.firebase.data?.skillValues?.[character]?.[skill]) ?? {};
+  const stateRank = useTypedSelector(state => state.firebase.data?.skillValues?.[character]?.[skill]?.rank) ?? 0;
+
+  const stateSkill = useTypedSelector(state => state.firebase.data?.skillValues?.[character]?.totalSkill) ?? 0;
+
+  const skillSkill  = parseInt(stateSkill);
+  const skillRank = parseInt(stateRank)
 
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -72,13 +81,20 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
           <TextField
               type={"number"}
               variant={"outlined"}
+              disabled
+              classes={{root: classes.skillRoot}}
               InputLabelProps={{shrink: true}}
-              InputProps={{classes: {input: classes.rankSkillInput}}}
+              InputProps={{
+                readOnly: true,
+                classes : {
+                  disabled: classes.skillInputRoot,
+                }
+              }}
               margin={"dense"}
               label={"Skill"}
               id={"skill"}
               value={skillSkill}
-              className={classes.rankSkillRoot}
+              className={classes.skillRoot}
               onChange={handleChange} />
         </Grid>
         <Grid
@@ -89,6 +105,7 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
               disabled
               margin={"dense"}
               label={"Total"}
+              classes={{root: classes.totalRoot}}
               InputLabelProps={{shrink: true}}
               InputProps={{readOnly:true, classes: {
                 disabled: classes.totalRoot,
@@ -96,7 +113,6 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
               value={(
                          skillRank) + (
                          skillSkill)}
-              classes={{root: classes.totalRoot}}
               type={"number"} />
         </Grid>
       </Grid>);
@@ -117,12 +133,23 @@ const useStyles = makeStyles((theme: Theme) => (
         margin: 0,
         textAlign: "center",
       },
+      skillRoot: {
+        margin   : 0,
+        textAlign: "center",
+      },
       totalRoot: {
         margin: 0,
+        fontWeight:"bold",
         backgroundColor: theme.palette.grey['200'],
         borderRadius: theme.shape.borderRadius,
         color:theme.palette.text.secondary,
         textAlign: "center",
+      },
+      skillInputRoot: {
+        margin         : 0,
+        borderRadius   : theme.shape.borderRadius,
+        color          : theme.palette.text.disabled,
+        textAlign      : "center",
       },
     }));
 

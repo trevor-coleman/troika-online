@@ -36,11 +36,12 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
   useFirebaseConnect([
                        {
                          path   : `/skills/${character}/${skill}/name`,
-                         storeAs: `skillTableRow/${character}/${skill}/name`,
+                         storeAs: `/skillTableRow/${character}/${skill}/name`,
                        },
                      ]);
 
   const name = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.name) ?? "";
+
 
   const [expand, setExpand] = useState(false);
 

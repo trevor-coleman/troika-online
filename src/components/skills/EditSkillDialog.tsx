@@ -36,7 +36,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
         storeAs: `editSkill/${skill}`
       }]);
 
-  const {name = "", description = ""} = useTypedSelector(state=> state.firebase.data.editSkill?.[skill]) ?? {}
+  const {name, description} = useTypedSelector(state=> state.firebase.data.editSkill?.[skill]) ?? {}
 
 
   const handleClose = async (undo?:boolean)=> {
@@ -64,7 +64,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
               <TextField variant={"outlined"}
                          label={"Name"}
                          id={"name"}
-                         value={name}
+                         value={name ?? ""}
                          onChange={handleChange}
                          placeholder={"New Skill"}
                          fullWidth />
@@ -73,7 +73,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
               <TextField variant={"outlined"}
                          multiline
                          id={"description"}
-                         value={description}
+                         value={description ?? ""}
                          onChange={handleChange}
                          label={"description"}
                          rows={4}
