@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import { Skill } from '../../store/Schema';
 import { useAuth } from '../../store/selectors';
 import { useFirebase } from 'react-redux-firebase';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 
 interface NewSkillDialogProps {
   open: boolean;

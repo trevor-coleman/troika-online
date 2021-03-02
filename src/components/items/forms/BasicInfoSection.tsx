@@ -16,7 +16,7 @@ import { FormValueChangeHandler, FormValueChange } from './FormValueChange';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
 import { ItemContext } from '../../../contexts/ItemContext';
-import { CharacterContext } from '../../../views/CharacterContext';
+import { CharacterContext } from '../../../contexts/CharacterContext';
 
 interface IChargesSectionProps {
   onChange: FormValueChangeHandler

@@ -4,7 +4,7 @@ import React, {
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { Checkbox } from '@material-ui/core';
 import { Casino, Edit, Info } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';

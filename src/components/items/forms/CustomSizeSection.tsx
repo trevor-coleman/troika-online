@@ -5,7 +5,7 @@ import { FormControlLabel, Switch, TextField } from '@material-ui/core';
 import { FormValueChangeHandler } from './FormValueChange';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
-import { CharacterContext } from '../../../views/CharacterContext';
+import { CharacterContext } from '../../../contexts/CharacterContext';
 import { ItemContext } from '../../../contexts/ItemContext';
 
 interface ICustomSizeSectionProps {

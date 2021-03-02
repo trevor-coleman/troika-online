@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { Close, ChatBubbleTwoTone } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { PopperContext } from '../skills/skillSections/SkillInfoButton';
 import { ItemContext } from '../../contexts/ItemContext';
 import { useFirebaseConnect } from 'react-redux-firebase';

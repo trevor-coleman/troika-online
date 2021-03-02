@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState, useContext } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { useAuth } from '../../store/selectors';
 import { Skill } from '../../store/Schema';
 import EditSkillDialog from './EditSkillDialog';

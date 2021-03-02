@@ -14,6 +14,7 @@ import {
   FormControlLabel,
   SvgIcon,
   Avatar,
+  Fade,
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import {
@@ -27,8 +28,10 @@ import {
   Edit,
   EditOutlined,
 } from '@material-ui/icons';
-import {KeyList} from '../../store/KeyList';
-import {Item} from '../../store/Item';
+import { KeyList } from '../../store/KeyList';
+import { Item } from '../../store/Item';
+import { GameContext } from '../../contexts/GameContext';
+import ChargesStepper from './ChargesStepper';
 import { ReactComponent as SwordIconOutline } from './sword-outline-svgrepo-com.svg';
 import { ReactComponent as SwordIconFilled } from './sword-filled-svgrepo-com.svg';
 import { ReactComponent as LightningOutline } from './lightning-outline-svgrepo-com.svg';
@@ -48,7 +51,7 @@ import { useTypedSelector } from '../../store';
 import {
   DraggableProvidedDragHandleProps, Draggable,
 } from 'react-beautiful-dnd';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { ItemContext } from '../../contexts/ItemContext';
 import BasicInfoSection from './forms/BasicInfoSection';
 import CollapsingSection from './forms/CollapsingSection';
@@ -62,6 +65,19 @@ interface IInventoryItemProps {
 
 type InventoryItemProps = PropsWithChildren<IInventoryItemProps>
 
+interface ExpandState {
+  isExpanded: boolean;
+  damage: boolean;
+  settings: boolean;
+  charges: boolean;
+  customSize: boolean;
+  basic: boolean;
+  armour: boolean;
+  sectionToggles: boolean;
+
+  [key: string]: boolean;
+}
+
 //COMPONENT
 const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryItemProps) => {
   const {
@@ -74,12 +90,13 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
   const firebase = useFirebase();
   const auth = useAuth();
   const {character} = useContext(CharacterContext);
+  const game = useContext(GameContext);
   useFirebaseConnect([
-                       {
-                         path   : `/items/${character}/${id}`,
-                         storeAs: `/inventoryItem/${id}`,
-                       },
-                     ]);
+    {
+      path   : `/items/${character}/${id}`,
+      storeAs: `/inventoryItem/${id}`,
+    },
+  ]);
   const item: Item = useTypedSelector(state => state.firebase.data?.inventoryItem?.[id]);
   const {
     name = "",
@@ -92,21 +109,31 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
     customSize = false,
   }: Item = item ?? {};
 
-  const [expanded, setExpanded] = useState<KeyList>({
-                                                      basic         : false,
-                                                      damage        : false,
-                                                      armour        : false,
-                                                      charges       : false,
-                                                      customSize    : false,
-                                                      settings      : false,
-                                                      sectionToggles: true,
-                                                    });
+  let initialState: ExpandState = {
+    isExpanded    : false,
+    basic         : false,
+    damage        : false,
+    armour        : false,
+    charges       : false,
+    customSize    : false,
+    settings      : false,
+    sectionToggles: true,
+  };
+  const [expanded, setExpanded] = useState<ExpandState>(initialState);
 
-  const toggle = (section: string) => {
-    setExpanded({
-                  ...expanded,
-                  [section]: !expanded[section],
-                });
+  const toggle = (section?: string) => {
+    if (!section) {
+      setExpanded(initialState);
+      return;
+    }
+    const shouldExpand = !expanded[section];
+    setExpanded(shouldExpand
+                ? {
+          ...initialState,
+          isExpanded: shouldExpand,
+          [section] : !expanded[section],
+        }
+                : initialState);
   };
 
   const handleChange: FormValueChangeHandler = (updates) => {
@@ -120,154 +147,211 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
       };
     }, {});
 
-    firebase.ref(`/items/${character}/${id}`).update(update);
+    firebase.ref(`/items/${character}/${id}`)
+            .update(update);
   };
 
   if (!isLoaded(item)) return <Card><CardContent>Loading</CardContent></Card>;
 
   return (
-      <ItemContext.Provider value={id}><Draggable draggableId={id}
-                                                  index={index}>{(provided,
-                                                                  snapshot) => (
-          <Grid item
-                xs={12}
-                innerRef={provided.innerRef}
-                {...provided.draggableProps}
+      <ItemContext.Provider value={id}><Draggable
+          draggableId={id}
+          index={index}>{(provided, snapshot) => (
+          <Grid
+              item
+              xs={12}
+              innerRef={provided.innerRef}
+              {...provided.draggableProps}
           >
             <Card className={classes.card}>
-              <CardHeader avatar={<Avatar>{size}</Avatar>}
-                          className={classes.cardHeader}
-                          titleTypographyProps={{variant: "h6"}}
-                          title={`${name}`}
-                          subheader={description}
-                          subheaderTypographyProps={{
-                            variant: "caption",
-                            color  : 'textPrimary',
-                          }}
-                          action={<FormControlLabel value="bottom"
-                                                    control={
-                                                      <Switch color="primary" />}
-                                                    label="Equip"
-                                                    labelPlacement="bottom" />}
-                          {...provided.dragHandleProps} />
-
+              <CardHeader
+                  avatar={<Avatar>{size}</Avatar>}
+                  className={classes.cardHeader}
+                  titleTypographyProps={{variant: "h6"}}
+                  title={`${name}`}
+                  subheader={description}
+                  subheaderTypographyProps={{
+                    variant: "caption",
+                    color  : 'textPrimary',
+                  }}
+                  action={<div className={classes.headerAction}>{hasCharges
+                                                                 ? <ChargesStepper item={id} />
+                                                                 :
+                                                                 <div />}<FormControlLabel
+                      value="bottom"
+                      control={<Switch color="primary" />}
+                      label="Equip"
+                      labelPlacement="bottom" /></div>}
+                  {...provided.dragHandleProps} />
               <CardActions className={classes.cardActions}>
                 <div className={classes.sectionToggles}>
-                  <SectionToggleIcon expanded={expanded.sectionToggles}
-                                     onToggle={toggle}
-                                     section={"sectionToggles"}
-                                     activeIcon={<ChevronLeft />}
-                                     inactiveIcon={<ChevronRight />}
-                                     show={true} />
-                  <SectionToggleIcon section={"basic"}
-                                     expanded={expanded.basic}
-                                     onToggle={toggle}
-                                     show={true}
-                                     activeIcon={<Edit />}
-                                     inactiveIcon={<EditOutlined />} />
-                  <SectionToggleIcon section={"armour"}
-                                     expanded={expanded.armour}
-                                     onToggle={toggle}
-                                     show={protects || expanded.sectionToggles}
-                                     activeIcon={<SecurityTwoTone />}
-                                     inactiveIcon={<SecurityOutlined />} />
-                  <SectionToggleIcon section={"damage"}
-                                     onToggle={toggle}
-                                     show={doesDamage ||
-                                           expanded.sectionToggles}
-                                     expanded={expanded.damage}
-                                     activeIcon={
-                                       <SvgIcon component={SwordIconFilled}
-                                                viewBox={"0 0 290.226 290.226"} />}
-                                     inactiveIcon={
-                                       <SvgIcon component={SwordIconOutline}
-                                                viewBox={"0 0 57 57"} />} />
-                  <SectionToggleIcon section={"customSize"}
-                                     onToggle={toggle}
-                                     show={customSize ||
-                                           expanded.sectionToggles}
-                                     expanded={expanded.customSize}
-                                     activeIcon={
-                                       <SvgIcon component={WeightFilled}
-                                                viewBox={"0 0 299.799 299.799"} />}
-                                     inactiveIcon={
-                                       <SvgIcon component={WeightOutline}
-                                                viewBox={"0 0 512 512"} />} />
+                  <SectionToggleIcon
+                      expanded={expanded.sectionToggles}
+                      onToggle={toggle}
+                      section={"sectionToggles"}
+                      activeIcon={<ChevronLeft />}
+                      inactiveIcon={<ChevronRight />}
+                      show={true} />
+                  <SectionToggleIcon
+                      section={"basic"}
+                      expanded={expanded.basic}
+                      onToggle={toggle}
+                      show={true}
+                      activeIcon={<Edit />}
+                      inactiveIcon={<EditOutlined />} />
+                  <SectionToggleIcon
+                      section={"armour"}
+                      expanded={expanded.armour}
+                      onToggle={toggle}
+                      show={protects || expanded.sectionToggles}
+                      activeIcon={<SecurityTwoTone />}
+                      inactiveIcon={<SecurityOutlined />} />
+                  <SectionToggleIcon
+                      section={"damage"}
+                      onToggle={toggle}
+                      show={doesDamage || expanded.sectionToggles}
+                      expanded={expanded.damage}
+                      activeIcon={<SvgIcon
+                          component={SwordIconFilled}
+                          viewBox={"0 0 290.226 290.226"} />}
+                      inactiveIcon={<SvgIcon
+                          component={SwordIconOutline}
+                          viewBox={"0 0 57 57"} />} />
+                  <SectionToggleIcon
+                      section={"customSize"}
+                      onToggle={toggle}
+                      show={customSize || expanded.sectionToggles}
+                      expanded={expanded.customSize}
+                      activeIcon={<SvgIcon
+                          component={WeightFilled}
+                          viewBox={"0 0 299.799 299.799"} />}
+                      inactiveIcon={<SvgIcon
+                          component={WeightOutline}
+                          viewBox={"0 0 512 512"} />} />
 
-                  <SectionToggleIcon section={"charges"}
-                                     onToggle={toggle}
-                                     show={hasCharges ||
-                                           expanded.sectionToggles}
-                                     expanded={expanded.charges}
-                                     activeIcon={
-                                       <SvgIcon component={LightningFilled}
-                                                viewBox={"0 0 46.093 46.093"} />}
-                                     inactiveIcon={
-                                       <SvgIcon component={LightningOutline}
-                                                viewBox={"0 0 192.008 192.008"} />} />
-                  <SectionToggleIcon section={"settings"}
-                                     onToggle={toggle}
-                                     show={true}
-                                     expanded={expanded.settings}
-                                     activeIcon={<Delete />}
-                                     inactiveIcon={<DeleteOutline />} />
+                  <SectionToggleIcon
+                      section={"charges"}
+                      onToggle={toggle}
+                      show={hasCharges || expanded.sectionToggles}
+                      expanded={expanded.charges}
+                      activeIcon={<SvgIcon
+                          component={LightningFilled}
+                          viewBox={"0 0 46.093 46.093"} />}
+                      inactiveIcon={<SvgIcon
+                          component={LightningOutline}
+                          viewBox={"0 0 192.008 192.008"} />} />
+                  <SectionToggleIcon
+                      section={"settings"}
+                      onToggle={toggle}
+                      show={true}
+                      expanded={expanded.settings}
+                      activeIcon={<Delete />}
+                      inactiveIcon={<DeleteOutline />} />
 
 
                 </div>
                 <div className={classes.rolls}>
-                  <Button disabled variant={"contained"}
-                          startIcon={<Casino />}>Roll</Button>
+                  <Button
+                      disabled
+                      variant={"contained"}
+                      startIcon={<Casino />}>Roll</Button>
                 </div>
               </CardActions>
-              <CollapsingSection expand={expanded.basic}>
-                <CardContent>
+              <CollapsingSection expand={expanded.isExpanded}>
+                <FadingSection
+                    onClose={toggle}
+                    expanded={expanded.basic}>
+
                   <BasicInfoSection onChange={handleChange} />
-                </CardContent>
-              </CollapsingSection>
-              <CollapsingSection expand={expanded.armour}>
-                <CardContent>
-                  <ArmourSection character={character}
-                                 item={id}
-                                 onChange={handleChange} />
-                </CardContent>
-              </CollapsingSection>
-              <CollapsingSection expand={expanded.damage}>
-                <CardContent>
+                </FadingSection>
+                <FadingSection
+                    onClose={toggle}
+                    expanded={expanded.armour}>
+                  <ArmourSection
+                      character={character}
+                      item={id}
+                      onChange={handleChange} />
+                </FadingSection>
+                <FadingSection
+                    onClose={toggle}
+                    expanded={expanded.damage}>
                   <DamageSection onChange={handleChange} />
-                </CardContent>
-              </CollapsingSection>
-              <CollapsingSection expand={expanded.customSize}>
-                <CardContent>
+                </FadingSection>
+                <FadingSection
+                    onClose={toggle}
+                    expanded={expanded.customSize}>
                   <CustomSizeSection onChange={handleChange} />
-                </CardContent>
-              </CollapsingSection>
-              <CollapsingSection expand={expanded.charges}>
-                <CardContent>
+                </FadingSection>
+                <FadingSection
+                    onClose={toggle}
+                    expanded={expanded.charges}>
                   <ChargesSection onChange={handleChange} />
-                </CardContent>
-              </CollapsingSection>
-              <CollapsingSection expand={expanded.settings}>
-                <CardContent>
-                  <Button onClick={() => onRemove(id)}
-                          variant={"contained"}
-                          color={"secondary"}>Remove</Button>
-                </CardContent>
+                </FadingSection>
+                <FadingSection
+                    onClose={toggle}
+                    expanded={expanded.settings}>
+                  <Button
+                      onClick={() => onRemove(id)}
+                      variant={"contained"}
+                      color={"secondary"}>Remove</Button>
+                </FadingSection>
               </CollapsingSection>
             </Card>
           </Grid>)}</Draggable></ItemContext.Provider>);
 };
 
+const FadingSection = (props: PropsWithChildren<{ expanded: boolean, onClose: () => void }>) => {
+  const {
+    expanded,
+    children,
+    onClose,
+  } = props;
+
+  const classes = useFadingStyles();
+  const [showChildren, setShowChildren] = useState(expanded);
+
+  return <Fade
+      in={expanded}
+      onEnter={() => setShowChildren(true)}
+      onExited={() => setShowChildren(false)}>
+    {showChildren
+     ? <>
+       <CardContent>
+         {children}
+       </CardContent>
+       <CardActions>
+         <div className={classes.spacer} />
+         <Button
+             variant="contained"
+             color={"primary"}
+             onClick={() => onClose()}>Close</Button>
+       </CardActions></>
+     : <div />}
+  </Fade>;
+};
+
+const useFadingStyles = makeStyles((theme: Theme) => (
+    {
+      spacer: {
+        flexGrow: 1,
+      },
+    }));
+
 const useStyles = makeStyles((theme: Theme) => (
     {
       root           : {},
-      card: {
-        border: "1px solid",
+      card           : {
+        border     : "1px solid",
         borderColor: theme.palette.divider,
-        margin: theme.spacing(1),
+        margin     : theme.spacing(1),
       },
       cardHeader     : {
         paddingTop   : theme.spacing(2),
         paddingBottom: 0,
+      },
+      headerAction   : {
+        display      : "flex",
+        flexDirection: 'row',
       },
       itemDescription: {
         paddingTop   : 0,

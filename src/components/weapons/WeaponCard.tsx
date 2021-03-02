@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext, ChangeEvent } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
 import Grid from '@material-ui/core/Grid';

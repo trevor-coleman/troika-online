@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import { Skill } from '../../store/Schema';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CharacterEditor from '../../views/CharacterEditor';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 
 interface AddSkillsDialogProps {
   open: boolean,

@@ -27,7 +27,7 @@ import Stats from '../components/stats/Stats';
 import Bio from '../components/bio/Bio';
 import CharacterSkills from '../components/skills/CharacterSkills';
 import { rollKey } from '../components/rolls/rollKey';
-import { CharacterContext } from './CharacterContext';
+import { CharacterContext } from '../contexts/CharacterContext';
 
 interface SessionProps {
 

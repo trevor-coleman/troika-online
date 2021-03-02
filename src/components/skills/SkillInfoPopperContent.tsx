@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import { SkillContext } from './context/SkillContext';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { PopperContext } from './skillSections/SkillInfoButton';
 
 interface ISkillInfoPopperContentProps {}

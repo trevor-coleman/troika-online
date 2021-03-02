@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
 import { makeStyles, Theme } from '@material-ui/core/styles';

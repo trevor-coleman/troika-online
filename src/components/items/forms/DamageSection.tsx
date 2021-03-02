@@ -19,7 +19,7 @@ import { FormValueChangeHandler, FormValueChange } from './FormValueChange';
 import Grid from '@material-ui/core/Grid';
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
-import { CharacterContext } from '../../../views/CharacterContext';
+import { CharacterContext } from '../../../contexts/CharacterContext';
 import { ItemContext } from '../../../contexts/ItemContext';
 
 export const weaponNames: { [key: string]: string } = {

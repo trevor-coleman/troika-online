@@ -16,7 +16,7 @@ import {
 import Box from '@material-ui/core/Box';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
-import { CharacterContext } from '../../../views/CharacterContext';
+import { CharacterContext } from '../../../contexts/CharacterContext';
 import { SkillContext } from '../context/SkillContext';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';

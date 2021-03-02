@@ -11,7 +11,6 @@ interface RollTesterProps {
   gameKey:string;
 }
 
-let count = 0;
 
 
 //COMPONENT
@@ -34,8 +33,6 @@ const RollTester: FunctionComponent<RollTesterProps> = (props: RollTesterProps) 
   let results: { [key:number]: number }= {};
 
   const newRoll=async (dice:number[])=> {
-    count++;
-
     const rollsRef = firebase.ref(`/rolls/${gameKey}`)
     const newRef =  rollsRef.push();
 

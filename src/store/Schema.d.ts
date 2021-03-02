@@ -1,3 +1,4 @@
+import { ChargesStepperState } from '../components/items/ChargesStepper';
 import {
   Skill, OtherItem, Weapon, Spell, InventoryItem,
 } from '../types/troika';
@@ -8,9 +9,15 @@ import { KeyList } from './KeyList';
 import { Item } from './Item';
 import { WeaponTableRowState } from '../components/weapons/WeaponTableRow';
 
+type CharacterEditorState = {
+    rolls: FbRoll[]
+}
+
 export default interface Schema {
   [key:string]: any,
+  characterEditor: CharacterEditorState,
   characterItems: CharacterItemsState,
+  chargesStepper: ChargesStepperState,
   editSkill: {name:string, description:string}
   skillTableRow: {[key:string]: Skill},
   skillText: SkillValues,
@@ -39,7 +46,7 @@ export default interface Schema {
   addSkills_srdSkills: Skill,
   srdItems: Item,
   games: Game,
-  rolls: { [key: string]: FbRoll },
+  rolls: {[key:string]:FbRoll},
   characters: Character
 }
 

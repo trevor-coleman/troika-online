@@ -12,7 +12,7 @@ import { useAuth, useSkill } from '../../store/selectors';
 import {
   useFirebase, useFirebaseConnect, isLoaded,
 } from 'react-redux-firebase';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { useTypedSelector } from '../../store';
 
 interface EditSkillDialogProps {

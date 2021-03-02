@@ -26,6 +26,7 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
 
   const game = useGame(gameKey);
 
+
   return (
       <div className={classes.root}>
         <Typography variant={"h3"}>{ game?.name ?? "No Game"}</Typography>

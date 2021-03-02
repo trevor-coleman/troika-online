@@ -12,7 +12,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { ExpandMore, ExpandLess, Casino } from '@material-ui/icons';
 import { useTypedSelector } from '../../store';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 
 interface SkillTableRowProps {
   skill: string,

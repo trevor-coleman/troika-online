@@ -8,7 +8,7 @@ import { FormValueChangeHandler, FormValueChange } from './FormValueChange';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
 import { ItemContext } from '../../../contexts/ItemContext';
-import { CharacterContext } from '../../../views/CharacterContext';
+import { CharacterContext } from '../../../contexts/CharacterContext';
 
 interface IChargesSectionProps {
   onChange: FormValueChangeHandler
@@ -111,7 +111,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
                        id={"charges-initial"}
                        variant={"outlined"}
                        onChange={handleChange}
-                       label={"Initial"}
+                       label={"Current"}
                        type={"number"}
                        InputLabelProps={{shrink: true}} />
             <TextField value={max ?? 0}

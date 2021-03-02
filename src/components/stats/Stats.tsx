@@ -8,12 +8,12 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import { Paper, TextField } from '@material-ui/core';
 import {
-  useFirebaseConnect,
-  isLoaded, useFirebase,
+  useFirebaseConnect, isLoaded, useFirebase,
 } from 'react-redux-firebase';
+import { GameContext } from '../../contexts/GameContext';
 import { useCharacter } from '../../store/selectors';
 import Grid from '@material-ui/core/Grid';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 
 interface StatsProps {}
 
@@ -21,17 +21,18 @@ interface StatsProps {}
 const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const firebase=useFirebase();
-  const {character:characterKey} = useContext(CharacterContext);
+  const firebase = useFirebase();
+  const {character: characterKey} = useContext(CharacterContext);
+  const {roll} = useContext(GameContext);
   useFirebaseConnect(`/characters/${characterKey}`);
   const character = useCharacter(characterKey);
 
   const [values, setValues] = useState({
-    luck_current: 0,
-    luck_max: 0,
-    stamina_max: 0,
+    luck_current   : 0,
+    luck_max       : 0,
+    stamina_max    : 0,
     stamina_current: 0,
-    skill: 0,
+    skill          : 0,
   });
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
@@ -48,11 +49,11 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
     if (isLoaded(character)) {
 
       const {
-        luck_current =0 ,
+        luck_current = 0,
         luck_max = 0,
-        stamina_current=0,
-        stamina_max=0,
-        skill=0,
+        stamina_current = 0,
+        stamina_max = 0,
+        skill = 0,
       } = character ?? {};
 
       setValues({
@@ -69,164 +70,212 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
   const allowRollStats = values.luck_current === 0 && values.luck_max === 0 &&
                          values.stamina_current === 0 && values.stamina_max ===
                          0 && values.skill === 0;
+
+  async function handleRoll(stat: "skill" | "luck_current" | "stamina_current"): Promise<void> {
+    let target: number = values[stat];
+    let ability: string;
+    switch (stat) {
+      case 'skill':
+        ability = "Skill";
+        break;
+      case 'luck_current':
+        ability = "Luck";
+        break;
+      case 'stamina_current':
+        ability = "Stamina";
+        break;
+
+    }
+
+    const rollKey = await roll({
+      dice         : [6, 6],
+      rolledAbility: ability,
+      rollerName   : character?.name ?? "Character",
+      target       : target,
+    });
+
+    console.log(rollKey);
+    await firebase.ref(`/rolls/${characterKey}/${rollKey}`).once('value', snap=>console.log(snap.val()))
+  }
+
   return (
-            <Grid container className={classes.container}
-                  direction={"column"} spacing={4}>
-              <Grid item
-                    xs={12}
-                    className={classes.skillGrid}>
-                <Button color={"primary"}>Skill</Button>
-                <TextField value={values.skill ?? 0}
-                           id={"skill"}
-                           variant={"outlined"}
-                           type={"number"}
-                           className={classes.skillField}
-                           onChange={handleChange}
-                           InputLabelProps={{
-                             shrink: true,
-                           }}
-                           InputProps={{
-                             classes: {
-                               input: classes.skillInput,
-                             },
-                           }} />
+      <Grid
+          container
+          className={classes.container}
+          direction={"column"}
+          spacing={4}>
+        <Grid
+            item
+            xs={12}
+            className={classes.skillGrid}>
+          <Button
+              color={"primary"}
+              onClick={() => {handleRoll("skill");}}>Skill</Button>
+          <TextField
+              value={values.skill ?? 0}
+              id={"skill"}
+              variant={"outlined"}
+              type={"number"}
+              className={classes.skillField}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                classes: {
+                  input: classes.skillInput,
+                },
+              }} />
 
-               <div className={"dummy"}/>
-              </Grid>
-              <Grid item
-                    xs={12}
+          <div className={"dummy"} />
+        </Grid>
+        <Grid
+            item
+            xs={12}
 
-                    className={classes.skillGrid}>
-                <Button color={"primary"}>Stamina</Button>
-                  <TextField value={values.stamina_current ?? 0}
-                             variant={"outlined"}
-                             type={"number"}
-                             id={"stamina_current"}
-                             onChange={handleChange}
-                             className={classes.skillField}
-                             InputLabelProps={{
-                               shrink: true,
-                             }}
-                             InputProps={{
-                               classes: {
-                                 input: classes.skillInput,
-                               },
-                             }} />
-                <TextField
-                    margin={"dense"}
-                    variant={"outlined"}
-                    value={values.stamina_max ?? 0}
-                           type={"number"}
-                    id={"stamina_max"}
-                    onChange={handleChange}
-                    label={"max"}
-                           className={classes.skillMaxField}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    InputProps={{
-                             classes: {
-                               input: classes.skillMaxInput,
-                             },
-                           }} />
-              </Grid>
-              <Grid item
-                    container
-                    xs={12}
-                    className={classes.skillGrid}>
-                <Button color={"primary"}>Luck</Button>
-                    <TextField value={values.luck_current ?? 0}
-                               variant={"outlined"}
-                               id={"luck_current"}
-                               type={"number"}
-                               onChange={handleChange}
-                               className={classes.skillField}
-                               InputLabelProps={{
-                                 shrink: true,
-                               }}
-                               InputProps={{
-                                 classes: {
-                                   input: classes.skillInput,
-                                 },
-                               }} />
+            className={classes.skillGrid}>
+          <Button color={"primary"}>Stamina</Button>
+          <TextField
+              value={values.stamina_current ?? 0}
+              variant={"outlined"}
+              type={"number"}
+              id={"stamina_current"}
+              onChange={handleChange}
+              className={classes.skillField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                classes: {
+                  input: classes.skillInput,
+                },
+              }} />
+          <TextField
+              margin={"dense"}
+              variant={"outlined"}
+              value={values.stamina_max ?? 0}
+              type={"number"}
+              id={"stamina_max"}
+              onChange={handleChange}
+              label={"max"}
+              className={classes.skillMaxField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                classes: {
+                  input: classes.skillMaxInput,
+                },
+              }} />
+        </Grid>
+        <Grid
+            item
+            container
+            xs={12}
+            className={classes.skillGrid}>
+          <Button color={"primary"}>Luck</Button>
+          <TextField
+              value={values.luck_current ?? 0}
+              variant={"outlined"}
+              id={"luck_current"}
+              type={"number"}
+              onChange={handleChange}
+              className={classes.skillField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                classes: {
+                  input: classes.skillInput,
+                },
+              }} />
 
-                    <TextField margin={"dense"}
-                               variant={"outlined"}
-                               value={values.luck_max ?? 0}
-                               id={"luck_max"}
-                               type={"number"}
-                               label={"max"}
-                               className={classes.skillMaxField}
-                               InputLabelProps={{
-                                 shrink: true,
-                               }}
-                               onChange={handleChange}
-                               InputProps={{
-                                 classes: {
-                                   input: classes.skillMaxInput,
-                                 },
-                               }} />
-              </Grid>
-                  <Grid item xs={12}>
-                      <Button fullWidth disabled
-                              variant={"contained"}>Test</Button>
-                    </Grid>
-              <Grid item xs={12}>
-                      <Button fullWidth disabled
-                              variant={"contained"}>Rest</Button>
-                    </Grid>
-            </Grid>);
+          <TextField
+              margin={"dense"}
+              variant={"outlined"}
+              value={values.luck_max ?? 0}
+              id={"luck_max"}
+              type={"number"}
+              label={"max"}
+              className={classes.skillMaxField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={handleChange}
+              InputProps={{
+                classes: {
+                  input: classes.skillMaxInput,
+                },
+              }} />
+        </Grid>
+        <Grid
+            item
+            xs={12}>
+          <Button
+              fullWidth
+              disabled
+              variant={"contained"}>Test</Button>
+        </Grid>
+        <Grid
+            item
+            xs={12}>
+          <Button
+              fullWidth
+              disabled
+              variant={"contained"}>Rest</Button>
+        </Grid>
+      </Grid>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      skillGrid: {
-        display: "flex",
+      skillGrid     : {
+        display      : "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems   : "center",
       },
-      container: {
+      container     : {
         paddingTop: theme.spacing(1),
       },
       skillContainer: {
-        border: "1px solid grey",
-        borderRadius: "100%",
-        height: "5rem",
-        width: "5rem",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        border                        : "1px solid grey",
+        borderRadius                  : "100%",
+        height                        : "5rem",
+        width                         : "5rem",
+        display                       : "flex",
+        alignItems                    : "center",
+        justifyContent                : "center",
         [theme.breakpoints.down('sm')]: {
           height: "3rem",
-          width: "3rem",
+          width : "3rem",
         },
       },
-      skillField: {
+      skillField    : {
         width: "6rem",
       },
-      dummy: {
+      dummy         : {
         width: "6rem",
       },
-      skillMaxField: {
-        width: "6rem",
-        background:theme.palette.grey['200']
+      skillMaxField : {
+        width     : "6rem",
+        background: theme.palette.grey['200'],
       },
-      skillInput: {
-        margin: "auto",
-        textAlign: "center",
-        fontSize: "2rem",
+      skillInput    : {
+        margin                        : "auto",
+        textAlign                     : "center",
+        fontSize                      : "2rem",
         [theme.breakpoints.down('sm')]: {
           paddingLeft: "0.2rem",
-          fontSize: "1.5rem",
+          fontSize   : "1.5rem",
         },
       },
-      skillMaxInput: {
-        paddingLeft: ".5rem",
-        textAlign: "center",
-        fontSize: "1rem",
+      skillMaxInput : {
+        paddingLeft                   : ".5rem",
+        textAlign                     : "center",
+        fontSize                      : "1rem",
         [theme.breakpoints.down('sm')]: {
           paddingLeft: "0.2rem",
-          fontSize: "1.5rem",
+          fontSize   : "1.5rem",
         },
       },
 

@@ -15,7 +15,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { Item } from '../../store/Item';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { useTypedSelector } from '../../store';
 
 interface AddItemsDialogProps {

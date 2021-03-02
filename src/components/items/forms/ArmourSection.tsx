@@ -143,7 +143,7 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
                                       className={classes.selectControl}>
             <Select variant={"outlined"}
                     id={"protection"}
-                    value={selected}
+                    value={selected ?? "unarmoured"}
                     name={"protection"}
                     onChange={handleSelectProtection}>
               {selectOptions.map((item, index) =>
@@ -157,7 +157,7 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
                        variant={"outlined"}
                        label={isTooHigh ? "Negative Values Only":"Damage Reduction"}
                        type={"number"}
-                       value={customValue}
+                       value={customValue ?? 0}
                        onChange={handleProtectionChange} />
           </FormGroup>
         </Grid></Grid>);

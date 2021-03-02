@@ -1,18 +1,24 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 
 import { useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import { rollKey } from '../components/rolls/rollKey';
 import CharacterSkills from '../components/skills/CharacterSkills';
 import Stats from '../components/stats/Stats';
 import Bio from '../components/bio/Bio';
 import CharacterItems from '../components/items/CharacterItems';
 import CharacterTitle from '../components/characters/CharacterTitle';
-import { CharacterContext } from './CharacterContext';
+import { CharacterContext } from '../contexts/CharacterContext';
 import CharacterWeapons from '../components/weapons/CharacterWeapons';
 import CharacterSheetSection
   from '../components/characterSheet/CharacterSheetSection';
+import { useCharacterRollContext } from '../contexts/CharacterRollContext';
+import { GameContext, TGameContext } from '../contexts/GameContext';
+import { useTypedSelector } from '../store';
+import { FbRoll } from '../store/Schema';
 
 interface CharacterEditorProps {
   init?: boolean
@@ -49,12 +55,26 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
 
   useEffect(() => {
     if (id !== characterKey) {
-      console.log("changing", id, setId);
       setId(characterKey);
     }
   }, [characterKey]);
 
+  const firebase = useFirebase()
+
+  const rollContext = useCharacterRollContext(characterKey);
+
+  useFirebaseConnect({
+    path       : `/rolls/${characterKey}`,
+    storeAs: `/characterEditorRolls`,
+    queryParams: ['orderByKey', 'limitToLast=10']
+
+  })
+
+  const orderedRolls = useTypedSelector(state => state.firebase.ordered.characterEditorRolls)
+  console.log("ORDERED ROOLS", orderedRolls)
+
   return (
+      <GameContext.Provider value={rollContext}>
       <CharacterContext.Provider value={{character: characterKey}}>
         <div>
           <CharacterTitle id={id} />
@@ -107,7 +127,8 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
             </Grid>
           </Grid>
         </div>
-      </CharacterContext.Provider>);
+      </CharacterContext.Provider>
+      </GameContext.Provider>);
 
   const classes = useStyles();
   const dispatch = useDispatch();

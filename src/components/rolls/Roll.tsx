@@ -7,6 +7,7 @@ import { FbRoll } from '../../store/Schema';
 import Button from '@material-ui/core/Button';
 
 interface RollProps {
+
   rollKey: string;
   animate?: boolean;
   roll: FbRoll;

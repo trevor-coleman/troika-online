@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { useFirebaseConnect, isEmpty, isLoaded } from 'react-redux-firebase';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { useTypedSelector } from '../../store';
 import Grid from '@material-ui/core/Grid';
 import WeaponCard from './WeaponCard';

@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme: Theme) => (
       },
       roll: {
         display:"inline-block",
-        border: "1px solid red",
         margin: theme.spacing(1),
       }
     }));

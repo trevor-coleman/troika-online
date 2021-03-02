@@ -19,7 +19,7 @@ import InventoryItem from './InventoryItem';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import { useTypedSelector } from '../../store';
-import { CharacterContext } from '../../views/CharacterContext';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import IconButton from '@material-ui/core/IconButton';
 import { AddCircleOutline } from '@material-ui/icons';
 import { Fade } from '@material-ui/core';
