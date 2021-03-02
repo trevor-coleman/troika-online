@@ -261,7 +261,8 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
                      .sort()
                      .map((weapon, index) => (
                          <MenuItem key={`${index}-${weapon}`}
-                                   value={weapon}>{weaponNames[weapon]}</MenuItem>))}
+                                   value={weapon ?? "Unarmed"}>{weaponNames[weapon] ??
+                                                                "Unarmed"}</MenuItem>))}
               <MenuItem key={`${Object.keys(weaponDamage).length}-custom`}
                         value={"custom"}>Custom</MenuItem>
             </Select>
