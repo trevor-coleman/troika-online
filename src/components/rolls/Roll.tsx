@@ -10,14 +10,15 @@ interface RollProps {
 
   rollKey: string;
   animate?: boolean;
-  roll: FbRoll;
+  roll: {key:string, value: FbRoll };
 }
 
 //COMPONENT
 const Roll: FunctionComponent<RollProps> = (props: RollProps) => {
   const {animate, roll, rollKey} = props;
+  console.log(roll)
 
-  return (<div><Dice rollKey={rollKey}  {...roll} animate /></div>);
+  return (<div><Dice rollKey={rollKey}  {...roll.value} animate /></div>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (

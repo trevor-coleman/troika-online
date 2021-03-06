@@ -7,13 +7,14 @@ import { IGameContextRollProps, TGameContext } from './GameContext';
 export const useCharacterRollContext = (characterKey: string) => {
   const firebase = useFirebase();
   useFirebaseConnect({path: `/rolls/${characterKey}`,
+    storeAs: `/rollDialog/`,
   queryParams: ['orderByKey', 'limitToLast=1']})
-  const lastRolls = useTypedSelector(state=>state.firebase.ordered?.rolls)
+  const lastRolls = useTypedSelector(state=>state.firebase.ordered?.rollDialog)
    console.log(lastRolls);
 
   return {
-    id: characterKey,
-    lastRolls,
+    id       : characterKey,
+    lastRoll: lastRolls ? lastRolls[0] : null,
     async roll(props: IGameContextRollProps) {
       const {
         target,

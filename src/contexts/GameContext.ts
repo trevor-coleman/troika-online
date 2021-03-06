@@ -6,19 +6,19 @@ export interface IGameContextRollProps {
   rolledAbility: string,
   dice: number[],
   target?: number,
-  lastRoll?: string,
+  lastRoll?: any,
 }
 
 export type TGameContext = {
   id: string;
   roll: (props: IGameContextRollProps) => Promise<string | null>;
-  lastRolls: {key:string, value:Partial<FbRoll>}[]
+  lastRoll: any;
 }
 
 export const GameContext = React.createContext<TGameContext>({
-  id  : "",
-  lastRolls: [],
-  roll: async (props: IGameContextRollProps) => {
+  id       : "",
+  lastRoll: null,
+  roll     : async (props: IGameContextRollProps) => {
     console.error("Tried to roll with default game context");
     return null;
   },

@@ -35,10 +35,6 @@ const Bio = (props: BioAndInfoProps) => {
 
   useEffect(()=>{},[name,special, background])
 
-  console.log(name, special, background)
-
-
-
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     firebase.ref(`/characters/${characterKey}`).update({
                                                          [e.target.id]: e.target.value,

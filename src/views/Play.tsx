@@ -175,14 +175,20 @@ const Play: FunctionComponent<SessionProps> = (props: SessionProps) => {
                            Gary of House Inkerton</b> rolls <b>Fishmongering</b></Typography>
             <Roll rollKey={"1234"}
                   animate={false}
-                  roll={roll()} />
+                  roll={{key: "1234", value:roll()}} />
             <Typography><b>Thor the Unhurried</b> rolls <b>Slow Perambulation</b></Typography>
             <Roll rollKey={"1234"}
                   animate={false}
-                  roll={roll()} />
+                  roll={{
+                    key  : "1234",
+                    value: roll()
+                  }} />
             <Typography><b>Middlesbrook the Middling</b> rolls <b>Average Intellect</b></Typography>
             <Roll rollKey={"1234"}
-                  roll={roll()} /></Dummy>
+                  roll={{
+                    key  : "1234",
+                    value: roll()
+                  }} /></Dummy>
           </Grid>
 
         </Grid></Grid>

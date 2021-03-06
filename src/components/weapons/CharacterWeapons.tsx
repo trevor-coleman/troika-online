@@ -29,7 +29,6 @@ const CharacterWeapons: FunctionComponent<IWeaponsProps> = (props: IWeaponsProps
 
   const {weapons = []} = useTypedSelector(state => state.firebase.data?.weapons?.[character]) ??
                          {};
-  console.log(weapons);
 
   return (
       <Grid container className={classes.root}>

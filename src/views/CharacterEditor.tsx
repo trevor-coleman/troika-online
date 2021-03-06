@@ -5,6 +5,7 @@ import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 
 import { useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import RollDialog from '../components/rolls/RollDialog/RollDialog';
 import { rollKey } from '../components/rolls/rollKey';
 import CharacterSkills from '../components/skills/CharacterSkills';
 import Stats from '../components/stats/Stats';
@@ -63,16 +64,6 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
 
   const rollContext = useCharacterRollContext(characterKey);
 
-  useFirebaseConnect({
-    path       : `/rolls/${characterKey}`,
-    storeAs: `/characterEditorRolls`,
-    queryParams: ['orderByKey', 'limitToLast=10']
-
-  })
-
-  const orderedRolls = useTypedSelector(state => state.firebase.ordered.characterEditorRolls)
-  console.log("ORDERED ROOLS", orderedRolls)
-
   return (
       <GameContext.Provider value={rollContext}>
       <CharacterContext.Provider value={{character: characterKey}}>
@@ -127,6 +118,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
             </Grid>
           </Grid>
         </div>
+        <RollDialog parent={"123"} id={"123"} open={true}/>
       </CharacterContext.Provider>
       </GameContext.Provider>);
 

@@ -22,6 +22,7 @@ export default interface Schema {
   skillTableRow: {[key:string]: Skill},
   skillText: SkillValues,
   skillSelectItem: Skill,
+  rollDialog: FbRoll
   skillInfoButton: {[key:string]: Skill}
   itemInfoButton: {[key:string]: Item}
   addItemsDialog: {inventory: string[], weapons:[]},
