@@ -118,7 +118,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
             </Grid>
           </Grid>
         </div>
-        <RollDialog parent={"123"} id={"123"} open={true}/>
+        <RollDialog parent={"123"} id={"123"} open={false}/>
       </CharacterContext.Provider>
       </GameContext.Provider>);
 

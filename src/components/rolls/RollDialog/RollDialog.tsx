@@ -31,17 +31,17 @@ const RollDialog: FunctionComponent<RollDialogProps> = (props: RollDialogProps) 
   const classes = useStyles();
   const firebase = useFirebase();
   const auth = useAuth();
-  const {lastRoll} = useContext(GameContext)
-  const [lastSeen, setLastSeen] = useState("")
+  const {lastRoll, lastSeen, setLastSeen} = useContext(GameContext)
+
 
   function handleClose():void {
+    console.log(lastRoll?.key)
     setLastSeen(lastRoll?.key ?? "")
   }
 
-  console.log("open", )
+  console.log("open", lastRoll)
   return (
-      <Dialog open={(
-                        lastRoll && lastRoll?.key !== lastSeen) ?? false}
+      <Dialog open={(lastSeen !=="firstOpen" && lastRoll!==null && lastRoll?.key !== lastSeen) ?? false}
               maxWidth={"xs"}
               onClose={handleClose}
               fullWidth>
