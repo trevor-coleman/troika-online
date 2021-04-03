@@ -2,7 +2,7 @@ import React, {
   FunctionComponent, useState, useCallback, useContext,
 } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { useFirebaseConnect } from 'react-redux-firebase';
+import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 import { GameContext } from '../../contexts/GameContext';
 import { useTypedSelector } from '../../store';
 import { CharacterContext } from '../../contexts/CharacterContext';
@@ -36,6 +36,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
   const {character} = useContext(CharacterContext);
   const {roll} = useContext(GameContext);
   const classes = useStyles();
+  const firebase=useFirebase();
 
   useFirebaseConnect([
     {
@@ -85,7 +86,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
 
   async function rollSkill(): Promise<void> {
     if (isSpell) {
-
+      await firebase.ref(`/characters/${character}/stamina_current`).set(stamina - staminaCost);
     }
     const thisRoll = await roll({
       dice         : [6, 6],

@@ -38,6 +38,23 @@ export const useCharacterRollContext = (characterKey: string) => {
 
       const total = roll.reduce((prev, curr) => prev + curr, 0) + 2;
 
+
+
+      const requestOptions = {
+        method : 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body   : JSON.stringify({
+          username: `Rollerbot`,
+          content: `**${rollerName}** rolling under **${target}** for **${rolledAbility}** 
+> Result: 
+> **${total}**  
+          `
+        })
+      };
+      fetch('https://discord.com/api/webhooks/827982601712435221/FqfPOT5svA0seeDUHFvoNaxHdSq7omtT4JiI2dccdX9vLaS8usvvyHEWdMmZc2Zl_E-n', requestOptions)
+          .then(response => console.log(response))
+
+
       await newRef.set({
         title: rollTitle,
         dice,

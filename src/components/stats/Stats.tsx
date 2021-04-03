@@ -79,6 +79,15 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                          values.stamina_current === 0 && values.stamina_max ===
                          0 && values.skill === 0;
 
+
+  async function basicRoll() {
+    await roll({
+      dice         : [6, 6],
+      rolledAbility: "None",
+      rollerName   : character?.name ?? "Character",
+      target       : 0,
+    })
+  }
   async function handleRoll(stat: "skill" | "luck_current" | "stamina_current"): Promise<void> {
     let target: number = values[stat];
     let ability: string;
@@ -114,6 +123,14 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
           className={classes.container}
           direction={"column"}
           spacing={4}>
+        <Grid
+            item
+            xs={12} className={classes.basicRoll}>
+          <Button
+              color={"primary"}
+              onClick={basicRoll}
+              variant={"outlined"}>Roll 2d6</Button>
+        </Grid>
         <Grid
             item
             xs={12}
@@ -224,14 +241,6 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
           <Button
               fullWidth
               disabled
-              variant={"contained"}>Test</Button>
-        </Grid>
-        <Grid
-            item
-            xs={12}>
-          <Button
-              fullWidth
-              disabled
               variant={"contained"}>Rest</Button>
         </Grid>
       </Grid>);
@@ -288,6 +297,11 @@ const useStyles = makeStyles((theme: Theme) => (
           fontSize   : "1.5rem",
         },
       },
+      basicRoll: {
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "center",
+      }
 
     }));
 
