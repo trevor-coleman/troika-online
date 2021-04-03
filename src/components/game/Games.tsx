@@ -11,6 +11,7 @@ import {
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
+import { Game } from '../../store/Schema';
 import GameListItem from './GameListItem';
 
 interface GamesProps {
@@ -31,13 +32,18 @@ const Games: FunctionComponent<GamesProps> = (props: GamesProps) => {
   const games = profile.games ?? {};
 
   async function addGame() {
-    const game = await firebase.ref(`/games/${gameId}`).once('value')
-    if(!game.val() || !gameId) {
+    const gameSnap = await firebase.ref(`/games/${gameId}`).once('value')
+    const game:Game = gameSnap.val()
+    if(!game || !gameId) {
       setGameError("Game Not Found");
       setGameId("")
       return;
     }
     await firebase.ref(`/profiles/${auth.uid}/games/${gameId}`).set(true)
+
+    if(game.owner === auth.uid) return;
+
+    await firebase.ref(`/games/${gameId}/players/${auth.uid}`).set(true)
 
   }
 
