@@ -29,7 +29,7 @@ const SRD: FunctionComponent<SRDProps> = (props: SRDProps) => {
   return (
       <div className={classes.root}>
         SRD
-        {type == "skill" ? <NewSkillDialog open={true} onClose={()=>{}} onCreate={handleCreateSkill} clearOnCreate />:""}
+        {type == "skill" ? <NewSkillDialog open={true} onClose={()=>{}} onCreate={handleCreateSkill} clearOnCreate defaultSpell />:""}
         {/*{type == "item" ? <NewItemDialog open={true} onClose={()=>{}} character={null} srd/>:""}*/}
       </div>);
 };

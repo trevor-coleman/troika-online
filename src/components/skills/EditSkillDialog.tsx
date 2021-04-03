@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
-  DialogTitle, DialogContent, TextField, Dialog,
+  DialogTitle, DialogContent, TextField, Dialog, FormControlLabel, Switch,
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -30,6 +30,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
       skill
   } = props;
   const auth = useAuth();
+  const classes = useStyles();
   const firebase = useFirebase();
   const {character} = useContext(CharacterContext);
   useFirebaseConnect([
@@ -37,7 +38,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
         storeAs: `editSkill/${skill}`
       }]);
 
-  const {name, description} = useTypedSelector(state=> state.firebase.data.editSkill?.[skill]) ?? {}
+  const {name, description, isSpell, staminaCost} = useTypedSelector(state=> state.firebase.data.editSkill?.[skill]) ?? {}
 
   const handleDelete = async ()=> {
     await firebase.ref(`/skills/${character}/${skill}/`).set(null)
@@ -53,6 +54,10 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
 
   const handleClose = async (undo?:boolean)=> {
     onClose();
+  }
+
+  async function handleToggle(isChecked:boolean) {
+    await firebase.ref(`/skills/${character}/${skill}/isSpell/`).set(isChecked);
   }
 
   async function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
@@ -90,6 +95,35 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
                          label={"description"}
                          rows={4}
                          fullWidth />
+            </Grid>
+            <Grid
+                item
+                container
+                direction={"row"}
+                xs={12}>
+              <Grid
+                  item
+                  xs={4}
+                  className={classes.checkboxGrid}><FormControlLabel
+                  labelPlacement={"end"}
+                  control={<Switch
+                      checked={isSpell ?? false}
+                      onChange={(e)=>handleToggle(e.target.checked)}
+                      id={"is-spell"}
+                      name="is-spell" />}
+                  label={"Spell"} /></Grid>
+              <Grid
+                  item
+                  xs={8}><TextField
+                  variant={"outlined"}
+                  disabled={!isSpell}
+                  label={"Stamina Cost"}
+                  id={"staminaCost"}
+                  value={staminaCost ?? 0}
+                  type={"number"}
+                  onChange={handleChange}
+                  fullWidth />
+              </Grid>
             </Grid>
             <Grid item
                   container
@@ -131,6 +165,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
 const useStyles = makeStyles((theme: Theme) => (
     {
       root: {},
+      checkboxGrid: {padding: theme.spacing(1)},
     }));
 
 export default EditSkillDialog;

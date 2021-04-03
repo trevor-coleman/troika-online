@@ -6,7 +6,7 @@ import { useFirebaseConnect } from 'react-redux-firebase';
 import { GameContext } from '../../contexts/GameContext';
 import { useTypedSelector } from '../../store';
 import { CharacterContext } from '../../contexts/CharacterContext';
-import { Checkbox } from '@material-ui/core';
+import { Checkbox, Popper, SvgIcon, Tooltip } from '@material-ui/core';
 import { Casino, Edit, Info } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -16,6 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { SkillContext } from './context/SkillContext';
 import SkillInfoButton from './skillSections/SkillInfoButton';
 import SkillInfoPopperContent from './SkillInfoPopperContent';
+import { ReactComponent as MagicWandIcon } from './magic-wand-svgrepo-com.svg';
 
 
 interface ISkillCardProps {
@@ -41,9 +42,19 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
       path   : `/skills/${character}/${skill}/name`,
       storeAs: `/skillTableRow/${character}/${skill}/name`,
     }, {
+      path   : `/skills/${character}/${skill}/isSpell`,
+      storeAs: `/skillTableRow/${character}/${skill}/isSpell`,
+    }, {
+      path   : `/skills/${character}/${skill}/staminaCost`,
+      storeAs: `/skillTableRow/${character}/${skill}/staminaCost`,
+    },{
       path   : `/characters/${character}/name`,
       storeAs: `/skillTableRow/${character}/name`,
     }, {
+      path   : `/characters/${character}/stamina_current`,
+      storeAs: `/skillTableRow/${character}/stamina_current`,
+    },
+    {
       path   : `/characters/${character}/skill`,
       storeAs: `/skillTableRow/${character}/totalSkill`,
     }, {
@@ -56,10 +67,15 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                "";
   const characterName = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.name) ??
                         "";
+  const stamina = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.stamina_current) ??
+                        0;
   const rank = parseInt(useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.rank) ??
                0);
   const total = parseInt(useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.totalSkill) ??
                 0);
+
+  const staminaCost = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.staminaCost) ?? 0
+  const isSpell = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.isSpell) ?? false
 
   const [expand, setExpand] = useState(false);
 
@@ -68,12 +84,17 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
   }, [expand]);
 
   async function rollSkill(): Promise<void> {
-   const thisRoll = await roll({
+    if (isSpell) {
+
+    }
+    const thisRoll = await roll({
       dice         : [6, 6],
       rolledAbility: name,
       rollerName   : characterName,
       target       : rank + total,
     });
+
+
 
    console.log(thisRoll)
   }
@@ -105,9 +126,9 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                 xs={3}
                 alignItems={"center"}
                 justify={"flex-start"}>
-              <Grid item>
-                <Button color={"primary"} onClick={rollSkill}>{name}</Button>
-              </Grid>
+              <Tooltip disableHoverListener={staminaCost <= stamina} title={"Stamina too low"}><Grid item>
+                <Button color={"primary"} disabled={staminaCost > stamina} onClick={rollSkill} endIcon={isSpell ? <SvgIcon><MagicWandIcon/></SvgIcon>: undefined} >{name + (isSpell ? ` (${staminaCost})` : "" )}</Button>
+              </Grid></Tooltip>
             </Grid>
             <Grid
                 item

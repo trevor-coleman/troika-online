@@ -18,8 +18,8 @@ export default interface Schema {
   characterEditor: CharacterEditorState,
   characterItems: CharacterItemsState,
   chargesStepper: ChargesStepperState,
-  editSkill: {name:string, description:string}
-  skillTableRow: {[key:string]: Skill},
+  editSkill: Skill,
+  skillTableRow: {[key:string]: Skill, stamina_current:number},
   skillText: SkillValues,
   skillSelectItem: Skill,
   rollDialog: FbRoll
@@ -123,6 +123,8 @@ export interface Skill {
   character: string,
   name: string,
   description: string,
+  isSpell: boolean,
+  staminaCost: number,
 }
 
 

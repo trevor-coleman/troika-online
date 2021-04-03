@@ -98,7 +98,7 @@ const Admin: FunctionComponent<AdminProps> = (props: AdminProps) => {
                   onClick={moveSRD}> MoveSRD</Button>
           <Button
               variant={"contained"}
-              disabled
+
               onClick={srdSkillSortNames}>srdSkillSortNames</Button>
         </Box></Paper>
 
