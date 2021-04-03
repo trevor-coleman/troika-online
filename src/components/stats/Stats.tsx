@@ -83,8 +83,8 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
   async function basicRoll() {
     await roll({
       dice         : [6, 6],
-      rolledAbility: "None",
-      rollerName   : character?.name ?? "Character",
+      rolledAbility: "Basic Roll",
+      rollerName   : character?.name ?? "Someone",
       target       : 0,
     })
   }
