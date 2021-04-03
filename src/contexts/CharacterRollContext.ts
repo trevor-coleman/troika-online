@@ -50,15 +50,15 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
 
       const total = roll.reduce((prev, curr) => prev + curr, 0) + 2;
 
-      const diceEmbeds: any[] = [];
+      // const diceEmbeds: any[] = [];
 
-      roll.forEach(die => {
-        diceEmbeds.push({
-          image: {
-            url: `https://troika-online.vercel.app/dice/${die + 1}.png`,
-          },
-        });
-      });
+      // roll.forEach(die => {
+      //   diceEmbeds.push({
+      //     image: {
+      //       url: `https://troika-online.vercel.app/dice/${die + 1}.png`,
+      //     },
+      //   });
+      // });
 
       const requestOptions = {
         method : 'POST',
@@ -81,7 +81,7 @@ ${target
 + Success
 \`\`\``
   : ''}`,
-          embeds  : diceEmbeds,
+          // embeds  : diceEmbeds,
         }),
       };
       fetch(
