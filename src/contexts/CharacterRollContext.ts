@@ -55,30 +55,25 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
         headers: {'Content-Type': 'application/json'},
         body   : JSON.stringify({
           username: `Rollerbot`,
-          embeds: [{
-            "image":"https://troika-online.vercel.app/
-
-
-          }]
-//           content : `
-// **${rollerName}** ${target == 0
-//                     ? `rolling 2d6`
-//                     : target === undefined
-//                       ? `tests ${rolledAbility}`
-//                       : `rolling under **${target}** for **${rolledAbility}**`}
-// > Result:
-// > **${total}**
-// ${target
-//   ? total > target
-//     ? `\`\`\`diff
-// - Fail
-// \`\`\``
-//     : `\`\`\`diff
-// + Success
-// \`\`\``
-//   : ''}
-//
-// `,
+          content : `
+**${rollerName}** ${target == 0
+                    ? `rolling 2d6`
+                    : target === undefined
+                      ? `tests ${rolledAbility}`
+                      : `rolling under **${target}** for **${rolledAbility}**`} 
+> Result: 
+> **${total}**
+${target
+  ? total > target
+    ? `\`\`\`diff
+- Fail
+\`\`\``
+    : `\`\`\`diff
++ Success
+\`\`\``
+  : ''}
+  
+`,
 
         }),
       };
