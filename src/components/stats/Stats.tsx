@@ -67,6 +67,14 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
 
   }, [character]);
 
+  async function spendLuck() {
+    setValues({...values, luck_current: values.luck_current - 1})
+    await firebase.ref(`/characters/${characterKey}/luck_current`)
+                  .set(character?.luck_current
+                       ? character.luck_current - 1
+                       : 0)
+  }
+
   const allowRollStats = values.luck_current === 0 && values.luck_max === 0 &&
                          values.stamina_current === 0 && values.stamina_max ===
                          0 && values.skill === 0;
@@ -79,6 +87,8 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
         ability = "Skill";
         break;
       case 'luck_current':
+        console.log("rolling luck")
+        await spendLuck()
         ability = "Luck";
         break;
       case 'stamina_current':
@@ -134,7 +144,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
             xs={12}
 
             className={classes.skillGrid}>
-          <Button color={"primary"}>Stamina</Button>
+          <Button onClick={() => {handleRoll("stamina_current");}} color={"primary"}>Stamina</Button>
           <TextField
               value={values.stamina_current ?? 0}
               variant={"outlined"}
@@ -173,7 +183,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
             container
             xs={12}
             className={classes.skillGrid}>
-          <Button color={"primary"}>Luck</Button>
+          <Button disabled={values.luck_current === 0} onClick={() => {handleRoll("luck_current");}} color={"primary"}>Luck</Button>
           <TextField
               value={values.luck_current ?? 0}
               variant={"outlined"}

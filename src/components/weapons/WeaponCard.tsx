@@ -97,7 +97,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
               justify={"flex-start"}
           >
             <Grid item>
-              <Typography>{name}</Typography>
+              <Button color={'primary'}>{name}</Button>
             </Grid>
           </Grid>
           <Grid

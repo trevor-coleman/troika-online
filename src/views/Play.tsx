@@ -199,7 +199,7 @@ const Play: FunctionComponent<SessionProps> = (props: SessionProps) => {
 const roll = ()=> ({
   dice: [6, 6],
   roll: rollKey(Math.random().toString(), [6, 6]),
-  rollUnder: 3,
+  target: 3,
   title: 'My Roll',
   total: 5,
 });

@@ -39,7 +39,7 @@ const RollDialog: FunctionComponent<RollDialogProps> = (props: RollDialogProps) 
   }
 
   return (
-      <Dialog open={lastRoll?.key !== lastSeen}
+      <Dialog open={lastRoll && lastRoll?.key !== lastSeen}
               maxWidth={"xs"}
               onClose={handleClose}
               fullWidth>

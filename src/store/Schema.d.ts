@@ -53,7 +53,7 @@ export default interface Schema {
 
 export interface FbRoll {
   title: string,
-  rollUnder: number,
+  target: number,
   dice: number[],
   roll: number[],
   total: number

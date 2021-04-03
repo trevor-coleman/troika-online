@@ -1,3 +1,4 @@
+import { DeleteOutline } from '@material-ui/icons';
 import React, {
   FunctionComponent, useState, ChangeEvent, useEffect, useContext,
 } from 'react';
@@ -38,6 +39,17 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
 
   const {name, description} = useTypedSelector(state=> state.firebase.data.editSkill?.[skill]) ?? {}
 
+  const handleDelete = async ()=> {
+    await firebase.ref(`/skills/${character}/${skill}/`).set(null)
+    await firebase.ref(`/characters/${character}/skillList`).once('value',(snap)=>{
+      if(!snap.val()) return;
+      const skillList = snap.val();
+      const newList = skillList.filter((id:string)=>id!==skill);
+      firebase.ref(`/characters/${character}/skillList`).set(newList);
+    })
+    onClose();
+
+  }
 
   const handleClose = async (undo?:boolean)=> {
     onClose();
@@ -55,7 +67,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
               onClose={()=>handleClose(false)}
               maxWidth={"xs"}
               fullWidth>
-        <DialogTitle>New Skill</DialogTitle>
+        <DialogTitle>{name ?? "Unnamed Skill"}</DialogTitle>
         <DialogContent>
           <Grid container
                 direction={"column"}
@@ -83,13 +95,24 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
                   container
                   direction={"row"}
                   spacing={1}>
-              <Grid item
-                    xs={6} />
+              <Grid
+                  item
+                  xs={3}>
+                <Button
+                    startIcon={<DeleteOutline/>}
+                    onClick={handleDelete}
+                    color={"secondary"}
+                    variant={"outlined"}
+                    fullWidth>Delete</Button>
+              </Grid>
+              <Grid
+                  item
+                  xs={3} />
               <Grid item
                     xs={3}>
                 <Button onClick={()=>handleClose(true)}
                         variant={"outlined"}
-                        fullWidth>Discard</Button>
+                        fullWidth>Cancel</Button>
               </Grid>
               <Grid item
                     xs={3}>

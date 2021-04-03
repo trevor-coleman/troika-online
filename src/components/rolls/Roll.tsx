@@ -13,6 +13,7 @@ interface RollProps {
   roll: {key:string, value: FbRoll };
 }
 
+
 //COMPONENT
 const Roll: FunctionComponent<RollProps> = (props: RollProps) => {
   const {animate, roll, rollKey} = props;

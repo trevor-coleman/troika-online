@@ -84,9 +84,9 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
       skillsRef.child(newKey).set(skills[selectedKey]);
     }
 
-    const newInventory = skillList.concat(newKeys);
-    await firebase.ref(`/characters/${character}/inventory`)
-                  .set(newInventory);
+    const newSkillList = skillList.concat(newKeys);
+    await firebase.ref(`/characters/${character}/skillList`)
+                  .set(newSkillList);
   };
 
   const removeSkill = (selectedSkill: string) => {

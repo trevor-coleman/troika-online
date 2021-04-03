@@ -41,6 +41,7 @@ export const useCharacterRollContext = (characterKey: string) => {
       await newRef.set({
         title: rollTitle,
         dice,
+        target,
         roll,
         total
       });
