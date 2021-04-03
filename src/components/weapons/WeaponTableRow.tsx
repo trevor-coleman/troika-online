@@ -8,7 +8,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Casino } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import { Skill } from '../../store/Schema';
+import { Skill, SkillValues } from '../../store/Schema';
 
 interface IWeaponTableRowProps {weapon: string}
 
@@ -17,6 +17,8 @@ type WeaponTableRowProps = IWeaponTableRowProps;
 export interface WeaponTableRowState {
   weapon: Item,
   skills: { [key: string]: Skill },
+  weaponSkillValues: SkillValues,
+  skill: number,
 }
 
 const WeaponTableHeader: FunctionComponent = () => {

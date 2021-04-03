@@ -26,15 +26,14 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
   const {roll} = useContext(GameContext);
   const firebase = useFirebase();
   useFirebaseConnect([
-                       {
-                         path   : `/items/${character}/${weapon}`,
-                         storeAs: `/weaponTableRow/${weapon}/weapon`,
-                       }, {
+    {
+      path   : `/items/${character}/${weapon}`,
+      storeAs: `/weaponTableRow/${weapon}/weapon`,
+    }, {
       path   : `/skills/${character}`,
       storeAs: `/weaponTableRow/${weapon}/skills`,
-    },
-    {path : `/characters/${character}/name`}
-                     ]);
+    }, {path: `/characters/${character}/name`},
+  ]);
   const {
     name = "",
     damage = [0, 0, 0, 0, 0, 0, 0],
@@ -45,9 +44,25 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
   } = useTypedSelector(state => state.firebase.data?.weaponTableRow?.[weapon]?.weapon) ??
       {};
 
-  const characterName = useTypedSelector(state => state.firebase.data.characters?.[character]?.name)
+  const characterName = useTypedSelector(state => state.firebase.data.characters?.[character]?.name);
   const skills = useTypedSelector(state => state.firebase.data?.weaponTableRow?.[weapon]?.skills) ??
                  {};
+
+  useFirebaseConnect([
+    {
+      path   : `/skillValues/${character}/${weaponSkill}`,
+      storeAs: `/weaponTableRow/${weapon}/weaponSkillValues`,
+    }, {
+      path   : `/characters/${character}/skill`,
+      storeAs: `/weaponTableRow/${weapon}/skill`,
+    },
+  ]);
+  const weaponSkillValues = useTypedSelector(state => (
+      {
+        rank : state.firebase.data?.weaponTableRow?.[weapon]?.weaponSkillValues?.rank ??
+               0,
+        skill: state.firebase.data.weaponTableRow?.[weapon]?.skill ?? 0,
+      }));
 
   const skillKeys = Object.keys(skills);
   const showAttributes = ranged || twoHanded || armourPiercing;
@@ -78,23 +93,28 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
   }
 
   function rollSkill() {
-    if(weaponSkill == "none") return;
-    firebase.ref(`/skillValues/${character}/${weaponSkill}`).once('value', async (snap)=>{
-      const result = snap.val()
-      const {rank, skill} = result;
-      const target = rank + skill;
+    if (weaponSkill == "none") return;
+    firebase.ref(`/skillValues/${character}/${weaponSkill}`)
+            .once('value', async (snap) => {
+              const result = snap.val();
+              const {
+                rank,
+                skill,
+              } = weaponSkillValues;
+              const target = rank + skill;
 
-      const thisRoll = await roll({
-        dice         : [6, 6],
-        rolledAbility: `${name} (${skills[weaponSkill].name})`,
-        rollerName   : characterName,
-        target       : rank + skill,
-      });
+              const thisRoll = await roll({
+                dice         : [6, 6],
+                rolledAbility: `${name} (${skills[weaponSkill].name})`,
+                rollerName   : characterName,
+                target       : (
+                                   rank ?? 0) + (
+                                   skill ?? 0),
+              });
 
-      console.log(thisRoll)
+              console.log(thisRoll);
 
-
-    })
+            });
   }
 
   return (
@@ -120,7 +140,9 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
               justify={"flex-start"}
           >
             <Grid item>
-              <Button onClick={rollSkill} color={'primary'}>{name}</Button>
+              <Button
+                  onClick={rollSkill}
+                  color={'primary'}>{name}</Button>
             </Grid>
           </Grid>
           <Grid

@@ -42,7 +42,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
     });
 
     firebase.ref(`/characters/${characterKey}/${e.target.id}`)
-            .set(e.target.value);
+            .set(parseInt(e.target.value));
   }
 
   useEffect(() => {
