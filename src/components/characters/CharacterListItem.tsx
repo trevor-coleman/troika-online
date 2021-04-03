@@ -1,15 +1,19 @@
 import React, {
   FunctionComponent,
   Component,
-  PropsWithChildren, ComponentType,
+  PropsWithChildren,
+  ComponentType,
+  useState, useEffect,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
-  ListItemText,
-  ListItem, ListItemSecondaryAction,
+  ListItemText, ListItem, ListItemSecondaryAction, ListItemAvatar, Avatar,
 } from '@material-ui/core';
-import { useFirebaseConnect, isLoaded } from 'react-redux-firebase';
+import {
+  useFirebaseConnect,
+  isLoaded, useFirebase,
+} from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
 import { useHistory } from 'react-router-dom';
 
@@ -28,13 +32,32 @@ const CharacterListItem: FunctionComponent<CharacterListItemProps> = (props: Cha
   const classes = useStyles();
   const dispatch = useDispatch();
   const history=useHistory();
+  const firebase=useFirebase();
 
   useFirebaseConnect({path: `/characters/${characterKey}`});
-  const character = useTypedSelector(state => state.firebase.data.characters && state.firebase.data.characters[characterKey] ? state.firebase.data.characters[characterKey] : {name:""});
+  const character = useTypedSelector(state => state.firebase.data?.characters?.[characterKey] ?? {name:"", portrait:""});
+
+  const [portraitUrl, setPortraitURL] = useState("");
+
+  useEffect(()=>{
+    getPortrait()
+  })
+
+  async function getPortrait() {
+    setPortraitURL(character?.portrait
+                   ? await firebase.storage()
+                                   .ref(character?.portrait)
+                                   .getDownloadURL()
+                   : portraitUrl);
+  }
 
   return (
       isLoaded(character) ?
-      <ListItem button onClick={()=>history.push(`/character/${characterKey}/edit`)}><ListItemText primary={character?.name ?? ""} />{firstAction
+      <ListItem className={classes.root} button onClick={()=>history.push(`/character/${characterKey}/edit`)}>
+        <ListItemAvatar>
+          <Avatar src={portraitUrl}>{character.name.slice(0,1)}</Avatar>
+        </ListItemAvatar>
+      <ListItemText primary={character?.name ?? ""} />{firstAction
                                                         ?
                                                         <ListItemSecondaryAction>
                                                                  {firstAction}
@@ -46,7 +69,7 @@ const CharacterListItem: FunctionComponent<CharacterListItemProps> = (props: Cha
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root: {},
+      root: {borderBottomWidth: 1, borderColor: theme.palette.divider, borderStyle:"solid"},
     }));
 
 export default CharacterListItem;

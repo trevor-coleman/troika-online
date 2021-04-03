@@ -1,3 +1,4 @@
+import Divider from '@material-ui/core/Divider';
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -36,6 +37,7 @@ const GameListItem: FunctionComponent<GameListItemProps> = (props: GameListItemP
         {firstAction
          ? <ListItemSecondaryAction>{firstAction}</ListItemSecondaryAction>
          : ""}
+        <Divider />
       </ListItem>);
 };
 

@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
+import { useAuth } from '../../store/selectors';
 
 interface ProfileListItemProps {
   profileKey:string;
@@ -28,10 +29,12 @@ const ProfileListItem: FunctionComponent<ProfileListItemProps> = (props: Profile
   const dispatch = useDispatch();
 
   useFirebaseConnect({path: `/profiles/${profileKey}`});
+  const auth = useAuth()
   const profile = useTypedSelector(state => state.firebase.data.profiles && state.firebase.data.profiles[profileKey] ? state.firebase.data.profiles[profileKey] :{})
 
   return (
-      <ListItem><ListItemText primary={profile?.displayName ?? ""} />{firstAction
+      <ListItem>
+        <ListItemText primary={profile?.displayName ?? auth.displayName ?? auth.email ?? "Anonymous User"} />{firstAction
                                                         ?
                                                         <ListItemSecondaryAction>
                                                                  {firstAction}

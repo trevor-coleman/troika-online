@@ -30,8 +30,8 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
   return (
       <div className={classes.root}>
         <Typography variant={"h3"}>{ game?.name ?? "No Game"}</Typography>
-        <Button startIcon={<Casino/>} onClick={()=>history.push(`/play/${gameKey}`)} size={"large"} variant={"contained"} color={"secondary"} className={classes.playButton}>Play</Button>
-        <Typography variant={"subtitle1"}>{gameKey}</Typography>
+        <Typography variant={"caption"}>Game ID: {gameKey}</Typography>
+        {/*<Button startIcon={<Casino/>} onClick={()=>history.push(`/play/${gameKey}`)} size={"large"} variant={"contained"} color={"secondary"} className={classes.playButton}>Play</Button>*/}
         <Grid container spacing={2}>
           <Grid item container direction={"column"} sm={5}><Players gameKey={gameKey}/></Grid>
           <Grid item container direction={"column"} sm={7}><Characters gameKey={gameKey}/></Grid>
