@@ -2,6 +2,7 @@ import React, { FunctionComponent, useContext, ChangeEvent } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { CharacterContext } from '../../contexts/CharacterContext';
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
+import { GameContext } from '../../contexts/GameContext';
 import { useTypedSelector } from '../../store';
 import Grid from '@material-ui/core/Grid';
 import { MenuItem, Select } from '@material-ui/core';
@@ -22,6 +23,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
   const {weapon} = props;
   const classes = useStyles();
   const {character} = useContext(CharacterContext);
+  const {roll} = useContext(GameContext);
   const firebase = useFirebase();
   useFirebaseConnect([
                        {
@@ -31,6 +33,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
       path   : `/skills/${character}`,
       storeAs: `/weaponTableRow/${weapon}/skills`,
     },
+    {path : `/characters/${character}/name`}
                      ]);
   const {
     name = "",
@@ -42,11 +45,11 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
   } = useTypedSelector(state => state.firebase.data?.weaponTableRow?.[weapon]?.weapon) ??
       {};
 
+  const characterName = useTypedSelector(state => state.firebase.data.characters?.[character]?.name)
   const skills = useTypedSelector(state => state.firebase.data?.weaponTableRow?.[weapon]?.skills) ??
                  {};
 
   const skillKeys = Object.keys(skills);
-
   const showAttributes = ranged || twoHanded || armourPiercing;
 
   const attributes = [
@@ -74,6 +77,26 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
             .set(e.target.value);
   }
 
+  function rollSkill() {
+    if(weaponSkill == "none") return;
+    firebase.ref(`/skillValues/${character}/${weaponSkill}`).once('value', async (snap)=>{
+      const result = snap.val()
+      const {rank, skill} = result;
+      const target = rank + skill;
+
+      const thisRoll = await roll({
+        dice         : [6, 6],
+        rolledAbility: `${name} (${skills[weaponSkill].name})`,
+        rollerName   : characterName,
+        target       : rank + skill,
+      });
+
+      console.log(thisRoll)
+
+
+    })
+  }
+
   return (
       <ItemContext.Provider value={weapon}>
         <Grid container>
@@ -97,7 +120,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
               justify={"flex-start"}
           >
             <Grid item>
-              <Button color={'primary'}>{name}</Button>
+              <Button onClick={rollSkill} color={'primary'}>{name}</Button>
             </Grid>
           </Grid>
           <Grid
