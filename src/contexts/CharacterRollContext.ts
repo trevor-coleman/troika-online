@@ -50,38 +50,28 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
 
       const total = roll.reduce((prev, curr) => prev + curr, 0) + 2;
 
-      const diceEmbeds :{title: string,image:{url:string, width:number, height: number}}[] =[]
+      const diceEmbeds :any[]=[]
 
-      roll.forEach(die=>{
-        diceEmbeds.push({
-          title: `**${rollerName}** ${target == 0
-                                      ? `rolling 2d6`
-                                      : target === undefined
-                                        ? `tests ${rolledAbility}`
-                                        : `rolling under **${target}** for **${rolledAbility}**`}`,
-          image: {
-            url:`https://troika-online.vercel.app/dice/${die}.png`,
-            width: 10,
-            height: 10,
-          }
-        })
-      })
-
-      const requestOptions = {
-        method : 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body   : JSON.stringify({
-          username: `Rollerbot`,
-          embeds: diceEmbeds,
-          content : `
+      diceEmbeds.push({title:`
 **${rollerName}** ${target == 0
                     ? `rolling 2d6`
                     : target === undefined
                       ? `tests ${rolledAbility}`
-                      : `rolling under **${target}** for **${rolledAbility}**`} 
-> Result: 
-> **${total}**
-${target
+                      : `rolling under **${target}** for **${rolledAbility}**`}`})
+
+      diceEmbeds.push({description: `> Result: 
+> **${total}**`})
+
+      roll.forEach(die=>{
+        diceEmbeds.push({
+          image: {
+            url:`https://troika-online.vercel.app/dice/${die+1}.png`,
+          }
+        })
+      })
+
+      diceEmbeds.push({footer:{
+        text: target
   ? total > target
     ? `\`\`\`diff
 - Fail
@@ -89,10 +79,15 @@ ${target
     : `\`\`\`diff
 + Success
 \`\`\``
-  : ''}
-  
-`,
+  : ''
+        }})
 
+      const requestOptions = {
+        method : 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body   : JSON.stringify({
+          username: `Rollerbot`,
+          embeds: diceEmbeds,
         }),
       };
       fetch(
