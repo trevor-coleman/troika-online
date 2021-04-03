@@ -50,28 +50,29 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
 
       const total = roll.reduce((prev, curr) => prev + curr, 0) + 2;
 
-      const diceEmbeds :any[]=[]
+      const diceEmbeds: any[] = [];
 
-      diceEmbeds.push({title:`
-**${rollerName}** ${target == 0
-                    ? `rolling 2d6`
-                    : target === undefined
-                      ? `tests ${rolledAbility}`
-                      : `rolling under **${target}** for **${rolledAbility}**`}`})
-
-      diceEmbeds.push({description: `> Result: 
-> **${total}**`})
-
-      roll.forEach(die=>{
+      roll.forEach(die => {
         diceEmbeds.push({
           image: {
-            url:`https://troika-online.vercel.app/dice/${die+1}.png`,
-          }
-        })
-      })
+            url: `https://troika-online.vercel.app/dice/${die + 1}.png`,
+          },
+        });
+      });
 
-      diceEmbeds.push({footer:{
-        text: target
+      const requestOptions = {
+        method : 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body   : JSON.stringify({
+          username: `Rollerbot`,
+          content : `**${rollerName}** ${target == 0
+                                         ? `rolling 2d6`
+                                         : target === undefined
+                                           ? `tests ${rolledAbility}`
+                                           : `rolling under **${target}** for **${rolledAbility}**`}
+> Result: 
+> **${total}**
+${target
   ? total > target
     ? `\`\`\`diff
 - Fail
@@ -79,15 +80,8 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     : `\`\`\`diff
 + Success
 \`\`\``
-  : ''
-        }})
-
-      const requestOptions = {
-        method : 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body   : JSON.stringify({
-          username: `Rollerbot`,
-          embeds: diceEmbeds,
+  : ''}`,
+          embeds  : diceEmbeds,
         }),
       };
       fetch(
