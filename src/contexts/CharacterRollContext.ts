@@ -50,11 +50,29 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
 
       const total = roll.reduce((prev, curr) => prev + curr, 0) + 2;
 
+      const diceEmbeds :{title: string,image:{url:string, width:number, height: number}}[] =[]
+
+      roll.forEach(die=>{
+        diceEmbeds.push({
+          title: `**${rollerName}** ${target == 0
+                                      ? `rolling 2d6`
+                                      : target === undefined
+                                        ? `tests ${rolledAbility}`
+                                        : `rolling under **${target}** for **${rolledAbility}**`}`,
+          image: {
+            url:`https://troika-online.vercel.app/dice/${die}.png`,
+            width: 10,
+            height: 10,
+          }
+        })
+      })
+
       const requestOptions = {
         method : 'POST',
         headers: {'Content-Type': 'application/json'},
         body   : JSON.stringify({
           username: `Rollerbot`,
+          embeds: diceEmbeds,
           content : `
 **${rollerName}** ${target == 0
                     ? `rolling 2d6`
