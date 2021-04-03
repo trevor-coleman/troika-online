@@ -80,7 +80,7 @@ ${target
     : `\`\`\`diff
 + Success
 \`\`\``
-  : ''}`,
+  : ''}\n`,
           // embeds  : diceEmbeds,
         }),
       };
