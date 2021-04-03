@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) => (
         backgroundColor: theme.palette.background.paper,
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
+        minHeight: 150,
 
       },
       sectionTitle: {

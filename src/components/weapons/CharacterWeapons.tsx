@@ -1,3 +1,4 @@
+import Typography from '@material-ui/core/Typography';
 import React, { FunctionComponent, useContext } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { useFirebaseConnect, isEmpty, isLoaded } from 'react-redux-firebase';
@@ -32,6 +33,10 @@ const CharacterWeapons: FunctionComponent<IWeaponsProps> = (props: IWeaponsProps
 
   return (
       <Grid container className={classes.root}>
+        {isLoaded(weapons) && isEmpty(weapons)
+         ? <div className={classes.missingMessage}>
+             <Typography>Weapons added to your inventory will appear here.</Typography></div>
+         : <div/>}
         {isLoaded(weapons) && !isEmpty(weapons)
          ? weapons.map(weapon => (
                 <Grid
@@ -51,6 +56,13 @@ const useStyles = makeStyles((theme: Theme) => (
         backgroundColor: theme.palette.background.paper,
         paddingLeft: theme.spacing(2),
       },
+      missingMessage: {
+        width: "100%",
+        display: 'flex',
+        alignItems: 'center',
+        color: theme.palette.text.disabled,
+        paddingLeft: theme.spacing(2),
+      }
     }));
 
 export default CharacterWeapons;

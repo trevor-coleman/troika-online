@@ -29,7 +29,7 @@ interface SkillsListProps {
 //COMPONENT
 const SrdSkillsList: FunctionComponent<SkillsListProps> = (props: SkillsListProps) => {
   const {
-    search,
+    search = "",
     values,
     setValues,
   } = props;
@@ -51,6 +51,8 @@ const SrdSkillsList: FunctionComponent<SkillsListProps> = (props: SkillsListProp
                              ? Object.keys(skills)
                              : [];
 
+
+
   const handleChange = (key: string, value: Skill | null) => {
     const newValues = {...values};
     if (value === null) {
@@ -60,7 +62,7 @@ const SrdSkillsList: FunctionComponent<SkillsListProps> = (props: SkillsListProp
       newValues[key] = value;
     }
     setValues(newValues);
-    console.log(newValues[key], Boolean(newValues[key]))
+
   };
 
   return (

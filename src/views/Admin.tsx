@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { useFirebase } from 'react-redux-firebase';
 import { Item } from '../store/Item';
+import { Skill } from '../store/Schema';
 
 interface AdminProps {}
 
@@ -16,6 +17,34 @@ const Admin: FunctionComponent<AdminProps> = (props: AdminProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const firebase = useFirebase();
+
+  async function srdSkillSortNames (){
+    const srdSkillsSnap = await firebase.ref('/srdSkills').orderByKey()
+                                        .once('value');
+
+    const srdSkills = srdSkillsSnap.val();
+
+    const result: {[key:string]: any} = {}
+    Object.keys(srdSkills).forEach(
+        key=> {
+          result[key] = {
+            ...srdSkills[key],
+            sort_name: srdSkills[key].name.toLowerCase()
+          }
+        }
+    )
+
+    await firebase.ref('/srdSkills').set(result)
+
+
+    // const processedSkills = srdSkillsSnap.val().map((item:Skill)=>{
+    //   return {
+    //     ...item,
+    //     sort_name: item.name.toLowerCase()
+    //   }
+    // })
+
+  }
 
   async function moveSRD() {
     const srdItemsSnap = await firebase.ref('/srdItems').once('value');
@@ -65,8 +94,12 @@ const Admin: FunctionComponent<AdminProps> = (props: AdminProps) => {
       <div className={classes.root}>
         <Typography variant={"h1"}>Admin</Typography>
         <Paper><Box p={2}>
-          <Button variant={"contained"}
+          <Button disabled variant={"contained"}
                   onClick={moveSRD}> MoveSRD</Button>
+          <Button
+              variant={"contained"}
+              disabled
+              onClick={srdSkillSortNames}>srdSkillSortNames</Button>
         </Box></Paper>
 
       </div>);

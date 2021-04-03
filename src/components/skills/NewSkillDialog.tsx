@@ -16,7 +16,8 @@ import { CharacterContext } from '../../contexts/CharacterContext';
 interface NewSkillDialogProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (newSkill:Partial<Skill>)=> void,
+  onCreate: (newSkill:Partial<Skill>)=> void;
+  clearOnCreate?: boolean;
 }
 
 //COMPONENT
@@ -25,6 +26,7 @@ const NewSkillDialog: FunctionComponent<NewSkillDialogProps> = (props: NewSkillD
     open,
     onClose,
       onCreate,
+      clearOnCreate,
   } = props;
 
   const [values, setValues] = useState<Partial<Skill>>({
@@ -41,6 +43,10 @@ const NewSkillDialog: FunctionComponent<NewSkillDialogProps> = (props: NewSkillD
 
   function saveSkill() {
       onCreate(values);
+      if(clearOnCreate) setValues({
+        description: '',
+        name       : '',
+      })
       onClose();
     }
 

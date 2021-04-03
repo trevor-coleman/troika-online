@@ -1,10 +1,11 @@
 import React, { FunctionComponent, useState, useContext } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { useFirebaseConnect, useFirebase } from 'react-redux-firebase';
+import { useFirebaseConnect, useFirebase, isEmpty } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
 import { CharacterContext } from '../../contexts/CharacterContext';
 import { useAuth } from '../../store/selectors';
 import { Skill } from '../../store/Schema';
+import AddSkillsDialog from './AddSkillsDialog';
 import EditSkillDialog from './EditSkillDialog';
 import SkillCard from './SkillCard';
 import Grid from '@material-ui/core/Grid';
@@ -106,6 +107,8 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
       <><Grid
           container
           direction={"column"}>
+        {isEmpty(skillList) ? <Grid item xs={12} className={classes.missingMessage}>
+          <Typography>Click the button below to add a skill</Typography></Grid>: ""}
         {skillList
             .map(skill => <Grid
                 item
@@ -146,7 +149,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
               <Grid item>
                 <Fade in={addVisible}>
                   <Typography>
-                  Add New Item
+                  Add New Skill
                 </Typography>
                 </Fade>
               </Grid>
@@ -169,6 +172,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
             </>
           </Grid>
         </Grid>
+        <AddSkillsDialog open={dialogState.add} character={character} onClose={()=>showDialog()} onAdd={addSkills}/>
         <EditSkillDialog open={dialogState.edit} onClose={()=>showDialog()} skill={selectedSkill}/>
       </>);
 };
@@ -183,6 +187,12 @@ const useStyles = makeStyles((theme: Theme) => {
           backgroundColor: theme.palette.background.paper,
           paddingLeft    : theme.spacing(2),
         },
+        missingMessage: {
+          color: theme.palette.text.disabled,
+          display: 'flex',
+          alignItems: 'center',
+          paddingLeft: theme.spacing(4)
+        }
       });
 });
 

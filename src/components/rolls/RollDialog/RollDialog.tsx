@@ -38,8 +38,10 @@ const RollDialog: FunctionComponent<RollDialogProps> = (props: RollDialogProps) 
     setLastSeen(lastRoll?.key ?? "")
   }
 
+  console.log("open", )
   return (
-      <Dialog open={lastRoll && lastRoll?.key !== lastSeen}
+      <Dialog open={(
+                        lastRoll && lastRoll?.key !== lastSeen) ?? false}
               maxWidth={"xs"}
               onClose={handleClose}
               fullWidth>

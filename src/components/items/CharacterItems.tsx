@@ -131,9 +131,10 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
   return (
       <>
         <DragDropContext onDragEnd={handleDragEnd}>
-          <div>
+          <div className={classes.div}>
             <Droppable droppableId={`${character}-inventory`}>{(provided) =>
               <Grid container
+                    className={classes.container}
                   innerRef={provided.innerRef}
                   {...provided.droppableProps}>
                 {isLoaded(inventory) && !isEmpty(inventory)
@@ -152,6 +153,14 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
         <Grid
             container
             className={classes.root}>
+          {isEmpty(inventory)
+           ? <Grid
+               item
+               xs={12}
+               className={classes.missingMessage}>
+             <Typography>Click the button below to add an
+                         item</Typography></Grid>
+           : ""}
           <Grid
               item
               container
@@ -190,6 +199,14 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
 const useStyles = makeStyles((theme: Theme) => (
     {
       root: {paddingLeft: theme.spacing(2)},
+      container: {width:"100%"},
+      div: {width: "100%"},
+      missingMessage: {
+        color      : theme.palette.text.disabled,
+        display    : 'flex',
+        alignItems : 'center',
+        padding: theme.spacing(4)
+      }
     }));
 
 export default CharacterItems;
