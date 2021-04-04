@@ -139,7 +139,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
               variant={"outlined"}>Roll 2d6</Button>
               <Button
               color={"primary"}
-              onClick={()=>basicRoll(1))}
+              onClick={()=>basicRoll(1)}
               variant={"outlined"}>Roll 1d6</Button>
         </Grid>
         <Grid
