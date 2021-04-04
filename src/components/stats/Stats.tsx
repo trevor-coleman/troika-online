@@ -80,10 +80,17 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                          0 && values.skill === 0;
 
 
-  async function basicRoll() {
+  async function basicRoll(numberOfDice:number) {
+    const dice = []
+
+    for (let i = 0; i <numberOfDice; i++) {
+      dice.push(6)
+    
+    }
+
     await roll({
-      dice         : [6, 6],
-      rolledAbility: "Basic Roll",
+      dice         : dice,
+      rolledAbility: `Basic Roll - ${numberOfDice}d6`,
       rollerName   : character?.name ?? "Someone",
       target       : 0,
     })
@@ -128,8 +135,12 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
             xs={12} className={classes.basicRoll}>
           <Button
               color={"primary"}
-              onClick={basicRoll}
+              onClick={()=>basicRoll(2)}
               variant={"outlined"}>Roll 2d6</Button>
+              <Button
+              color={"primary"}
+              onClick={()=>basicRoll(1))}
+              variant={"outlined"}>Roll 1d6</Button>
         </Grid>
         <Grid
             item
