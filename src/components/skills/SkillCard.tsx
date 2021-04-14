@@ -86,18 +86,28 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
 
   async function rollSkill(): Promise<void> {
     if (isSpell) {
+      console.log("ROLLING SPELL")
       await firebase.ref(`/characters/${character}/stamina_current`).set(stamina - staminaCost);
+      await roll({
+        type       : 'spell',
+        dice       : [6, 6],
+        rolledSkill: name,
+        rollerKey  : character,
+        rollerName : characterName,
+        target     : rank + total
+      });
+      return;
     }
-    const thisRoll = await roll({
-      dice         : [6, 6],
-      rolledAbility: name,
-      rollerName   : characterName,
-      target       : rank + total,
+
+    await roll({
+      type       : 'skill',
+      dice       : [6, 6],
+      rolledSkill: name,
+      rollerKey: character,
+      rollerName : characterName,
+      target     : rank + total
     });
 
-
-
-   console.log(thisRoll)
   }
 
   return (

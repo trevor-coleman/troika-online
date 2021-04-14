@@ -10,7 +10,7 @@ import random from '../../utils/SeededRandom';
 interface DiceProps {
   rollKey: string,
   dice: number[],
-  roll: number[],
+  roll?: number[],
   animate?: boolean;
 }
 
@@ -21,8 +21,9 @@ const seedRandom = (s:number) => () => {
 
 //COMPONENT
 const Dice: FunctionComponent<DiceProps> = (props: DiceProps) => {
-  const {dice, roll, rollKey} = props;
+  const {dice, roll = [], rollKey} = props;
   const animate = props.animate ?? true;
+
 
   const numberOfDice = dice.length;
   const theme =useTheme();
@@ -41,7 +42,7 @@ const Dice: FunctionComponent<DiceProps> = (props: DiceProps) => {
                         key={`${rollKey}-${index}`}
                         className={classes.roll} item>
                       <Die
-                          dieRoll={die}
+                          dieRoll={die-1}
                           animate={animate}
                       />
                     </Grid>)}

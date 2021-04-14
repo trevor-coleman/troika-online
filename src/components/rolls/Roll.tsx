@@ -1,25 +1,36 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { RollProps } from '../../contexts/GameContext';
 import stringHash from './stringHash';
 import Dice from './Dice';
-import { FbRoll } from '../../store/Schema';
 import Button from '@material-ui/core/Button';
 
-interface RollProps {
-
+interface RollComponentProps {
   rollKey: string;
   animate?: boolean;
-  roll: {key:string, value: FbRoll };
+  roll: { key: string, value: RollProps | null } ;
 }
 
-
 //COMPONENT
-const Roll: FunctionComponent<RollProps> = (props: RollProps) => {
-  const {animate, roll, rollKey} = props;
-  console.log(roll)
+const Roll: FunctionComponent<RollComponentProps> = (props: RollComponentProps) => {
+  const {
+    animate,
+    roll,
+    rollKey,
+  } = props;
+  console.log(roll);
 
-  return (<div><Dice rollKey={rollKey}  {...roll.value} animate /></div>);
+  return (
+      roll?.value
+      ? <div>
+        <Dice
+            rollKey={rollKey}  {...roll.value}
+            animate />
+        </div>
+      : <div>No Roll</div>
+  );
+
 };
 
 const useStyles = makeStyles((theme: Theme) => (

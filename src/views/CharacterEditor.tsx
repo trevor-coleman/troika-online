@@ -17,48 +17,15 @@ import CharacterWeapons from '../components/weapons/CharacterWeapons';
 import CharacterSheetSection
   from '../components/characterSheet/CharacterSheetSection';
 import { useCharacterRollContext } from '../contexts/CharacterRollContext';
-import { GameContext, TGameContext } from '../contexts/GameContext';
-import { useTypedSelector } from '../store';
-import { FbRoll } from '../store/Schema';
+import { GameContext } from '../contexts/GameContext';
 
 interface CharacterEditorProps {
   init?: boolean
 }
 
-function onRender(id: string, // the "id" prop of the Profiler tree that has just committed
-                  phase: string, // either "mount" (if the tree just mounted)
-                                 // or "update" (if it re-rendered)
-                  actualDuration: any, // time spent rendering the committed
-                                       // update
-                  baseDuration: any, // estimated time to render the entire
-                                     // subtree without memoization
-                  startTime: any, // when React began rendering this update
-                  commitTime: any, // when React committed this update
-                  interactions: any, // the Set of interactions belonging to
-                  // this update
-)
-{
-  console.log({
-                id,
-                phase,
-                actualDuration,
-                baseDuration,
-                startTime,
-                commitTime,
-                interactions,
-              });
-}
-
 //COMPONENT
 const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: CharacterEditorProps) => {
   const {characterKey} = useParams<{ characterKey: string }>();
-  const [id, setId] = useState("");
-
-  useEffect(() => {
-    if (id !== characterKey) {
-      setId(characterKey);
-    }
-  }, [characterKey]);
 
   const firebase = useFirebase()
 
@@ -68,7 +35,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
       <GameContext.Provider value={rollContext}>
       <CharacterContext.Provider value={{character: characterKey}}>
         <div>
-          <CharacterTitle id={id} />
+          <CharacterTitle id={characterKey} />
           <Grid
               container
               direction={'column'}
@@ -76,7 +43,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
             <Grid
                 item
                 xs={12}>
-              <Bio characterKey={id} />
+              <Bio characterKey={characterKey} />
             </Grid>
             <Grid
                 item container spacing={2}
@@ -118,7 +85,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
             </Grid>
           </Grid>
         </div>
-        <RollDialog parent={"123"} id={"123"} open={false}/>
+        <RollDialog parent={"rolls"} id={characterKey} open={false}/>
       </CharacterContext.Provider>
       </GameContext.Provider>);
 

@@ -1,4 +1,5 @@
 import { ChargesStepperState } from '../components/items/ChargesStepper';
+import { RollProps } from '../contexts/GameContext';
 import {
   Skill, OtherItem, Weapon, Spell, InventoryItem,
 } from '../types/troika';
@@ -10,7 +11,7 @@ import { Item } from './Item';
 import { WeaponTableRowState } from '../components/weapons/WeaponTableRow';
 
 type CharacterEditorState = {
-    rolls: FbRoll[]
+    rolls: RollProps[]
 }
 
 export default interface Schema {
@@ -22,7 +23,7 @@ export default interface Schema {
   skillTableRow: {[key:string]: Skill, stamina_current:number},
   skillText: SkillValues,
   skillSelectItem: Skill,
-  rollDialog: FbRoll
+  lastRoll: RollProps,
   skillInfoButton: {[key:string]: Skill}
   itemInfoButton: {[key:string]: Item}
   addItemsDialog: {inventory: string[], weapons:[]},
@@ -47,17 +48,10 @@ export default interface Schema {
   addSkills_srdSkills: Skill,
   srdItems: Item,
   games: Game,
-  rolls: {[key:string]:FbRoll},
+  rolls: {[key:string]:RollProps},
   characters: Character
 }
 
-export interface FbRoll {
-  title: string,
-  target: number,
-  dice: number[],
-  roll: number[],
-  total: number
-}
 
 export interface Game {
   name: string,
@@ -115,7 +109,7 @@ export interface Character {
 export interface SkillValues {
   skill: number,
   rank: number,
-  used: boolean
+  used?: boolean
 }
 
 export interface Skill {

@@ -1,7 +1,8 @@
 export default function stringHash (s:string) {
   if(!s) return 0;
+
   let hash = 0, i, chr;
-    for (i = 0; i < s.length; i++) {
+    for (i = s.length-10; i < s.length; i++) {
       chr = s.charCodeAt(i);
       hash = (
                  (

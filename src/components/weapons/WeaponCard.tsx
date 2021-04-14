@@ -92,29 +92,36 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
             .set(e.target.value);
   }
 
-  function rollSkill() {
-    if (weaponSkill == "none") return;
-    firebase.ref(`/skillValues/${character}/${weaponSkill}`)
-            .once('value', async (snap) => {
-              const result = snap.val();
-              const {
-                rank,
-                skill,
-              } = weaponSkillValues;
-              const target = rank + skill;
+  async function rollWeapon() {
+    const characterSkillSnap = await firebase.ref(`/characters/${character}/skill`)
+                               .once('value')
+    const characterSkill = characterSkillSnap.val();
 
-              const thisRoll = await roll({
-                dice         : [6, 6],
-                rolledAbility: `${name} (${skills[weaponSkill].name})`,
-                rollerName   : characterName,
-                target       : (
-                                   rank ?? 0) + (
-                                   skill ?? 0),
-              });
+    let rank=0;
+    let rolledSkill="";
+    let target =0;
 
-              console.log(thisRoll);
+    if (weaponSkill == "none") {
+      rolledSkill = "Base Skill"
+    } else {
+      const snap = await firebase.ref(`/skillValues/${character}/${weaponSkill}`)
+                                 .once('value')
+      const weaponSkillValues = snap.val();
+      rank = weaponSkillValues.rank;
+      rolledSkill = skills[weaponSkill].name
+    }
 
-            });
+      await roll({
+        type        : 'weapon',
+        dice        : [6, 6],
+        rolledSkill,
+        rollerKey: character,
+        weaponKey: weapon,
+        rolledWeapon: name,
+        rollerName  : characterName,
+        rank        : rank,
+        skill       : characterSkill,
+      });
   }
 
   return (
@@ -141,7 +148,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
           >
             <Grid item>
               <Button
-                  onClick={rollSkill}
+                  onClick={rollWeapon}
                   color={'primary'}>{name}</Button>
             </Grid>
           </Grid>

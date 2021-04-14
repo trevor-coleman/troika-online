@@ -13,6 +13,7 @@ import {
   ListSubheader,
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import { IRollSkillProps } from '../contexts/GameContext';
 import { useGame } from '../store/selectors';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -22,7 +23,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem';
 import { Star, ExpandLess } from '@material-ui/icons';
 import Roll from '../components/rolls/Roll';
-import { FbRoll } from '../store/Schema';
+
 import Stats from '../components/stats/Stats';
 import Bio from '../components/bio/Bio';
 import CharacterSkills from '../components/skills/CharacterSkills';
@@ -196,11 +197,16 @@ const Play: FunctionComponent<SessionProps> = (props: SessionProps) => {
       </div>);
 };
 
-const roll = ()=> ({
+const roll:()=>IRollSkillProps = ()=> ({
   dice: [6, 6],
+  type: 'skill',
+  rolledSkill: 'Empathy',
+  rollerKey:'1234',
+  rollerName: 'Billy',
   roll: rollKey(Math.random().toString(), [6, 6]),
   target: 3,
   title: 'My Roll',
+  result: 'Result',
   total: 5,
 });
 
