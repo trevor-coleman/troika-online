@@ -8,7 +8,9 @@ export type RollProps =
 
 export type RollType = "skill" | "weapon" | "basic" | "damage" | "spell"
 
-export type RollFormatter = (total: number, props: RollProps) => IRollText
+export type RollFormatter = (props: RollProps) => IRollText
+
+export type RollSuccessChecker = (roll: number[], total: number)=> boolean;
 
 export interface IRollText {
   title: string,
@@ -23,6 +25,7 @@ export interface IRollBaseProps {
   type: RollType,
   title ?: string,
   rollerName: string,
+  success?: boolean,
   roll?: number[],
   dice: number[],
   description?: string,

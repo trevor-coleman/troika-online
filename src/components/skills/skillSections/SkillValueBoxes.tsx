@@ -8,12 +8,12 @@ import { SkillContext } from '../context/SkillContext';
 import { useTypedSelector } from '../../../store';
 import Box from '@material-ui/core/Box/Box';
 
-interface IValueBoxesProps {}
+interface IValueBoxesProps {unarmed?: boolean}
 
 type ValueBoxesProps = IValueBoxesProps;
 
 const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxesProps) => {
-  const {} = props;
+  const {unarmed} = props;
   const classes = useStyles();
   const {character} = useContext(CharacterContext);
   const skill=useContext(SkillContext);
@@ -70,6 +70,7 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
             label={"Rank"}
             margin={"dense"}
             id={"rank"}
+            disabled={unarmed}
             className={classes.rankSkillRoot}
             InputProps={{classes: {input: classes.rankSkillInput}}}
             InputLabelProps={{shrink:true}}

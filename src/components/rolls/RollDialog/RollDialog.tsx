@@ -72,12 +72,6 @@ const RollDialog: FunctionComponent<RollDialogProps> = (props: RollDialogProps) 
     }
   }
 
-  console.log("open",
-      lastSeen !== "firstOpen",
-      lastRoll !== null,
-      lastSeen,
-      key !== lastSeen);
-
   return (
       <Dialog
           open={shouldShow}
@@ -109,7 +103,6 @@ const RollDialog: FunctionComponent<RollDialogProps> = (props: RollDialogProps) 
 
 const Result = ({result}: { result: string }) => {
   const [show, setShow] = useState(false);
-  console.log("Show is: ", show);
 
   useEffect(
       () => {

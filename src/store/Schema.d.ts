@@ -1,7 +1,7 @@
 import { ChargesStepperState } from '../components/items/ChargesStepper';
 import { RollProps } from '../contexts/GameContext';
 import {
-  Skill, OtherItem, Weapon, Spell, InventoryItem,
+  Spell,
 } from '../types/troika';
 import { Profile } from './index';
 import { WeaponsState } from '../components/weapons/CharacterWeapons';
@@ -20,7 +20,7 @@ export default interface Schema {
   characterItems: CharacterItemsState,
   chargesStepper: ChargesStepperState,
   editSkill: Skill,
-  skillTableRow: {[key:string]: Skill, stamina_current:number},
+  skillTableRow: SkillTableRow,
   skillText: SkillValues,
   skillSelectItem: Skill,
   lastRoll: RollProps,
@@ -122,6 +122,12 @@ export interface Skill {
 }
 
 
+export interface SkillTableRow {
+  [key:string]: Skill & {rank: number, used: boolean},
+  name: string,
+  stamina_current: number,
+  totalSkill: number,
+}
 
 
 

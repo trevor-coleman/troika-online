@@ -33,19 +33,28 @@ const CharacterWeapons: FunctionComponent<IWeaponsProps> = (props: IWeaponsProps
 
   return (
       <Grid container className={classes.root}>
+        <Grid
+            item
+            xs={12}>
+          <WeaponCard
+              weapon={"unarmed"} />
+        </Grid>
         {isLoaded(weapons) && isEmpty(weapons)
          ? <div className={classes.missingMessage}>
-             <Typography>Weapons added to your inventory will appear here.</Typography></div>
-         : <div/>}
+           <Typography>Weapons added to your inventory will appear
+                       here.</Typography></div>
+         : <div />}
         {isLoaded(weapons) && !isEmpty(weapons)
-         ? weapons.map(weapon => (
-                <Grid
-                    key={weapon}
-                    item
-                    xs={12}>
-                  <WeaponCard
-                      weapon={weapon} />
-                </Grid>))
+         ? weapons.map(weapon => {
+            return (
+                  <Grid
+                      key={weapon}
+                      item
+                      xs={12}>
+                    <WeaponCard
+                        weapon={weapon} />
+                  </Grid>);
+            })
          : <div />}
       </Grid>)
 };

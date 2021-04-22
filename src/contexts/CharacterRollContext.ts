@@ -9,7 +9,9 @@ import {
   IRollSkillProps,
   IRollBasicProps,
   IRollDamageProps,
-  RollFormatter, IRollSpellProps,
+  RollFormatter,
+  IRollSpellProps,
+  RollSuccessChecker,
 } from './GameContext';
 
 export const useCharacterRollContext = (characterKey: string): TGameContext => {
@@ -22,7 +24,8 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
   });
   const lastRolls = useTypedSelector(state => state.firebase.ordered?.lastRoll);
 
-  console.log("roll context character key", characterKey);
+  const isSnakeEyes = (roll: number[]) => roll.every(die => die === 1);
+  const isBoxCars = (roll: number[]) => roll.every(die => die === 6);
 
   async function rollSpell(props: IRollSpellProps) {
     const {
@@ -32,25 +35,38 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     } = props;
 
     const formatter: RollFormatter = (
-        total => {
-          console.log(`formatting spell result: ${total} ${typeof total}`)
+        props => {
+          const {
+            total = 0,
+            roll = [0, 0],
+          } = props;
+
           let result = "";
-          if(total == 2){
-            result = `${total} - Guaranteed Success`}
-          else if (total == 12) {
-            result = `${total} - Fumble!`
+          let success: boolean;
+          if (isSnakeEyes(roll)) {
+            success = true;
+            result = `${total} - Guaranteed Success`;
           }
-          else if(total <= target) {
-            result = `${total} - Success!`
-          } else {
-            result = `${total} - Failed.`
+          else if (isBoxCars(roll)) {
+            success = false;
+            result = `${total} - OOPS!`;
+          }
+          else {
+            success = total <= target;
+            result =
+                success
+                ? `${total} - Success!`
+                : `${total} - Failed.`;
           }
 
           return (
               {
                 title      : `${rollerName} Casts ${rolledSkill}`,
                 description: `Under ${target}`,
-                result
+                result,
+                total,
+                success,
+                roll,
               });
         });
 
@@ -69,14 +85,40 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     } = props;
 
     const formatter: RollFormatter = (
-        total => (
-            {
-              title : `${rollerName} - ${rolledSkill}`,
-              description: `Under ${target}`,
-              result: total <= target
-                      ? `${total} - Success!`
-                      : `${total} - Failed.`,
-            }));
+        props => {
+          const {
+            total = 0,
+            roll = [0,0],
+          } = props;
+
+          let result = "";
+          let success: boolean;
+
+          if (isBoxCars(roll)) {
+            success = false;
+            result = `${total} - Fumble!`;
+          }
+          else if (isSnakeEyes(roll)) {
+            success = true;
+            result = `${total} - Automatic Success`;
+          }
+          else {
+            success = total <= target;
+            result =
+                success
+                ? `${total} - Success!`
+                : `${total} - Failed.`;
+
+          }
+
+          return (
+              {
+                title      : `${rollerName} - ${rolledSkill}`,
+                description: `Under ${target}`,
+                result,
+                success
+              });
+        });
 
     const {
       key,
@@ -95,15 +137,20 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     } = props;
 
     const formatter: RollFormatter = (
-        total => (
-            {
-              title : `${rollerName} attacks with ${rolledWeapon} (${rolledSkill})`,
-              result: `Attacks with ${total + rank +
-                                      skill} power (Roll: ${total}, Rank: ${rank}, Skill: ${skill})`,
-            }));
+        props => {
+          const {total = 0} = props;
+          return (
+              {
+                title : `${rollerName} attacks with ${rolledWeapon} (${rolledSkill})`,
+                result: `Attacks with ${total + rank +
+                                        skill} power (Roll: ${total ??
+                                                              0}, Rank: ${rank ??
+                                                                          0}, Skill: ${skill ??
+                                                                                       0})`,
+              });
+        });
     const newRoll = await pushNewRoll(props, formatter);
 
-    console.log(newRoll);
 
     const {
       key,
@@ -120,7 +167,7 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
       damage,
     } = props;
 
-    const formatter: RollFormatter = (total) => (
+    const formatter: RollFormatter = ({total=0}) => (
         {
           title : `${rollerName} rolls damage with ${rolledWeapon}`,
           result: `Rolled a ${total} for ${damage[total - 1]} damage`,
@@ -142,14 +189,14 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     const roll = rollKey(key ?? Math.random()
                                     .toString(), dice);
 
-
     const total = roll.reduce((prev, curr) => prev + curr);
+
 
     const {
       title,
       result,
       description,
-    } = formatter(total, props);
+    } = formatter({...props, total, roll});
 
     await newRef.set({
       ...props,
@@ -178,10 +225,14 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
 
     } = props;
 
-    const {key} = await pushNewRoll(props, (total => ({
-      title: `${rollerName} rolls ${dice.length}d6`,
-      result: `Rolled a ${total}`
-    })) );
+    const {key} = await pushNewRoll(
+        props,
+        (
+            ({total=0}) => (
+                {
+                  title : `${rollerName} rolls ${dice.length}d6`,
+                  result: `Total: ${total}`,
+                })));
 
     return key;
   }
@@ -207,7 +258,7 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
         case 'weapon':
           return rollWeapon(props);
         case 'spell':
-          return rollSpell(props)
+          return rollSpell(props);
         default:
           return null;
       }

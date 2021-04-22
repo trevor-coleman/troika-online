@@ -19,7 +19,7 @@ const Roll: FunctionComponent<RollComponentProps> = (props: RollComponentProps) 
     roll,
     rollKey,
   } = props;
-  console.log(roll);
+
 
   return (
       roll?.value

@@ -48,6 +48,9 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
     }, {
       path   : `/skills/${character}/${skill}/staminaCost`,
       storeAs: `/skillTableRow/${character}/${skill}/staminaCost`,
+    }, {
+      path   : `/skills/${character}/${skill}/used`,
+      storeAs: `/skillTableRow/${character}/${skill}/used`,
     },{
       path   : `/characters/${character}/name`,
       storeAs: `/skillTableRow/${character}/name`,
@@ -64,16 +67,18 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
     },
   ]);
 
-  const name = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.name) ??
+  const used = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.used) ?? false;
+
+  const name = skill == "unarmed" ? "Unarmed" : useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.name) ??
                "";
   const characterName = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.name) ??
                         "";
   const stamina = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.stamina_current) ??
                         0;
-  const rank = parseInt(useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.rank) ??
-               0);
-  const total = parseInt(useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.totalSkill) ??
-                0);
+  const rank = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.rank) ??
+               0;
+  const total = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.totalSkill) ??
+                0;
 
   const staminaCost = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.staminaCost) ?? 0
   const isSpell = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.isSpell) ?? false
@@ -83,6 +88,12 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
   const toggleExpand = useCallback(() => {
     setExpand(!expand);
   }, [expand]);
+
+  async function handleUsed(e: React.ChangeEvent<HTMLInputElement>): Promise<void> {
+    if(skill=="unarmed") return;
+    const newValue = e.target.checked;
+    await firebase.ref(`/skills/${character}/${skill}/used`).set(newValue ?? false);
+  }
 
   async function rollSkill(): Promise<void> {
     if (isSpell) {
@@ -127,7 +138,10 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                 alignItems={"center"}
                 justify={"center"}>
               <div><Checkbox
+                  disabled={skill == "unarmed"}
                   className={classes.checkBox}
+                  checked={used}
+                  onChange={handleUsed}
                   size={"small"} /></div>
             </Grid>
             {/*Name*/}
@@ -153,7 +167,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
             <Grid
                 item
                 xs={5}>
-              <SkillValueBoxes />
+              <SkillValueBoxes unarmed={skill=="unarmed"} />
             </Grid>
             {/*Button*/}
             <Grid
@@ -165,6 +179,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                 spacing={1}
             >
               <Grid item><Button
+                  disabled={skill=="unarmed"}
                   variant="contained"
                   fullWidth
                   onClick={() => onEdit(skill)}>
