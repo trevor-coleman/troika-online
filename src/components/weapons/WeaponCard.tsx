@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import { MenuItem, Select } from '@material-ui/core';
 import SkillSelectItem from '../skills/SkillSelectItem';
 import Button from '@material-ui/core/Button';
-import { FormatListBulletedSharp } from '@material-ui/icons';
+import { Casino as CasinoIcon, FormatListBulletedSharp } from '@material-ui/icons';
 import SkillInfoButton from '../skills/skillSections/SkillInfoButton';
 import { ItemContext } from '../../contexts/ItemContext';
 import WeaponInfoPopperContent from './WeaponInfoPopperContent';
@@ -35,10 +35,11 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
     }, {path: `/characters/${character}/name`},
   ]);
   const {
-    name = "",
-    damage = [0, 0, 0, 0, 0, 0, 0],
+    name = weapon == "unarmed" ? "Unarmed" : "",
+    damage = weapon == "unarmed" ? [1,1,1,2,2,3,4] : [0, 0, 0, 0, 0, 0, 0],
     ranged = false,
     twoHanded = false,
+      isEquipped = false,
     armourPiercing = false,
     skill: weaponSkill = "none",
   } = useTypedSelector(state => state.firebase.data?.weaponTableRow?.[weapon]?.weapon) ??
@@ -190,6 +191,9 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
                 </MenuItem>)}
               </Select>
             </Grid>
+          </Grid>
+          <Grid item>
+            {isEquipped ? <Button disabled>"Equipped"</Button> : <Button startIcon={<CasinoIcon/>}>Equip</Button>}
           </Grid>
 
         </Grid>
