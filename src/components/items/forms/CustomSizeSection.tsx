@@ -1,7 +1,7 @@
 import React, { FunctionComponent, ChangeEvent, useContext } from 'react';
-import { makeStyles, Theme } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import { FormControlLabel, Switch, TextField } from '@material-ui/core';
+import updateInventoryPositions from '../../../api/updateInventoryPositions';
 import { FormValueChangeHandler } from './FormValueChange';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
@@ -14,11 +14,11 @@ interface ICustomSizeSectionProps {
 
 type CustomSizeSectionProps = ICustomSizeSectionProps;
 
-const CustomSizeSection: FunctionComponent<ICustomSizeSectionProps> = (props: ICustomSizeSectionProps) => {
+const CustomSizeSection: FunctionComponent<CustomSizeSectionProps> = (props: CustomSizeSectionProps) => {
   const {
     onChange,
   } = props;
-  const classes = useStyles();
+
 
   const {character} = useContext(CharacterContext);
   const item = useContext(ItemContext);
@@ -51,18 +51,19 @@ const CustomSizeSection: FunctionComponent<ICustomSizeSectionProps> = (props: IC
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const id= e.target.id.slice(5)
+    const value  = id == "size" ? parseInt(e.target.value) : e.target.value;
+
     onChange([
                {
-                 id   : e.target.id.slice(5),
-                 value: e.target.value,
+                 id,
+                 value,
                  source: "customSizeSection"
                },
              ]);
 
-    console.log({
-                  id   : e.target.id.slice(5),
-                  value: e.target.value,
-                });
+    updateInventoryPositions(character, new Date().toString())
+
   };
   return (
       <Grid item
@@ -92,9 +93,5 @@ const CustomSizeSection: FunctionComponent<ICustomSizeSectionProps> = (props: IC
       </Grid>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
-    {
-      CustomSizeSection: {},
-    }));
 
 export default CustomSizeSection;

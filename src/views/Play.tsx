@@ -198,16 +198,16 @@ const Play: FunctionComponent<SessionProps> = (props: SessionProps) => {
 };
 
 const roll:()=>IRollSkillProps = ()=> ({
-  dice: [6, 6],
-  type: 'skill',
-  rolledSkill: 'Empathy',
-  rollerKey:'1234',
-  rollerName: 'Billy',
-  roll: rollKey(Math.random().toString(), [6, 6]),
-  target: 3,
-  title: 'My Roll',
-  result: 'Result',
-  total: 5,
+  dice        : [6, 6],
+  type        : 'skill',
+  rolledSkill : 'Empathy',
+  rollerKey   :'1234',
+  rollerName  : 'Billy',
+  roll        : rollKey(Math.random().toString(), [6, 6]),
+  target      : 3,
+  title       : 'My Roll',
+  dialogResult: 'Result',
+  total       : 5,
 });
 
 const useStyles = makeStyles((theme: Theme) => (

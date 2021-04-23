@@ -8,6 +8,7 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 
 interface IStepInputProps {
   label: string,
+  labelPosition?: "bottom" | "end" | "start" | "top",
   value: number,
   maximum?: number,
   onIncrease: ()=>void,
@@ -19,6 +20,7 @@ type StepInputProps = IStepInputProps;
 const StepInput: FunctionComponent<IStepInputProps> = (props: IStepInputProps) => {
   const {
     label,
+      labelPosition = "bottom",
     value,
       maximum,
     onDecrease,
@@ -32,7 +34,6 @@ const StepInput: FunctionComponent<IStepInputProps> = (props: IStepInputProps) =
       <div className={classes.Stepper}>
 
         <FormControlLabel
-            value="bottom"
             control={(
                 <div className={classes.counter}>
                   <IconButton size={'small'} className={classes.counterButton} onClick={onIncrease}>
@@ -44,7 +45,7 @@ const StepInput: FunctionComponent<IStepInputProps> = (props: IStepInputProps) =
                   </IconButton>
                 </div>)}
             label={label ?? ""}
-            labelPlacement="bottom"
+            labelPlacement={labelPosition}
         />
       </div>)
 }

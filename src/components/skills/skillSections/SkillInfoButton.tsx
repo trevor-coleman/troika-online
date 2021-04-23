@@ -21,7 +21,7 @@ import { SkillContext } from '../context/SkillContext';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-interface ISkillInfoButtonProps {}
+interface ISkillInfoButtonProps {disabled?:boolean}
 
 type SkillInfoButtonProps = PropsWithChildren<ISkillInfoButtonProps>;
 
@@ -29,7 +29,7 @@ const dummyFunc = () => {}
 export const PopperContext = React.createContext(dummyFunc);
 
 const SkillInfoButton: FunctionComponent<SkillInfoButtonProps> = (props: SkillInfoButtonProps) => {
-  const {children} = props;
+  const {children, disabled} = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const {character} = useContext(CharacterContext);
@@ -66,7 +66,7 @@ const SkillInfoButton: FunctionComponent<SkillInfoButtonProps> = (props: SkillIn
 
   return (
         <PopperContext.Provider value={closePopper}>
-          <IconButton onClick={handleClick}>
+          <IconButton onClick={handleClick} disabled={disabled}>
             <Info />
           </IconButton>
           <Popper

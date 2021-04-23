@@ -4,18 +4,19 @@ export type RollProps =
     IRollSkillProps
     | IRollWeaponProps
     | IRollBasicProps |
-    IRollDamageProps | IRollSpellProps
+    IRollDamageProps | IRollSpellProps | IRollInventoryProps
 
-export type RollType = "skill" | "weapon" | "basic" | "damage" | "spell"
+export type RollType = "skill" | "weapon" | "basic" | "damage" | "spell" | "inventory"
 
-export type RollFormatter = (props: RollProps) => IRollText
+export type RollFormatter = (props: RollProps) => IRollResult
 
 export type RollSuccessChecker = (roll: number[], total: number)=> boolean;
 
-export interface IRollText {
+export interface IRollResult {
   title: string,
-  description?: string,
-  result: string,
+  dialogDetail: string,
+  discordDescription: string,
+  dialogResult: string,
   success?: boolean
 }
 
@@ -24,14 +25,16 @@ export interface IRollBaseProps {
   rollerKey: string,
   type: RollType,
   title ?: string,
-  rollerName: string,
+  rollerName?: string,
   success?: boolean,
   roll?: number[],
   dice: number[],
-  description?: string,
+  dialogDetail?: string,
+  discordDescription?: string,
   total?: number,
   lastRoll?: {key:string, value: RollProps | null } | null,
-  result?: string,
+  dialogResult?: string,
+  discordResult?: string,
 }
 
 export interface IRollDamageProps extends IRollBaseProps {
@@ -41,7 +44,11 @@ export interface IRollDamageProps extends IRollBaseProps {
   damage: number[]
 }
 
-
+export interface IRollInventoryProps extends IRollBaseProps {
+  type: "inventory",
+  itemName: string,
+  position: number,
+}
 
 export interface IRollSkillProps extends IRollBaseProps {
   type: "skill",

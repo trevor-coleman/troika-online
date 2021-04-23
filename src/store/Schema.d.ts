@@ -29,6 +29,7 @@ export default interface Schema {
   addItemsDialog: {inventory: string[], weapons:[]},
   weaponTableRow: WeaponTableRowState,
   damageSection: { damage:number[], doesDamage:boolean, damagesAs:string, twoHanded:boolean, ranged: boolean, armourPiercing: boolean, weapons: string[] },
+  inventoryItem: Item,
   weapons: WeaponsState,
   addSrdItems: Item,
   queryTest: any,
@@ -49,7 +50,7 @@ export default interface Schema {
   srdItems: Item,
   games: Game,
   rolls: {[key:string]:RollProps},
-  characters: Character
+  characters: Character,
 }
 
 
@@ -101,6 +102,7 @@ export interface Character {
   provisions: number;
   items: { [key:string]:Item };
   inventory: string[];
+  inventoryPositions: {[key:string]: number},
   equipped: KeyList;
   skills: { [key:string] : Skill };
   skillValues: { [key: string]: SkillValues }

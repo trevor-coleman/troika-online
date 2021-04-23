@@ -9,6 +9,7 @@ import {
   DialogTitle, DialogContent, Dialog, DialogActions, TextField,
 } from '@material-ui/core';
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
+import updateInventoryPositions from '../../api/updateInventoryPositions';
 import { useAuth } from '../../store/selectors';
 import SrdItemsList from './SrdItemsList';
 import Box from '@material-ui/core/Box';
@@ -88,7 +89,8 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
     newWeapons = newWeapons.concat(newWeaponKeys);
 
     firebase.ref(`/characters/${character}/inventory`)
-                  .set(newInventory);
+                  .set(newInventory).then(()=>{
+      updateInventoryPositions(character, new Date().toString());});
 
     firebase.ref(`/characters/${character}/weapons`)
                   .set(newWeapons);
@@ -96,6 +98,7 @@ const AddItemsDialog: FunctionComponent<AddItemsDialogProps> = (props: AddItemsD
     setSelection({});
     setSearch("");
     onClose();
+
     setIsAdding(false);
   };
   return (

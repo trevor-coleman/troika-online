@@ -5,7 +5,11 @@ import { useTypedSelector } from '../../store';
 import { CharacterContext } from '../../contexts/CharacterContext';
 import StepInput from '../utility/StepInput';
 
-interface IChargesStepperProps {item: string}
+interface IChargesStepperProps {
+  item: string,
+  labelPosition?: "bottom" | "end" | "start" | "top",
+  label?: string,
+}
 
 type ChargesStepperProps = IChargesStepperProps;
 
@@ -16,7 +20,11 @@ export type ChargesStepperState = {
 }
 
 const ChargesStepper: FunctionComponent<IChargesStepperProps> = (props: IChargesStepperProps) => {
-  const {item} = props;
+  const {
+    item,
+      label = "Charges",
+    labelPosition = "bottom",
+  } = props;
   const classes = useStyles();
   const {character} = useContext(CharacterContext);
   useFirebaseConnect({
@@ -27,7 +35,7 @@ const ChargesStepper: FunctionComponent<IChargesStepperProps> = (props: ICharges
 
   const {charges} = useTypedSelector(state => state.firebase.data?.chargesStepper?.[item]) ??
                     {};
-  const handleChange = (amount:number) => {
+  const handleChange = (amount: number) => {
     firebase.ref(`/items/${character}/${item}/charges/initial`)
             .set((
                      charges?.initial ?? 0) + amount);
@@ -36,11 +44,12 @@ const ChargesStepper: FunctionComponent<IChargesStepperProps> = (props: ICharges
   return (
       <div className={classes.ChargesStepper}>
         <StepInput
-            label={"Charges"}
+            label={label}
+            labelPosition={labelPosition}
             value={charges?.initial ?? 0}
             maximum={charges?.max}
             onDecrease={() => handleChange(-1)}
-            onIncrease={()=>handleChange(1)} />
+            onIncrease={() => handleChange(1)} />
       </div>);
   0;
 };

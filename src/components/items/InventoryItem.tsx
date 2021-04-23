@@ -1,5 +1,10 @@
 import React, {
-  FunctionComponent, PropsWithChildren, useState, useContext,
+  FunctionComponent,
+  PropsWithChildren,
+  useState,
+  useContext,
+  ChangeEvent,
+  useEffect,
 } from 'react';
 import {
   useFirebase, useFirebaseConnect, isLoaded,
@@ -15,6 +20,8 @@ import {
   SvgIcon,
   Avatar,
   Fade,
+  Typography,
+  Collapse,
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import {
@@ -26,8 +33,9 @@ import {
   Delete,
   DeleteOutline,
   Edit,
-  EditOutlined,
+  EditOutlined, Work,
 } from '@material-ui/icons';
+import WorkIcon from '@material-ui/icons/Work';
 import { KeyList } from '../../store/KeyList';
 import { Item } from '../../store/Item';
 import { GameContext } from '../../contexts/GameContext';
@@ -90,21 +98,29 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
   const firebase = useFirebase();
   const auth = useAuth();
   const {character} = useContext(CharacterContext);
+  const rollContext = useContext(GameContext);
   const game = useContext(GameContext);
   useFirebaseConnect([
     {
       path   : `/items/${character}/${id}`,
       storeAs: `/inventoryItem/${id}`,
+    }, {
+      path   : `/characters/${character}/inventory`,
+      storeAs: `/inventoryItem/${id}/inventory`,
+    }, {
+      path: `/characters/${character}/inventoryPositions`,
     },
   ]);
   const item: Item = useTypedSelector(state => state.firebase.data?.inventoryItem?.[id]);
+
   const {
     name = "",
     description = "",
-    size = 1,
+    isEquipped = false,
     hasCharges = false,
     doesDamage = false,
     hasModifiers = false,
+    size = 0,
     protects = false,
     customSize = false,
   }: Item = item ?? {};
@@ -120,6 +136,11 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
     sectionToggles: true,
   };
   const [expanded, setExpanded] = useState<ExpandState>(initialState);
+  const inventoryPositions = useTypedSelector(state => state.firebase.data?.characters?.[character]?.inventoryPositions);
+
+  const position = inventoryPositions
+                   ? inventoryPositions[id] ?? 0
+                   : 0;
 
   const toggle = (section?: string) => {
     if (!section) {
@@ -151,153 +172,182 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
             .update(update);
   };
 
+  const handleEquip = ({target: {checked}}: ChangeEvent<HTMLInputElement>) => {
+    firebase.ref(`/items/${character}/${id}/isEquipped`)
+            .set(checked);
+  };
+
   if (!isLoaded(item)) return <Card><CardContent>Loading</CardContent></Card>;
 
+  const isEncumbered = () => 1 * position + 1 * size > 12;
+
+  const rollInventory = () => {
+    rollContext.roll({
+      type      : 'inventory',
+      position  : position + 1,
+      itemName  : name,
+      rollerKey : character,
+      dice      : [6, 6],
+    });
+  };
+
   return (
-      <ItemContext.Provider value={id}><Draggable
-          draggableId={id}
-          index={index}>{(provided, snapshot) => (
-          <Grid
-              item
-              xs={12}
-              innerRef={provided.innerRef}
-              {...provided.draggableProps}
-          >
-            <Card className={classes.card}>
-              <CardHeader
-                  avatar={<Avatar>{size}</Avatar>}
-                  className={classes.cardHeader}
-                  titleTypographyProps={{variant: "h6"}}
-                  title={`${name}`}
-                  subheader={description}
-                  subheaderTypographyProps={{
-                    variant: "caption",
-                    color  : 'textPrimary',
-                  }}
-                  action={<div className={classes.headerAction}>{hasCharges
-                                                                 ? <ChargesStepper item={id} />
-                                                                 :
-                                                                 <div />}<FormControlLabel
-                      value="bottom"
-                      control={<Switch color="primary" />}
-                      label="Equip"
-                      labelPlacement="bottom" /></div>}
-                  {...provided.dragHandleProps} />
-              <CardActions className={classes.cardActions}>
-                <div className={classes.sectionToggles}>
-                  <SectionToggleIcon
-                      expanded={expanded.sectionToggles}
-                      onToggle={toggle}
-                      section={"sectionToggles"}
-                      activeIcon={<ChevronLeft />}
-                      inactiveIcon={<ChevronRight />}
-                      show={true} />
-                  <SectionToggleIcon
-                      section={"basic"}
-                      expanded={expanded.basic}
-                      onToggle={toggle}
-                      show={true}
-                      activeIcon={<Edit />}
-                      inactiveIcon={<EditOutlined />} />
-                  <SectionToggleIcon
-                      section={"armour"}
-                      expanded={expanded.armour}
-                      onToggle={toggle}
-                      show={protects || expanded.sectionToggles}
-                      activeIcon={<SecurityTwoTone />}
-                      inactiveIcon={<SecurityOutlined />} />
-                  <SectionToggleIcon
-                      section={"damage"}
-                      onToggle={toggle}
-                      show={doesDamage || expanded.sectionToggles}
-                      expanded={expanded.damage}
-                      activeIcon={<SvgIcon
-                          component={SwordIconFilled}
-                          viewBox={"0 0 290.226 290.226"} />}
-                      inactiveIcon={<SvgIcon
-                          component={SwordIconOutline}
-                          viewBox={"0 0 57 57"} />} />
-                  <SectionToggleIcon
-                      section={"customSize"}
-                      onToggle={toggle}
-                      show={customSize || expanded.sectionToggles}
-                      expanded={expanded.customSize}
-                      activeIcon={<SvgIcon
-                          component={WeightFilled}
-                          viewBox={"0 0 299.799 299.799"} />}
-                      inactiveIcon={<SvgIcon
-                          component={WeightOutline}
-                          viewBox={"0 0 512 512"} />} />
+      <ItemContext.Provider value={id}>
+        <Draggable
+            draggableId={id}
+            index={index}>{(provided, snapshot) => (
+            <Grid
+                item
+                xs={12}
+                innerRef={provided.innerRef}
+                {...provided.draggableProps}
+            >
+              <Card className={classes.card}>
+                <CardHeader
+                    avatar={<Avatar
+                        className={isEncumbered()
+                                   ? classes.problemAvatar
+                                   : undefined}>{position + 1}</Avatar>}
+                    className={classes.cardHeader}
+                    titleTypographyProps={{variant: "h6"}}
+                    title={`${name}`}
+                    subheader={description}
+                    subheaderTypographyProps={{
+                      variant: "caption",
+                      color  : 'textPrimary',
+                    }}
+                    action={<div className={classes.headerAction}>{hasCharges
+                                                                   ?
+                                                                   <ChargesStepper item={id} />
+                                                                   :
+                                                                   <div />}<FormControlLabel
+                        value="bottom"
+                        control={<Switch
+                            checked={isEquipped}
+                            onChange={(e) => handleEquip(e)}
+                            color="primary" />}
+                        label="Equip"
+                        labelPlacement="bottom" /></div>}
+                    {...provided.dragHandleProps} />
+                <Collapse in={isEncumbered()}><CardContent><Typography
+                    variant={'overline'}
+                    color={'error'}>This item is too large to fit in your
+                                    inventory!</Typography>
+                  <Typography
+                      variant={'body2'}
+                      color={'error'}>(Size: {size}, Available Space: {12 - (
+                      position)})</Typography></CardContent></Collapse>
+                <CardActions className={classes.cardActions}>
+                  <div className={classes.sectionToggles}>
+                    <SectionToggleIcon
+                        section={"basic"}
+                        expanded={expanded.basic}
+                        onToggle={toggle}
+                        show={true}
+                        activeIcon={<Edit />}
+                        inactiveIcon={<EditOutlined />} />
+                    <SectionToggleIcon
+                        section={"armour"}
+                        expanded={expanded.armour}
+                        enabled={protects}
+                        onToggle={toggle}
+                        show={protects || expanded.sectionToggles}
+                        activeIcon={<SecurityTwoTone />}
+                        inactiveIcon={<SecurityOutlined />} />
+                    <SectionToggleIcon
+                        section={"damage"}
+                        onToggle={toggle}
+                        enabled={doesDamage}
+                        show={doesDamage || expanded.sectionToggles}
+                        expanded={expanded.damage}
+                        activeIcon={<SvgIcon
+                            component={SwordIconFilled}
+                            viewBox={"0 0 290.226 290.226"} />}
+                        inactiveIcon={<SvgIcon
+                            component={SwordIconOutline}
+                            viewBox={"0 0 57 57"} />} />
+                    <SectionToggleIcon
+                        section={"customSize"}
+                        onToggle={toggle}
+                        enabled={customSize}
+                        show={customSize || expanded.sectionToggles}
+                        expanded={expanded.customSize}
+                        activeIcon={<SvgIcon
+                            component={WeightFilled}
+                            viewBox={"0 0 299.799 299.799"} />}
+                        inactiveIcon={<SvgIcon
+                            component={WeightOutline}
+                            viewBox={"0 0 512 512"} />} />
 
-                  <SectionToggleIcon
-                      section={"charges"}
-                      onToggle={toggle}
-                      show={hasCharges || expanded.sectionToggles}
-                      expanded={expanded.charges}
-                      activeIcon={<SvgIcon
-                          component={LightningFilled}
-                          viewBox={"0 0 46.093 46.093"} />}
-                      inactiveIcon={<SvgIcon
-                          component={LightningOutline}
-                          viewBox={"0 0 192.008 192.008"} />} />
-                  <SectionToggleIcon
-                      section={"settings"}
-                      onToggle={toggle}
-                      show={true}
-                      expanded={expanded.settings}
-                      activeIcon={<Delete />}
-                      inactiveIcon={<DeleteOutline />} />
+                    <SectionToggleIcon
+                        section={"charges"}
+                        onToggle={toggle}
+                        enabled={hasCharges}
+                        show={hasCharges || expanded.sectionToggles}
+                        expanded={expanded.charges}
+                        activeIcon={<SvgIcon
+                            component={LightningFilled}
+                            viewBox={"0 0 46.093 46.093"} />}
+                        inactiveIcon={<SvgIcon
+                            component={LightningOutline}
+                            viewBox={"0 0 192.008 192.008"} />} />
+                    <SectionToggleIcon
+                        section={"settings"}
+                        onToggle={toggle}
+                        show={true}
+                        expanded={expanded.settings}
+                        activeIcon={<Delete />}
+                        inactiveIcon={<DeleteOutline />} />
+                  </div>
+                  <div className={classes.rolls}>
+                    <Button
+                        variant={"contained"}
+                        startIcon={<WorkIcon />}
+                        onClick={rollInventory}
+                    >Retrieve</Button>
+                  </div>
+                </CardActions>
+                <CollapsingSection expand={expanded.isExpanded}>
+                  <FadingSection
+                      onClose={toggle}
+                      expanded={expanded.basic}>
 
-
-                </div>
-                <div className={classes.rolls}>
-                  <Button
-                      disabled
-                      variant={"contained"}
-                      startIcon={<Casino />}>Roll</Button>
-                </div>
-              </CardActions>
-              <CollapsingSection expand={expanded.isExpanded}>
-                <FadingSection
-                    onClose={toggle}
-                    expanded={expanded.basic}>
-
-                  <BasicInfoSection onChange={handleChange} />
-                </FadingSection>
-                <FadingSection
-                    onClose={toggle}
-                    expanded={expanded.armour}>
-                  <ArmourSection
-                      character={character}
-                      item={id}
-                      onChange={handleChange} />
-                </FadingSection>
-                <FadingSection
-                    onClose={toggle}
-                    expanded={expanded.damage}>
-                  <DamageSection onChange={handleChange} />
-                </FadingSection>
-                <FadingSection
-                    onClose={toggle}
-                    expanded={expanded.customSize}>
-                  <CustomSizeSection onChange={handleChange} />
-                </FadingSection>
-                <FadingSection
-                    onClose={toggle}
-                    expanded={expanded.charges}>
-                  <ChargesSection onChange={handleChange} />
-                </FadingSection>
-                <FadingSection
-                    onClose={toggle}
-                    expanded={expanded.settings}>
-                  <Button
-                      onClick={() => onRemove(id)}
-                      variant={"contained"}
-                      color={"secondary"}>Remove</Button>
-                </FadingSection>
-              </CollapsingSection>
-            </Card>
-          </Grid>)}</Draggable></ItemContext.Provider>);
+                    <BasicInfoSection onChange={handleChange} />
+                  </FadingSection>
+                  <FadingSection
+                      onClose={toggle}
+                      expanded={expanded.armour}>
+                    <ArmourSection
+                        character={character}
+                        item={id}
+                        onChange={handleChange} />
+                  </FadingSection>
+                  <FadingSection
+                      onClose={toggle}
+                      expanded={expanded.damage}>
+                    <DamageSection onChange={handleChange} />
+                  </FadingSection>
+                  <FadingSection
+                      onClose={toggle}
+                      expanded={expanded.customSize}>
+                    <CustomSizeSection onChange={handleChange} />
+                  </FadingSection>
+                  <FadingSection
+                      onClose={toggle}
+                      expanded={expanded.charges}>
+                    <ChargesSection onChange={handleChange} />
+                  </FadingSection>
+                  <FadingSection
+                      onClose={toggle}
+                      expanded={expanded.settings}>
+                    <Button
+                        onClick={() => onRemove(id)}
+                        variant={"contained"}
+                        color={"secondary"}>Remove</Button>
+                  </FadingSection>
+                </CollapsingSection>
+              </Card>
+            </Grid>)}</Draggable></ItemContext.Provider>);
 };
 
 const FadingSection = (props: PropsWithChildren<{ expanded: boolean, onClose: () => void }>) => {
@@ -359,6 +409,9 @@ const useStyles = makeStyles((theme: Theme) => (
       },
       cardActions    : {display: 'flex'},
       sectionToggles : {flexGrow: 1},
+      problemAvatar  : {
+        backgroundColor: theme.palette.error.main,
+      },
       rolls          : {
         display       : "flex",
         flexDirection : "row",

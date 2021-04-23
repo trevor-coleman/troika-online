@@ -1,7 +1,8 @@
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useFirebase, isEmpty } from 'react-redux-firebase';
-import { makeStyles } from '@material-ui/core/styles';
+
 import { RootState } from '../../store';
 import GoogleButton from 'react-google-button';
 import { Container, TextField, Paper, Box } from '@material-ui/core';
@@ -76,7 +77,9 @@ function SignIn() {
                    sm={6}
                    md={4}
                    lg={2}><GoogleButton onClick={loginWithGoogle} /></Grid>
-              </Grid></Box></Paper>
+              </Grid>
+           </Box>
+          </Paper>
            : <Redirect to={"/home"} />}
         </div>
       );

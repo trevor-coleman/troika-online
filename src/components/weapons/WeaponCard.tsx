@@ -6,9 +6,15 @@ import { GameContext } from '../../contexts/GameContext';
 import { useTypedSelector } from '../../store';
 import Grid from '@material-ui/core/Grid';
 import { MenuItem, Select } from '@material-ui/core';
+import ChargesStepper from '../items/ChargesStepper';
 import SkillSelectItem from '../skills/SkillSelectItem';
 import Button from '@material-ui/core/Button';
-import { Casino as CasinoIcon, FormatListBulletedSharp } from '@material-ui/icons';
+import {
+  Casino as CasinoIcon,
+  Check,
+  FiberManualRecord, FiberManualRecordOutlined,
+  FormatListBulletedSharp,
+} from '@material-ui/icons';
 import SkillInfoButton from '../skills/skillSections/SkillInfoButton';
 import { ItemContext } from '../../contexts/ItemContext';
 import WeaponInfoPopperContent from './WeaponInfoPopperContent';
@@ -39,6 +45,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
     damage = weapon == "unarmed" ? [1,1,1,2,2,3,4] : [0, 0, 0, 0, 0, 0, 0],
     ranged = false,
     twoHanded = false,
+      hasCharges = false,
       isEquipped = false,
     armourPiercing = false,
     skill: weaponSkill = "none",
@@ -135,8 +142,8 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
               alignItems={"center"}
               justify={"center"}>
             <Grid item>
-              <IconButton>
-                <FormatListBulletedSharp />
+              <IconButton disabled>
+                {isEquipped ? <Check/> : <FiberManualRecordOutlined />}
               </IconButton>
             </Grid>
           </Grid>
@@ -160,7 +167,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
               alignItems={"center"}
               justify={"center"}>
             <Grid item>
-              <SkillInfoButton>
+              <SkillInfoButton disabled={weapon=="unarmed"}>
                 <WeaponInfoPopperContent />
               </SkillInfoButton>
             </Grid>
@@ -192,10 +199,11 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
               </Select>
             </Grid>
           </Grid>
-          <Grid item>
-            {isEquipped ? <Button disabled>"Equipped"</Button> : <Button startIcon={<CasinoIcon/>}>Equip</Button>}
+          <Grid item xs={2}>
+            {hasCharges
+             ? <ChargesStepper item={weapon} label={""} labelPosition={"top"} />
+             : <div />}
           </Grid>
-
         </Grid>
       </ItemContext.Provider>);
 };

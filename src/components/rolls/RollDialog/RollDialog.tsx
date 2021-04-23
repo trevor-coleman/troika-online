@@ -81,14 +81,14 @@ const RollDialog: FunctionComponent<RollDialogProps> = (props: RollDialogProps) 
         <DialogTitle>{rollValue?.title ?? "Roll"}</DialogTitle>
         <DialogContent>
           <div>
-            <Typography>{rollValue?.description ?? ""}</Typography>
+            <Typography>{rollValue?.dialogDetail ?? ""}</Typography>
             {lastRoll
              ? <Roll
                  rollKey={key ?? ""}
                  roll={lastRoll} />
              : <div />}
           </div>
-          <Result result={rollValue?.result ?? ""} />
+          <Result result={rollValue?.dialogResult ?? ""} />
         </DialogContent>
         <DialogActions><Button variant={"outlined"} onClick={()=>handleClose()}>Close</Button>
           {rollValue?.type==="weapon" ? <Button

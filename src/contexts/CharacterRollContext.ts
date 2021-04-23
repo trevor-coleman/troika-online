@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
+import { abilityWebhook, discordWebhook } from '../api/discord';
 import { rollKey } from '../components/rolls/rollKey';
 import { useTypedSelector } from '../store';
+import { Roll } from '../types/troika';
 import {
   IRollWeaponProps,
   RollProps,
@@ -11,18 +13,21 @@ import {
   IRollDamageProps,
   RollFormatter,
   IRollSpellProps,
-  RollSuccessChecker,
+  RollSuccessChecker, IRollInventoryProps,
 } from './GameContext';
 
 export const useCharacterRollContext = (characterKey: string): TGameContext => {
   const firebase = useFirebase();
   const [lastSeen, setLastSeen] = useState<string | null>("firstOpen");
-  useFirebaseConnect({
+  useFirebaseConnect([{
     path       : `/rolls/${characterKey}`,
     storeAs    : `/lastRoll/`,
     queryParams: ['orderByKey', 'limitToLast=1'],
-  });
+  }, {path:`/characters/${characterKey}/name`}]);
+
   const lastRolls = useTypedSelector(state => state.firebase.ordered?.lastRoll);
+  const characterName =  useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.name) ?? "Character"
+  const characterAvatar = useTypedSelector(state => state.firebase.data.characters?.[characterKey]?.portrait)
 
   const isSnakeEyes = (roll: number[]) => roll.every(die => die === 1);
   const isBoxCars = (roll: number[]) => roll.every(die => die === 6);
@@ -30,7 +35,7 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
   async function rollSpell(props: IRollSpellProps) {
     const {
       target,
-      rollerName,
+      rollerName = characterName,
       rolledSkill,
     } = props;
 
@@ -61,9 +66,10 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
 
           return (
               {
-                title      : `${rollerName} Casts ${rolledSkill}`,
-                description: `Under ${target}`,
-                result,
+                title             : `${rollerName} casts ${rolledSkill}`,
+                dialogDetail      : `Roll under ${target} to case ${rolledSkill}`,
+                discordDescription: `rolls to ***cast ${rolledSkill}*** (under ${target})`,
+                dialogResult      : result,
                 total,
                 success,
                 roll,
@@ -77,10 +83,62 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     return key;
   }
 
+  async function rollInventory(props: IRollInventoryProps) {
+    const {
+      itemName,
+        position,
+        rollerName = characterName,
+    } = props;
+
+    const formatter: RollFormatter = (
+        props=> {
+          const {
+            total = 0,
+            roll = [0, 0]
+          } = props
+
+          let result = "";
+          let success:boolean;
+
+          if (isBoxCars(roll)) {
+            success = true;
+            result = `${total} - Automatic Success!`;
+          }
+          else if (isSnakeEyes(roll)) {
+            success = false;
+            result = `${total} - Fumble`;
+          } else {
+            success = total >= position;
+            result =
+                success
+                ? `${total} - Success!`
+                : `${total} - Failed.`;
+          }
+
+          return (
+              {
+                title             : `${rollerName} - Get ${itemName} from Inventory`,
+                dialogDetail      : `Roll over ${position} to retrieve ${itemName}`,
+                discordDescription: `rolls to ***retrieve ${itemName}*** (over ${position})`,
+                dialogResult      : result,
+                success
+              });
+
+        }
+    )
+
+    const {
+      key,
+    } = await pushNewRoll(props, formatter);
+
+    return key;
+
+  }
+
   async function rollSkill(props: IRollSkillProps) {
     const {
       target,
-      rollerName,
+      rollerName = characterName,
       rolledSkill,
     } = props;
 
@@ -113,9 +171,10 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
 
           return (
               {
-                title      : `${rollerName} - ${rolledSkill}`,
-                description: `Under ${target}`,
-                result,
+                title             : `${rollerName} tests ${rolledSkill}`,
+                dialogDetail      : `roll under ${target} to test ${rolledSkill}`,
+                discordDescription: `tests ***${rolledSkill}*** (under ${target})`,
+                dialogResult      : result,
                 success
               });
         });
@@ -130,7 +189,7 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
   async function rollWeapon(props: IRollWeaponProps) {
     const {
       rolledWeapon,
-      rollerName,
+      rollerName = characterName,
       rolledSkill,
       rank,
       skill,
@@ -141,12 +200,19 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
           const {total = 0} = props;
           return (
               {
-                title : `${rollerName} attacks with ${rolledWeapon} (${rolledSkill})`,
-                result: `Attacks with ${total + rank +
-                                        skill} power (Roll: ${total ??
+                title             : `${rollerName} attacks with ${rolledWeapon} (${rolledSkill})`,
+                dialogDetail:`roll to attack with ${rolledWeapon} using ${rolledSkill}`,
+                discordDescription: `attacks with ***${rolledWeapon}*** using ***${rolledSkill}***`,
+                dialogResult: `Attacks with ${total + rank +
+                                              skill} power (Roll: ${total ??
                                                               0}, Rank: ${rank ??
                                                                           0}, Skill: ${skill ??
                                                                                        0})`,
+                discordResult: `**${total + rank +
+                                               skill}**\n_(Roll: ${total ??
+                                                                     0}, Rank: ${rank ??
+                                                                                 0}, Skill: ${skill ??
+                                                                                              0})_`
               });
         });
     const newRoll = await pushNewRoll(props, formatter);
@@ -163,20 +229,43 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
   async function rollDamage(props: IRollDamageProps) {
     const {
       rolledWeapon,
-      rollerName,
+      rollerName = characterName,
       damage,
     } = props;
 
     const formatter: RollFormatter = ({total=0}) => (
         {
-          title : `${rollerName} rolls damage with ${rolledWeapon}`,
-          result: `Rolled a ${total} for ${damage[total - 1]} damage`,
+          title             : `${rollerName} rolls damage with ${rolledWeapon}`,
+          dialogDetail      : `Roll damage with ${rolledWeapon}`,
+          discordDescription: `rolls ***damage*** with ***${rolledWeapon}***`,
+          dialogResult      : `Rolled a ${total} for ${damage[total - 1]} damage`,
         });
 
     const {key} = await pushNewRoll(props, formatter);
 
     return key;
 
+  }
+
+  async function rollBasic(props: IRollBasicProps) {
+    const {
+      rollerName = characterName,
+      dice,
+
+    } = props;
+
+    const {key} = await pushNewRoll(
+        props,
+        (
+            ({total=0}) => (
+                {
+                  title             : `${rollerName} rolls ${dice.length}d6`,
+                  dialogDetail      :`Roll ${dice.length}d6`,
+                  discordDescription: `rolls ***${dice.length}d6***`,
+                  dialogResult      : `Total: ${total}`,
+                })));
+
+    return key;
   }
 
   async function pushNewRoll(props: RollProps, formatter: RollFormatter) {
@@ -191,23 +280,24 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
 
     const total = roll.reduce((prev, curr) => prev + curr);
 
-
-    const {
-      title,
-      result,
-      description,
-    } = formatter({...props, total, roll});
-
-    await newRef.set({
+    let newRollProps: RollProps = {
       ...props,
-      title,
-      result,
-      description: description ?? null,
+      ...formatter({
+        ...props,
+        total,
+        roll
+      }),
       roll,
       total,
-    });
+    };
+    await newRef.set(
+      newRollProps
+    );
 
     if (lastSeen === "firstOpen") {setLastSeen(null);}
+
+    console.log(newRollProps);
+    discordWebhook(newRollProps)
 
     return {
       newRef,
@@ -216,25 +306,6 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
       key,
     };
 
-  }
-
-  async function rollBasic(props: IRollBasicProps) {
-    const {
-      rollerName,
-      dice,
-
-    } = props;
-
-    const {key} = await pushNewRoll(
-        props,
-        (
-            ({total=0}) => (
-                {
-                  title : `${rollerName} rolls ${dice.length}d6`,
-                  result: `Total: ${total}`,
-                })));
-
-    return key;
   }
 
   return {
@@ -247,7 +318,7 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     lastRoll   : lastRolls
                  ? lastRolls[0]
                  : null,
-    async roll(props) {
+    async roll(props :RollProps) {
       switch (props.type) {
         case 'basic':
           return rollBasic(props);
@@ -259,6 +330,8 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
           return rollWeapon(props);
         case 'spell':
           return rollSpell(props);
+        case 'inventory':
+          return rollInventory(props);
         default:
           return null;
       }

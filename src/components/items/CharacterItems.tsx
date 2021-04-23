@@ -9,6 +9,7 @@ import {
   DropResult, ResponderProvided, DragDropContext, Droppable, Draggable,
 } from 'react-beautiful-dnd';
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
+import updateInventoryPositions from '../../api/updateInventoryPositions';
 import AddItemsDialog from './AddItemsDialog';
 import Button from '@material-ui/core/Button';
 import {
@@ -81,7 +82,6 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
                    : newState);
   }
 
-
   async function handleDragEnd(result: DropResult,
                                provided: ResponderProvided): Promise<void> {
     const {
@@ -103,6 +103,10 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
     newItemArray.splice(destination.index, 0, draggableId);
     await firebase.ref(`/characters/${character}/inventory`)
                   .set(newItemArray);
+
+    await updateInventoryPositions(character, new Date().toString());
+
+
   }
 
   const removeItem = (id: string) => {
