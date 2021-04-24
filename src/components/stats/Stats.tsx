@@ -14,6 +14,7 @@ import { GameContext } from '../../contexts/GameContext';
 import { useCharacter } from '../../store/selectors';
 import Grid from '@material-ui/core/Grid';
 import { CharacterContext } from '../../contexts/CharacterContext';
+import RestDialog from '../rest/RestDialog';
 
 interface StatsProps {}
 
@@ -26,6 +27,8 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
   const {roll} = useContext(GameContext);
   useFirebaseConnect(`/characters/${characterKey}`);
   const character = useCharacter(characterKey);
+  const [open, setOpen] = useState(true);
+  const handleCloseRestDialog = () => {setOpen(false)}
 
   const [values, setValues] = useState({
     luck_current   : 0,
@@ -263,9 +266,10 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
             xs={12}>
           <Button
               fullWidth
-              disabled
+              onClick={()=>setOpen(true)}
               variant={"contained"}>Rest</Button>
         </Grid>
+        <RestDialog open={open} handleClose={handleCloseRestDialog} />
       </Grid>);
 };
 

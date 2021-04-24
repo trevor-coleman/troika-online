@@ -4,9 +4,9 @@ export type RollProps =
     IRollSkillProps
     | IRollWeaponProps
     | IRollBasicProps |
-    IRollDamageProps | IRollSpellProps | IRollInventoryProps
+    IRollDamageProps | IRollSpellProps | IRollInventoryProps | IRollToAdvanceProps
 
-export type RollType = "skill" | "weapon" | "basic" | "damage" | "spell" | "inventory"
+export type RollType = "skill" | "weapon" | "basic" | "damage" | "spell" | "inventory" | "advance"
 
 export type RollFormatter = (props: RollProps) => IRollResult
 
@@ -74,6 +74,12 @@ export interface IRollWeaponProps extends IRollBaseProps {
 export interface IRollBasicProps extends IRollBaseProps {
   type: "basic",
   rollerName: string,
+}
+
+export interface IRollToAdvanceProps  extends IRollBaseProps {
+  type: "advance",
+  rolledSkill: string,
+  target: number,
 }
 
 export type TGameContext = {

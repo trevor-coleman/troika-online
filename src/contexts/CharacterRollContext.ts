@@ -13,7 +13,8 @@ import {
   IRollDamageProps,
   RollFormatter,
   IRollSpellProps,
-  RollSuccessChecker, IRollInventoryProps,
+  RollSuccessChecker,
+  IRollInventoryProps, IRollToAdvanceProps,
 } from './GameContext';
 
 export const useCharacterRollContext = (characterKey: string): TGameContext => {
@@ -268,6 +269,41 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     return key;
   }
 
+  async function rollToAdvance(props: IRollToAdvanceProps):Promise<string|null> {
+    const {
+      rolledSkill,
+      rollerName = characterName,
+      target = 0,
+        total = 0,
+    } = props;
+
+    const formatter: RollFormatter = (
+        props => {
+          const {
+            total = 0,
+            roll = [0, 0],
+          } = props;
+
+          const success = total >= target;
+          const result = success
+                         ? `${total} - Success!`
+                         : `${total} - Failed.`;
+
+          return (
+              {
+                title             : `${rollerName} rolls to advance ${rolledSkill}`,
+                dialogDetail      : `roll over ${target} to advance ${rolledSkill}`,
+                discordDescription: `tries to advance ***${rolledSkill}*** (over ${target})`,
+                dialogResult      : result,
+                success
+              });
+        });
+
+    const {key} = await pushNewRoll(props, formatter);
+
+    return key;
+  }
+
   async function pushNewRoll(props: RollProps, formatter: RollFormatter) {
     const rollsRef = firebase.ref(`/rolls/${characterKey}`);
 
@@ -332,6 +368,8 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
           return rollSpell(props);
         case 'inventory':
           return rollInventory(props);
+        case 'advance':
+          return rollToAdvance(props);
         default:
           return null;
       }

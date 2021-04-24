@@ -5,6 +5,7 @@ import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 
 import { useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import RestDialog from '../components/rest/RestDialog';
 import RollDialog from '../components/rolls/RollDialog/RollDialog';
 import { rollKey } from '../components/rolls/rollKey';
 import CharacterSkills from '../components/skills/CharacterSkills';
@@ -92,6 +93,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
           </Grid>
         </div>
         <RollDialog parent={"rolls"} id={characterKey} open={false}/>
+
       </CharacterContext.Provider>
       </GameContext.Provider>);
 
