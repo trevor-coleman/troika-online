@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useParams, useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
@@ -25,6 +25,10 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
   useFirebaseConnect([`/games/${gameKey}`]);
 
   const game = useGame(gameKey);
+
+  useEffect(()=>{
+    document.title = `${game?.name ?? "Game"} - Troika Online`
+  },[game])
 
 
   return (

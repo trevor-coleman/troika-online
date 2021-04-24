@@ -18,6 +18,7 @@ import CharacterSheetSection
   from '../components/characterSheet/CharacterSheetSection';
 import { useCharacterRollContext } from '../contexts/CharacterRollContext';
 import { GameContext } from '../contexts/GameContext';
+import { useCharacter } from '../store/selectors';
 
 interface CharacterEditorProps {
   init?: boolean
@@ -30,6 +31,11 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
   const firebase = useFirebase()
 
   const rollContext = useCharacterRollContext(characterKey);
+  const character = useCharacter(characterKey);
+
+  useEffect(()=>{
+    document.title = (character?.name ?? "Character Editor") + " - Troika Online"
+  }, [character])
 
   return (
       <GameContext.Provider value={rollContext}>

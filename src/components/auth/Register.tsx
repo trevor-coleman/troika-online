@@ -1,4 +1,8 @@
-import React, { FunctionComponent, ChangeEvent, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ChangeEvent,
+  useState, useEffect,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -26,6 +30,8 @@ const Register: FunctionComponent<RegisterProps> = (props: RegisterProps) => {
     password: "",
     confirmPassword: "",
   });
+
+  useEffect(()=>{document.title = "Register - Troika Online"},[])
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
     setValues({
@@ -62,7 +68,7 @@ const Register: FunctionComponent<RegisterProps> = (props: RegisterProps) => {
   return (
       <div className={classes.root}>
         <Typography paragraph variant={"h2"}>Register</Typography>
-        <Typography paragraph>Already have an account? <Link to={"/register"}>Sign In
+        <Typography paragraph>Already have an account? <Link to={"/sign-in"}>Sign In
                                                                       Here</Link></Typography>
         {isEmpty(auth)?
         <Paper>

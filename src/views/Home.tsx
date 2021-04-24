@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useFirebase } from 'react-redux-firebase';
@@ -24,6 +24,10 @@ interface HomeProps {
 //COMPONENT
 const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
   const {} = props;
+
+  useEffect(()=>{
+    document.title = "Home - Troika Online"
+  })
 
   return (
       <div>

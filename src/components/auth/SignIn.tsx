@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useFirebase, isEmpty } from 'react-redux-firebase';
 
@@ -17,7 +17,7 @@ function SignIn() {
   const classes = useStyles();
   const firebase = useFirebase();
   const auth = useSelector((state: RootState) => state.firebase.auth);
-
+  useEffect(() => {document.title = "Sign In - Troika Online"}, [])
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
