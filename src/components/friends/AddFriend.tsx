@@ -26,13 +26,13 @@ const AddFriend: FunctionComponent<AddFriendProps> = (props: AddFriendProps) => 
   const userKey = auth.uid;
 
   useFirebaseConnect({
-    path: '/profiles',
+    path: 'profiles',
     storeAs: 'addFriendResult',
-    queryParams: ['orderByChild=email', `equalTo=${email.toLowerCase()}`],
+    queryParams: ['orderByChild=email', `equalTo=${email}`],
   });
-  useFirebaseConnect({path: `/profiles/${userKey}/friendRequests/sent`});
+  useFirebaseConnect({path: `/profiles/${userKey}/sentRequests`});
 
-  const result = useTypedSelector(state => state.firebase.data.addFriendResult);
+  const result = useTypedSelector(state => state.firebase.ordered.addFriendResult);
   const sentRequests = useTypedSelector(state => {
     return state.firebase.profile.sentRequests &&
            state.firebase.profile.sentRequests
@@ -45,6 +45,8 @@ const AddFriend: FunctionComponent<AddFriendProps> = (props: AddFriendProps) => 
            ? state.firebase.profile.friends
            : {};
   });
+
+  console.log(email, "result:", result)
 
   const friendKey = result
                     ? Object.keys(result)[0]
@@ -70,7 +72,8 @@ const AddFriend: FunctionComponent<AddFriendProps> = (props: AddFriendProps) => 
   }
 
   const addFriend = async () => {
-    console.log(friendKey, userKey);
+    console.log(`FriendKey: ${friendKey} || userKey: ${userKey}`);
+    console.log(`/profiles/${userKey}/sentRequests/${friendKey}`)
     await firebase.ref(`/profiles/${userKey}/sentRequests/${friendKey}`)
                   .set(true);
     await firebase.ref(`/profiles/${friendKey}/receivedRequests/${userKey}`)

@@ -107,7 +107,7 @@
           ".read"  : "auth.uid !== null",
           ".write" : "data.child('owner').val()===auth.uid || data.child('public').val() === true"
         }
-      },
+      }
     }
   }
 }
