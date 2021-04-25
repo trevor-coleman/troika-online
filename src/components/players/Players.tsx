@@ -88,8 +88,9 @@ const Players: FunctionComponent<PlayersProps> = (props: PlayersProps) => {
               {isLoaded(players)
                ? Object.keys(players)
                        .map(item => (
-                           <ProfileListItem key={item}
-                                            profileKey={item} />))
+                           <ProfileListItem
+                               key={item}
+                               profileKey={item} />))
                : ""}
             </List>
             {game?.owner && auth.uid == game?.owner
@@ -115,11 +116,15 @@ const Players: FunctionComponent<PlayersProps> = (props: PlayersProps) => {
           <DialogTitle>Select Player to Invite</DialogTitle>
           <List>
             {Object.keys(friends)
-                   .map(item => (
-                       <ProfileListItem key={item}
-                                        profileKey={item}
-                                        firstAction={
-                                          <InviteButton profileKey={item} />} />))}
+                   .map(item => {
+                     console.log("friend item ->", item)
+                     return (
+                         <ProfileListItem
+                             key={item}
+                             profileKey={item}
+                             firstAction={
+                               <InviteButton profileKey={item} />} />);
+                   })}
             <ListItem>
               <Box m={2} />
               <ListItemSecondaryAction>

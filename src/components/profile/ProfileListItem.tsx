@@ -16,7 +16,6 @@ import { useAuth } from '../../store/selectors';
 interface ProfileListItemProps {
   profileKey:string;
   firstAction?: JSX.Element
-
 }
 
 //COMPONENT
@@ -30,11 +29,10 @@ const ProfileListItem: FunctionComponent<ProfileListItemProps> = (props: Profile
 
   useFirebaseConnect({path: `/profiles/${profileKey}`});
   const auth = useAuth()
-  const profile = useTypedSelector(state => state.firebase.data.profiles && state.firebase.data.profiles[profileKey] ? state.firebase.data.profiles[profileKey] :{})
-
+  const profile = useTypedSelector(state => (state.firebase.data.profiles && state.firebase.data.profiles[profileKey]) ? state.firebase.data.profiles[profileKey] :{})
   return (
       <ListItem>
-        <ListItemText primary={profile?.displayName ?? auth.displayName ?? auth.email ?? "Anonymous User"} />{firstAction
+        <ListItemText primary={profile?.displayName ?? profile.email ?? "Anonymous User"} />{firstAction
                                                         ?
                                                         <ListItemSecondaryAction>
                                                                  {firstAction}
