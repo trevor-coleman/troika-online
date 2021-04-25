@@ -32,7 +32,7 @@ const ProfileListItem: FunctionComponent<ProfileListItemProps> = (props: Profile
   const profile = useTypedSelector(state => (state.firebase.data.profiles && state.firebase.data.profiles[profileKey]) ? state.firebase.data.profiles[profileKey] :{})
   return (
       <ListItem>
-        <ListItemText primary={profile?.displayName ?? profile.email ?? "Anonymous User"} />{firstAction
+        <ListItemText primary={profile?.name ?? profile.email ?? "Anonymous User"} />{firstAction
                                                         ?
                                                         <ListItemSecondaryAction>
                                                                  {firstAction}

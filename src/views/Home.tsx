@@ -16,6 +16,8 @@ import Friends from '../components/friends/Friends';
 import { useTypedSelector } from '../store';
 import Games from '../components/game/Games';
 import GameInvitations from '../components/game/GameInvitations';
+import { Profile } from '../store/Schema';
+import { useAuth } from '../store/selectors';
 import {ReactComponent as MainIcon} from '../svg/knowledge-svgrepo-com.svg';
 
 interface HomeProps {
@@ -24,10 +26,38 @@ interface HomeProps {
 //COMPONENT
 const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
   const {} = props;
+  const firebase = useFirebase()
+  const auth=useAuth();
 
   useEffect(()=>{
     document.title = "Home - Troika Online"
-  })
+
+    const profileRef = firebase.ref(`/profiles/${auth.uid}`);
+    profileRef.once(`value`).then(snap=>{
+      if(!snap.val()) return;
+      const profile:Profile = snap.val();
+
+      const update: Partial<Profile> = {}
+
+      let updateRequired = false;
+      console.log(auth.displayName)
+      if(auth.displayName && (profile.name+'') !== auth.displayName ) {
+        update.name = auth.displayName;
+        updateRequired = true;
+      }
+      if(auth.email && profile.email !== auth.email) {
+        update.email = auth.email;
+        updateRequired = true;
+      }
+
+      if(updateRequired) {
+        profileRef.update(update)
+      }
+    })
+
+
+
+  }, [auth])
 
   return (
       <div>
