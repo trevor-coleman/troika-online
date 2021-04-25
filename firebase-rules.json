@@ -1,24 +1,113 @@
 {
-    "rules" : {
-        ".read"    : "now < 1613883600000",
-        ".write"   : "now < 1613883600000",
-        "profiles" : {
-            ".indexOn" : [
-                "email"
-            ],
-            "$uid"     : {
-                ".indexOn" : [
-                    "email"
-                ],
-                "games"    : {
-                    ".indexOn" : [
-                        "name"
-                    ]
-                }
-            }
+  "rules" : {
+    "characters"  : {
+      ".read"        : "auth.uid  !== null",
+      ".write"       : "auth.uid !== null",
+      "$characterId" : {
+        ".read"  : "data.child('owner').val() === auth.uid || root.child('games').child(data.child('game').val()).child('players').child(auth.uid).val() === true || root.child('games').child(data.child('game').val()).child('owner').val() === auth.uid",
+        ".write" : "data.child('owner').val() === auth.uid"
+      }
+    },
+    "profiles"    : {
+      ".indexOn" : [
+        "email"
+      ],
+      ".write"   : "auth.uid !== null",
+      ".read"    : "auth.uid !== null",
+      "$uid"     : {
+        ".indexOn"         : [
+          "email"
+        ],
+        "games"            : {
+          ".indexOn" : [
+            "name"
+          ]
         },
-        "skills"   : {
-            ".indexOn" : "character"
+        "receivedRequests" : {
+          "$receivedId" : {
+            ".read" : "auth.uid !== null",
+          }
         }
+      },
+    },
+    "skills"      : {
+      "$characterId" : {
+        ".read"  : "root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('players').child(auth.uid).val() === true || root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('owner').val() === auth.uid",
+        ".write" : "root.child('characters').child($characterId).child('owner').val() === auth.uid || root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('owner').val() === auth.uid",
+      },
+      ".indexOn"     : [
+        "character",
+        "owner",
+        "name"
+      ]
+    },
+    "skillValues" : {
+      "$characterId" : {
+        ".read"  : "root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('players').child(auth.uid).val() === true || root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('owner').val() === auth.uid",
+        ".write" : "root.child('characters').child($characterId).child('owner').val() === auth.uid || root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('owner').val() === auth.uid",
+      },
+    },
+    "items"       : {
+      "$characterId" : {
+        ".read"  : "root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('players').child(auth.uid).val() === true || root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('owner').val() === auth.uid",
+        ".write" : "root.child('characters').child($characterId).child('owner').val() === auth.uid || root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('owner').val() === auth.uid",
+      },
+      ".indexOn"     : [
+        "character",
+        "owner",
+        "name"
+      ]
+    },
+    "srdItems"    : {
+      ".read"    : "auth.uid !==null",
+      ".write"   : "auth.uid === 'B7ILUsB2usNeWTYgBSSsmm5YAgy2'",
+      ".indexOn" : [
+        "name",
+        "sort_name"
+      ]
+    },
+    "srdSkills"   : {
+      ".read"    : "auth.uid !==null",
+      ".write"   : "auth.uid === 'B7ILUsB2usNeWTYgBSSsmm5YAgy2'",
+      ".indexOn" : [
+        "name",
+        "sort_name"
+      ]
+    },
+    "rolls"       : {
+      "$characterId" : {
+        ".read"  : "root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('players').child(auth.uid).val() === true || root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('owner').val() === auth.uid",
+        ".write" : "root.child('characters').child($characterId).child('owner').val() === auth.uid || root.child('games').child(root.child('characters').child($characterId).child('game').val()).child('owner').val() === auth.uid",
+      },
+    },
+    "games"       : {
+      ".read"   : "auth.uid  !== null",
+      ".write"  : "auth.uid !== null",
+      "$gameId" : {
+        ".read"      : "auth.uid !== null",
+        ".write"     : "root.child('games').child($gameId).child('owner').val() === auth.uid",
+        "name"       : {
+          ".read"  : "auth.uid !== null",
+          ".write" : "root.child('games').child($gameId).child('owner').val() === auth.uid"
+        },
+        "public"     : {
+          ".read"  : "auth.uid !== null",
+          ".write" : "root.child('games').child($gameId).child('owner').val() === auth.uid"
+        },
+        "players"    : {
+          "$playerId" : {
+            ".read"  : "auth.uid !== null",
+            ".write" : "(root.child('games').child($gameId).child('public').val() === true && auth.uid === $playerId) || root.child('games').child($gameId).child('owner').val() === auth.uid",
+          }
+        },
+        "characters" : {
+          ".write" : "(root.child('games').child($gameId).child('players').child(auth.uid).val() === true || root.child('games').child($gameId).child('owner').val() === auth.uid )",
+        },
+        "$other"     : {
+          ".read"  : "auth.uid !== null",
+          ".write" : "data.child('owner').val()===auth.uid || data.child('public').val() === true"
+        }
+      },
     }
+  }
 }
