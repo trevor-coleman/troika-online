@@ -3,28 +3,40 @@ import React from 'react';
 export type RollProps =
     IRollSkillProps
     | IRollWeaponProps
-    | IRollBasicProps |
-    IRollDamageProps | IRollSpellProps | IRollInventoryProps | IRollToAdvanceProps
+    | IRollBasicProps
+    | IRollDamageProps
+    | IRollSpellProps
+    | IRollInventoryProps
+    | IRollToAdvanceProps
+    | IRollToAdvanceSecondRollProps
 
-export type RollType = "skill" | "weapon" | "basic" | "damage" | "spell" | "inventory" | "advance"
+export type RollType =
+    "skill"
+    | "weapon"
+    | "basic"
+    | "damage"
+    | "spell"
+    | "inventory"
+    | "advance"
+    | "second"
 
 export type RollFormatter = (props: RollProps) => IRollResult
 
-export type RollSuccessChecker = (roll: number[], total: number)=> boolean;
+export type RollSuccessChecker = (roll: number[], total: number) => boolean;
 
 export interface IRollResult {
   title: string,
   dialogDetail: string,
   discordDescription: string,
   dialogResult: string,
-  success?: boolean
+  success?: boolean,
 }
 
 export interface IRollBaseProps {
   key?: string,
   rollerKey: string,
   type: RollType,
-  title ?: string,
+  title?: string,
   rollerName?: string,
   success?: boolean,
   roll?: number[],
@@ -32,7 +44,7 @@ export interface IRollBaseProps {
   dialogDetail?: string,
   discordDescription?: string,
   total?: number,
-  lastRoll?: {key:string, value: RollProps | null } | null,
+  lastRoll?: { key: string, value: RollProps | null } | null,
   dialogResult?: string,
   discordResult?: string,
 }
@@ -76,25 +88,34 @@ export interface IRollBasicProps extends IRollBaseProps {
   rollerName: string,
 }
 
-export interface IRollToAdvanceProps  extends IRollBaseProps {
+export interface IRollToAdvanceProps extends IRollBaseProps {
   type: "advance",
-  rolledSkill: string,
+  rolledSkillName: string,
+  rolledSkillKey: string,
+  rolledSkillRank: number,
+  target: number,
+}
+
+export interface IRollToAdvanceSecondRollProps extends IRollBaseProps {
+  type: 'second',
+  rolledSkillName: string,
+  rolledSkillKey: string,
+  rolledSkillRank: number,
   target: number,
 }
 
 export type TGameContext = {
-  id: string;
-  lastRoll: { key:string, value: RollProps | null } | null;
-  lastSeen: string | null;
-  setLastSeen: (key: string) => void;
-  roll: (props: RollProps) => Promise<string | null>
+  id: string; lastRoll: { key: string, value: RollProps | null } | null; lastSeen: string | null; setLastSeen: (key: string) => void; roll: (props: RollProps) => Promise<string | null>
 }
 
 export const GameContext = React.createContext<TGameContext>({
   id         : "",
   lastSeen   : "",
   setLastSeen: (key: string) => {},
-  lastRoll   : {key:"", value: null},
+  lastRoll   : {
+    key  : "",
+    value: null,
+  },
   roll       : async (props: RollProps) => {
     console.error("Tried to roll with default game context");
     return null;

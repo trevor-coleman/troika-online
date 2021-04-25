@@ -46,7 +46,7 @@ const RestDialog: FunctionComponent<RestDialogProps> = (props: RestDialogProps) 
       storeAs    : `/restDialog`,
     },
   ]);
-  const {skill} = useCharacter(character) ?? {skill: 0};
+  const {skill, name:rollerName} = useCharacter(character) ?? {skill: 0};
   const {roll} = useContext(GameContext);
   let skills = useTypedSelector(state => state.firebase.ordered?.restDialog);
 
@@ -57,18 +57,21 @@ const RestDialog: FunctionComponent<RestDialogProps> = (props: RestDialogProps) 
     setRolledSkills([])
   }
 
-  async function rollToAdvance(item: ISkillListItem, target: number) {
+  async function rollToAdvance(item: ISkillListItem, target: number, rank:number) {
 
     if (rolledSkills.length >= 3) return;
 
     const {value: {name}} = item;
 
     const rollProps: IRollToAdvanceProps = {
-      dice       : [6, 6],
-      rolledSkill: name,
-      rollerKey  : character,
+      dice           : [6, 6],
+      rolledSkillName: name,
+      rolledSkillKey: item.key,
+      rolledSkillRank: rank,
+      rollerKey      : character,
+      rollerName,
       target,
-      type       : 'advance',
+      type           : 'advance',
 
     };
 
@@ -78,6 +81,9 @@ const RestDialog: FunctionComponent<RestDialogProps> = (props: RestDialogProps) 
       newRolledSkills.push(item.key);
       setRolledSkills([...newRolledSkills]);
     }
+
+
+
 
   }
 
@@ -96,12 +102,13 @@ const RestDialog: FunctionComponent<RestDialogProps> = (props: RestDialogProps) 
                     item={item}
                     skill={skill}
                     disabled={rolledSkills.includes(item.key)}
+                    rollsCompleted={rolledSkills.length >=3}
                     onRoll={rollToAdvance} />)
              : ""}</List>
         </DialogContent>
         <DialogActions><Button
             onClick={onClose}
-            variant={"contained"}>Done</Button></DialogActions>
+            variant={"contained"} color={rolledSkills.length >= 3 ? 'secondary' : 'primary'}>Done</Button></DialogActions>
       </Dialog>);
 };
 

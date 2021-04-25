@@ -27,8 +27,8 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
   const {roll} = useContext(GameContext);
   useFirebaseConnect(`/characters/${characterKey}`);
   const character = useCharacter(characterKey);
-  const [open, setOpen] = useState(true);
-  const handleCloseRestDialog = () => {setOpen(false)}
+  const [open, setOpen] = useState(false);
+  const handleCloseRestDialog = () => {setOpen(false);};
 
   const [values, setValues] = useState({
     luck_current   : 0,
@@ -45,10 +45,10 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
       [e.target.id]: parseInt(e.target.value),
     });
 
-
-
     firebase.ref(`/characters/${characterKey}/${e.target.id}`)
-            .set(parseInt(e.target.value == "" ? "0" : e.target.value));
+            .set(parseInt(e.target.value == ""
+                          ? "0"
+                          : e.target.value));
   }
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
 
     await roll({
       type      : 'basic',
-      rollerKey: characterKey,
+      rollerKey : characterKey,
       dice      : dice,
       rollerName: character?.name ?? "Someone",
     });
@@ -126,7 +126,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
       type       : "skill",
       dice       : [6, 6],
       rolledSkill: ability,
-      rollerKey: characterKey,
+      rollerKey  : characterKey,
       rollerName : character?.name ?? "Character",
       target     : target,
     });
@@ -138,19 +138,36 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
           container
           className={classes.container}
           direction={"column"}
-          spacing={4}>
+          spacing={2}>
         <Grid
             item
             xs={12}
             className={classes.basicRoll}>
           <Button
+              className={classes.basicRollButton}
               color={"primary"}
               onClick={() => basicRoll(2)}
-              variant={"outlined"}>Roll 2d6</Button>
+              variant={"outlined"}>
+            Roll 2d6
+          </Button>
           <Button
+              className={classes.basicRollButton}
               color={"primary"}
               onClick={() => basicRoll(1)}
-              variant={"outlined"}>Roll 1d6</Button>
+              variant={"outlined"}>
+            Roll 1d6
+          </Button>
+
+        </Grid>
+        <Grid
+            item
+            xs={12}>
+          <Box marginX={2}>
+            <Button
+                fullWidth
+                color={'primary'}
+                onClick={() => setOpen(true)}
+                variant={"contained"}>Rest</Button></Box>
         </Grid>
         <Grid
             item
@@ -261,15 +278,10 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                 },
               }} />
         </Grid>
-        <Grid
-            item
-            xs={12}>
-          <Button
-              fullWidth
-              onClick={()=>setOpen(true)}
-              variant={"contained"}>Rest</Button>
-        </Grid>
-        <RestDialog open={open} handleClose={handleCloseRestDialog} />
+
+        <RestDialog
+            open={open}
+            handleClose={handleCloseRestDialog} />
       </Grid>);
 };
 
@@ -327,8 +339,14 @@ const useStyles = makeStyles((theme: Theme) => (
       basicRoll     : {
         alignItems    : "center",
         display       : "flex",
-        justifyContent: "center",
+        justifyContent: "space-evenly",
+        margin: theme.spacing(1),
+
       },
+      basicRollButton : {
+        flexGrow: 1,
+        margin:1,
+      }
 
     }));
 
