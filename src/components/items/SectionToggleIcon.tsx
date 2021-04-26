@@ -6,6 +6,7 @@ interface SectionToggleIconProps {
   section: string;
   activeIcon: JSX.Element;
   inactiveIcon: JSX.Element;
+  disabled?: boolean,
   enabled?: boolean,
   show: boolean;
   expanded: boolean;
@@ -16,6 +17,7 @@ const SectionToggleIcon = ({
                              section,
                              activeIcon,
                              inactiveIcon,
+    disabled,
                              expanded,
                               enabled,
                              onToggle,
@@ -24,7 +26,7 @@ const SectionToggleIcon = ({
 
 
   return show
-         ? <IconButton color={(expanded && section !== 'sectionToggles') ? 'secondary' : enabled ?'primary':undefined} onClick={() => onToggle(section)}>
+         ? <IconButton disabled={disabled} color={(expanded && section !== 'sectionToggles') ? 'secondary' : enabled ?'primary':undefined} onClick={() => onToggle(section)}>
            {enabled
             ? activeIcon
             : inactiveIcon}

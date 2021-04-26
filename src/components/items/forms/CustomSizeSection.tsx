@@ -20,7 +20,7 @@ const CustomSizeSection: FunctionComponent<CustomSizeSectionProps> = (props: Cus
   } = props;
 
 
-  const {character} = useContext(CharacterContext);
+  const {character, editable} = useContext(CharacterContext);
   const item = useContext(ItemContext);
 
   useFirebaseConnect([
@@ -72,6 +72,7 @@ const CustomSizeSection: FunctionComponent<CustomSizeSectionProps> = (props: Cus
         <Grid item
               xs={3}>
           <FormControlLabel labelPlacement={"start"}
+                            disabled={!editable}
                             control={<Switch checked={customSize ?? false}
                                              onChange={handleChecked}
                                              id={"item-customSize"}
@@ -85,7 +86,7 @@ const CustomSizeSection: FunctionComponent<CustomSizeSectionProps> = (props: Cus
                      id={"item-size"}
                      variant={"outlined"}
                      label={"Size"}
-                     disabled={!customSize}
+                     disabled={!customSize || !editable}
                      onChange={handleChange}
                      value={size ?? 1}
                      InputLabelProps={{shrink: true}} />

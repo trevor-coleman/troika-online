@@ -1,9 +1,14 @@
-import React, { FunctionComponent, ChangeEvent, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ChangeEvent,
+  useState, useContext,
+} from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import {
   FormControlLabel, Switch, FormControl, Select, MenuItem, TextField, FormGroup,
 } from '@material-ui/core';
+import { CharacterContext } from '../../../contexts/CharacterContext';
 import { FormValueChange, FormValueChangeHandler } from './FormValueChange';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
@@ -66,6 +71,7 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
                                            : protection);
   const [customValue, setCustomValue] = useState(protection);
   const [custom, setCustom] = useState(false);
+  const {editable} = useContext(CharacterContext)
 
   let handleEnabled: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
     onChange([
@@ -131,7 +137,9 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
       <Grid container direction={"row"}><Grid item
               xs={3}>
         <FormControlLabel labelPlacement={"start"}
-                          control={<Switch checked={protects ?? false}
+                          control={<Switch
+                              disabled={!editable}
+                              checked={protects ?? false}
                                            onChange={handleEnabled}
                                            id={"item-protects"}
                                            name="item-protects" />}
@@ -139,7 +147,7 @@ const ArmourSection: FunctionComponent<IArmourSectionProps> = (props: IArmourSec
       </Grid>
         <Grid item
               xs={9}>
-          <FormGroup row><FormControl disabled={!protects}
+          <FormGroup row><FormControl disabled={!protects || !editable}
                                       className={classes.selectControl}>
             <Select variant={"outlined"}
                     id={"protection"}

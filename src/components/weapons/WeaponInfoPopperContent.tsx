@@ -54,7 +54,6 @@ const WeaponInfoPopperContent: FunctionComponent<IWeaponInfoPopperContentProps> 
   } = useTypedSelector(state => state.firebase.data?.itemInfoButton?.[character]?.[item]) ??
       "";
 
-  console.log(character, item, damage, twoHanded, ranged, armourPiercing);
   const attributes = useMemo( ()=> {
                                 const result = [];
                                 if (ranged) { result.push("Ranged")}
@@ -64,7 +63,6 @@ const WeaponInfoPopperContent: FunctionComponent<IWeaponInfoPopperContentProps> 
                               },[ranged, twoHanded, armourPiercing]
   )
 
-  console.log(attributes);
 
 
 
@@ -86,7 +84,6 @@ const WeaponInfoPopperContent: FunctionComponent<IWeaponInfoPopperContentProps> 
           <DamageTable damage={damage} />
         </CardContent>
         <CardActions>
-          <Button startIcon={<ChatBubbleTwoTone />}>Chat</Button>
           <Button startIcon={<Close />} onClick={closePopper}>Close</Button>
         </CardActions>
       </Card>);

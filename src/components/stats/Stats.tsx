@@ -23,7 +23,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const firebase = useFirebase();
-  const {character: characterKey} = useContext(CharacterContext);
+  const {character: characterKey, editable} = useContext(CharacterContext);
   const {roll} = useContext(GameContext);
   useFirebaseConnect(`/characters/${characterKey}`);
   const character = useCharacter(characterKey);
@@ -139,7 +139,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
           className={classes.container}
           direction={"column"}
           spacing={2}>
-        <Grid
+        {editable ? <Grid
             item
             xs={12}
             className={classes.basicRoll}>
@@ -158,8 +158,8 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
             Roll 1d6
           </Button>
 
-        </Grid>
-        <Grid
+        </Grid> :""}
+        {editable ? <Grid
             item
             xs={12}>
           <Box marginX={2}>
@@ -168,18 +168,20 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                 color={'primary'}
                 onClick={() => setOpen(true)}
                 variant={"contained"}>Rest</Button></Box>
-        </Grid>
+        </Grid> :""}
         <Grid
             item
             xs={12}
             className={classes.skillGrid}>
           <Button
+              disabled={!editable}
               color={"primary"}
               onClick={() => {handleRoll("skill");}}>Skill</Button>
           <TextField
               value={values.skill ?? 0}
               id={"skill"}
               variant={"outlined"}
+              disabled={!editable}
               type={"number"}
               className={classes.skillField}
               onChange={handleChange}
@@ -200,9 +202,11 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
 
             className={classes.skillGrid}>
           <Button
+              disabled={!editable}
               onClick={() => {handleRoll("stamina_current");}}
               color={"primary"}>Stamina</Button>
           <TextField
+              disabled={!editable}
               value={values.stamina_current ?? 0}
               variant={"outlined"}
               type={"number"}
@@ -218,6 +222,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                 },
               }} />
           <TextField
+              disabled={!editable}
               margin={"dense"}
               variant={"outlined"}
               value={values.stamina_max ?? 0}
@@ -241,10 +246,11 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
             xs={12}
             className={classes.skillGrid}>
           <Button
-              disabled={values.luck_current === 0}
+              disabled={values.luck_current === 0 || !editable}
               onClick={() => {handleRoll("luck_current");}}
               color={"primary"}>Luck</Button>
           <TextField
+              disabled={!editable}
               value={values.luck_current ?? 0}
               variant={"outlined"}
               id={"luck_current"}
@@ -263,6 +269,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
           <TextField
               margin={"dense"}
               variant={"outlined"}
+              disabled={!editable}
               value={values.luck_max ?? 0}
               id={"luck_max"}
               type={"number"}

@@ -51,7 +51,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
             <Grid
                 item
                 xs={12}>
-              <Bio characterKey={characterKey} />
+              <Bio />
             </Grid>
             <Grid
                 item container spacing={2}

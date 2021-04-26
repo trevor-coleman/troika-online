@@ -1,3 +1,5 @@
+import Button from '@material-ui/core/Button';
+import { Delete } from '@material-ui/icons';
 import React, {
   FunctionComponent,
   Component,
@@ -25,14 +27,16 @@ import { useHistory } from "react-router-dom";
 
 interface CharacterListItemProps {
   characterKey: string;
+  editing?: boolean;
   firstAction?: JSX.Element;
+  onRemoveCharacter?: (character:string)=>void;
 }
 
 //COMPONENT
 const CharacterListItem: FunctionComponent<CharacterListItemProps> = (
   props: CharacterListItemProps
 ): JSX.Element => {
-  const { characterKey, firstAction } = props;
+  const { characterKey, firstAction, editing, onRemoveCharacter } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -46,6 +50,8 @@ const CharacterListItem: FunctionComponent<CharacterListItemProps> = (
         portrait: "",
       }
   );
+
+
 
   const [portraitUrl, setPortraitURL] = useState("");
 
@@ -61,21 +67,35 @@ const CharacterListItem: FunctionComponent<CharacterListItemProps> = (
     );
   }
 
+  const [showConfirm, setShowConfirm] = useState(false);
+
+
+
   return isLoaded(character) ? (
     <ListItem
       className={classes.root}
       button
-      onClick={() => history.push(`/character/${characterKey}/edit`)}
+      onClick={editing ? ()=>setShowConfirm(true) : () => history.push(`/character/${characterKey}/edit`)}
     >
       <ListItemAvatar>
-        <Avatar src={portraitUrl}>{character.name.slice(0, 1)}</Avatar>
+        {editing
+         ? <Avatar className={classes.deleteIcon}><Delete /></Avatar>
+         : <Avatar src={portraitUrl}>{character.name.slice(0, 1)}</Avatar>}
       </ListItemAvatar>
       <ListItemText primary={character?.name ?? ""} />
+      <ListItemSecondaryAction>
+      {editing && showConfirm
+       ?
+         <><Button variant={"contained"} onClick={()=>setShowConfirm(false)}>Cancel</Button>{`  `}
+         <Button variant={'contained'} color={'secondary'} onClick={()=> {
+           if(onRemoveCharacter) onRemoveCharacter(characterKey);
+         }}>DELETE</Button></>
+       : ""}
       {firstAction ? (
-        <ListItemSecondaryAction>{firstAction}</ListItemSecondaryAction>
+        {firstAction}
       ) : (
         ""
-      )}
+      )}</ListItemSecondaryAction>
     </ListItem>
   ) : (
     <ListItem />
@@ -88,6 +108,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderColor: theme.palette.divider,
     borderStyle: "solid",
   },
+  deleteIcon: {
+    backgroundColor: theme.palette.secondary.main
+  }
 }));
 
 export default CharacterListItem;

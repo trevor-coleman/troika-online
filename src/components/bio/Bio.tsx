@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, useContext } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -6,7 +6,9 @@ import { Paper } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import { Character } from '../../store/Schema';
+import { useCharacter } from '../../store/selectors';
 import { blankCharacter } from '../../store/templates';
 import {
   useFirebaseConnect, useFirebase, isLoaded,
@@ -16,12 +18,12 @@ import { useTypedSelector } from '../../store';
 import { Popper } from '@material-ui/core';
 
 interface BioAndInfoProps {
-  characterKey: string;
+
 }
 
 //COMPONENT
 const Bio = (props: BioAndInfoProps) => {
-  const {characterKey} = props;
+  const {character:characterKey, editable} = useContext(CharacterContext);
   useFirebaseConnect([
       {path: `/characters/${characterKey}/name`, storeAs: `/bio/${characterKey}/name` },
       {path: `/characters/${characterKey}/background`, storeAs: `/bio/${characterKey}/background` },
@@ -57,8 +59,7 @@ const Bio = (props: BioAndInfoProps) => {
                       alignItems={"center"}
                       justify={"center"}>
                   <Grid item><DragAndDropPortrait alt={name ??
-                                                       "avatar placeholder"}
-                                                  characterKey={characterKey} /></Grid>
+                                                       "avatar placeholder"} /></Grid>
                 </Grid>
                 <Grid item
                       container
@@ -73,6 +74,7 @@ const Bio = (props: BioAndInfoProps) => {
                         md={12}
                         lg={6}>
                     <TextField label={"name"}
+                               disabled={!editable}
                                variant={"outlined"}
                                fullWidth
                                id={"name"}
@@ -87,6 +89,7 @@ const Bio = (props: BioAndInfoProps) => {
 
                   >
                     <TextField label={"Background"}
+                               disabled={!editable}
                                variant={"outlined"}
                                fullWidth
                                id={"background"}
@@ -98,6 +101,7 @@ const Bio = (props: BioAndInfoProps) => {
                         md={12}>
                     <TextField label={"Special"}
                                variant={"outlined"}
+                               disabled={!editable}
                                fullWidth
                                rows={4}
                                id={"special"}

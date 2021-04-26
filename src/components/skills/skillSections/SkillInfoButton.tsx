@@ -66,7 +66,7 @@ const SkillInfoButton: FunctionComponent<SkillInfoButtonProps> = (props: SkillIn
 
   return (
         <PopperContext.Provider value={closePopper}>
-          <IconButton onClick={handleClick} disabled={disabled}>
+          <IconButton color={"primary"} onClick={handleClick} disabled={disabled}>
             <Info />
           </IconButton>
           <Popper

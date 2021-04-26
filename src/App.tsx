@@ -15,7 +15,6 @@ import CharacterEditor from './views/CharacterEditor';
 import Settings from './views/Settings';
 import SRD from './views/SRD';
 import Register from './components/auth/Register';
-import Play from './views/Play';
 import Admin from './views/Admin';
 import TestPage from './views/TestPage';
 
@@ -34,7 +33,6 @@ function App(props: any) {
 
           <AuthIsLoaded>
             <Switch>
-              <PrivateRoute path={'/play/:gameKey'}><Play /></PrivateRoute>
               <Route path={"/*"}>
                 <Layout>
                   <Switch>

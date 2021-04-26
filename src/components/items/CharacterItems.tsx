@@ -55,9 +55,7 @@ export interface CharacterItemsState {
 
 const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: CharacterItemsProps) => {
   const classes = useStyles();
-  const theme = useTheme();
-  const dispatch = useDispatch();
-  const {character} = useContext(CharacterContext)
+  const {character, editable} = useContext(CharacterContext)
   useFirebaseConnect([
       {path:`/characters/${character}/inventory`, storeAs:`characterItems/${character}/inventory`},
       {path:`/characters/${character}/weapons`, storeAs:`characterItems/${character}/weapons`},
@@ -165,7 +163,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
              <Typography>Click the button below to add an
                          item</Typography></Grid>
            : ""}
-          <Grid
+          {editable ? <Grid
               item
               container
               direction={"row"}
@@ -192,7 +190,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = (props: Character
                 variant={"contained"}>New</Button></Fade>
             </Grid>
                </>
-          </Grid>
+          </Grid> :""}
         </Grid>
         <AddItemsDialog open={dialogState.add}
                         onClose={() => showDialog()}

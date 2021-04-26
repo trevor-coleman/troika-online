@@ -129,7 +129,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
     onChange
   } = props;
   const classes = useStyles();
-  const {character} = useContext(CharacterContext);
+  const {character, editable} = useContext(CharacterContext);
   const item = useContext(ItemContext);
   const firebase = useFirebase();
 
@@ -245,6 +245,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
         <Grid item
               xs={3}>
           <FormControlLabel labelPlacement={"start"}
+                            disabled={!editable}
                             control={<Switch checked={doesDamage}
                                              onChange={handleChecked}
                                              id={"item-doesDamage"}
@@ -256,6 +257,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
           <FormControl fullWidth
                        disabled={!doesDamage}>
             <Select variant="outlined"
+                    disabled={!editable}
                     id="damagesAs"
                     value={damagesAs}
                     name={"damagesAs"}
@@ -284,7 +286,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
                               padding={"none"}
                               key={`damage-cell-${index}`}>
                             <TextField
-                                disabled={disableCustomFields}
+                                disabled={disableCustomFields || !editable}
                                 InputLabelProps={{
                                   classes: {
                                     root: classes.damageRoot,
@@ -311,16 +313,16 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
           <FormGroup row>
             <FormControlLabel control={<Checkbox
                 checked={ranged ?? false}
-                disabled={!doesDamage}
+                disabled={!doesDamage|| !editable}
                                                  onChange={handleChecked}
                                                  name="item-ranged" />}
                               label="Ranged" />
-            <FormControlLabel control={<Checkbox disabled={!doesDamage}
+            <FormControlLabel control={<Checkbox disabled={!doesDamage|| !editable}
                                                  checked={twoHanded ?? false}
                                                  onChange={handleChecked}
                                                  name="item-twoHanded" />}
                               label="Two Handed" />
-            <FormControlLabel control={<Checkbox disabled={!doesDamage}
+            <FormControlLabel control={<Checkbox disabled={!doesDamage|| !editable}
                                                  checked={armourPiercing ?? false}
                                                  onChange={handleChecked}
                                                  name="item-armourPiercing" />}

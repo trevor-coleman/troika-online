@@ -34,7 +34,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
     onChange,
   } = props;
   const item=useContext(ItemContext);
-  const {character} = useContext(CharacterContext)
+  const {character, editable} = useContext(CharacterContext)
   const [values, setValues] = useState({name:"", description:""})
   const nameRef = useRef(null);
   const descriptionRef = useRef(null);
@@ -119,6 +119,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
           <Grid item >
             <TextField
                 fullWidth
+                disabled={!editable}
                 value={values.name ?? ""}
                 inputRef={nameRef}
                        id={"basic-name"}
@@ -133,6 +134,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
           <Grid item>
             <TextField
                 ref={descriptionRef}
+                disabled={!editable}
                 value={values.description ?? ""}
                        fullWidth
                        multiline

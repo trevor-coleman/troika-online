@@ -21,7 +21,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
     onChange,
   } = props;
   const item=useContext(ItemContext);
-  const {character} = useContext(CharacterContext)
+  const {character, editable} = useContext(CharacterContext)
 
   useFirebaseConnect([
                        {
@@ -97,6 +97,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
             spacing={2}><Grid item
                               xs={3}>
         <FormControlLabel labelPlacement={"start"}
+                          disabled={!editable}
                           control={<Switch checked={hasCharges ?? false}
                                            onChange={handleChecked}
                                            id={"item-hasCharges"}
@@ -107,7 +108,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
               xs={9}>
           <FormGroup row>
             <TextField value={initial ?? 0}
-                       disabled={!hasCharges}
+                       disabled={!hasCharges || !editable}
                        id={"charges-initial"}
                        variant={"outlined"}
                        onChange={handleChange}

@@ -19,7 +19,7 @@ export interface WeaponsState {
 const CharacterWeapons: FunctionComponent<IWeaponsProps> = (props: IWeaponsProps) => {
   const {} = props;
   const classes = useStyles();
-  const {character} = useContext(CharacterContext);
+  const {character, editable} = useContext(CharacterContext);
 
   useFirebaseConnect([
                        {
@@ -41,8 +41,7 @@ const CharacterWeapons: FunctionComponent<IWeaponsProps> = (props: IWeaponsProps
         </Grid>
         {isLoaded(weapons) && isEmpty(weapons)
          ? <div className={classes.missingMessage}>
-           <Typography>Weapons added to your inventory will appear
-                       here.</Typography></div>
+           <Typography>{editable ? "Weapons added to your inventory will appear here." : "No Weapons"}</Typography></div>
          : <div />}
         {isLoaded(weapons) && !isEmpty(weapons)
          ? weapons.map(weapon => {

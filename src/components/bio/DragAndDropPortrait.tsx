@@ -1,8 +1,11 @@
 import { ReactComponent } from '*.svg';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent, useContext, useEffect, useState,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Avatar } from '@material-ui/core';
+import { CharacterContext } from '../../contexts/CharacterContext';
 import DragAndDrop from '../DragAndDrop';
 import { usePortrait, useCharacter } from '../../store/selectors';
 import {
@@ -10,19 +13,21 @@ import {
 } from 'react-redux-firebase';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { ReactComponent as SirHorse } from './horse-svgrepo-com.svg'
+import { ReactComponent as SirHorse } from './horse-svgrepo-com.svg';
 
 interface DragAndDropAvatarProps {
-  characterKey: string,
   alt: string
 }
 
 //COMPONENT
 const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: DragAndDropAvatarProps) => {
   const {
-    characterKey,
     alt,
   } = props;
+  const {
+    character: characterKey,
+    editable,
+  } = useContext(CharacterContext);
   const classes = useStyles();
   const dispatch = useDispatch();
   const firebase = useFirebase();
@@ -87,20 +92,37 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
           justifyItems={"center"}
           className={classes.root}>
 
-        <DragAndDrop handleDrop={handleDrop}>{portraitUrl == ""
-                                              ? <Box className={classes.placeHolder} ><SirHorse /></Box>
-                                              : <img
-                                                  alt={alt ??
-                                                       "avatar-placeholder"}
-                                                  src={portraitUrl}
-                                                  className={classes.portrait} />}</DragAndDrop>
-        <Typography
-            paragraph
-            align={"center"}
-            className={classes.caption}
-            variant={"caption"}>Drag and Drop to Upload</Typography>
+        {editable
+         ? <>
+           <DragAndDrop
+               handleDrop={handleDrop}>
+             {portraitUrl == ""
+              ? <Box className={classes.placeHolder}>
+                <SirHorse />
+              </Box>
+              : <img
+                  alt={alt ?? "avatar-placeholder"}
+                  src={portraitUrl}
+                  className={classes.portrait} />}
+           </DragAndDrop>
+           <Typography
+               paragraph
+               align={"center"}
+               className={classes.caption}
+               variant={"caption"}>Drag and Drop to Upload</Typography>
+         </>
+         : <div>
+           {portraitUrl == ""
+            ? <Box className={classes.placeHolder}>
+              <SirHorse />
+            </Box>
+            : <img
+                alt={alt ?? "avatar-placeholder"}
+                src={portraitUrl}
+                className={classes.portrait} />}
+         </div>}
       </Box>);
-};
+}
 
 const useStyles = makeStyles((theme: Theme) => (
     {

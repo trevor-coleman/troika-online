@@ -32,14 +32,14 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
   const classes = useStyles();
   const firebase = useFirebase();
   const auth = useAuth();
-  const {character} = useContext(CharacterContext);
+  const {character, editable} = useContext(CharacterContext);
 
   useFirebaseConnect([
-                       {
-                         path   : `/characters/${character}/skillList`,
-                         storeAs: `characterSkills/${character}/skillList`,
-                       },
-                     ]);
+    {
+      path   : `/characters/${character}/skillList`,
+      storeAs: `characterSkills/${character}/skillList`,
+    },
+  ]);
   const skillList = useTypedSelector(state => state.firebase.data?.characters?.[character]?.skillList) ??
                     [];
   const [selectedSkill, setSelectedSkill] = useState("");
@@ -48,7 +48,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
       initialState);
 
   function showDialog(dialog?: string, key?: string): void {
-    setSelectedSkill(key??"")
+    setSelectedSkill(key ?? "");
     const newState = initialState;
     setDialogState(dialog
                    ? {
@@ -57,17 +57,19 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
         }
                    : newState);
   }
+
   const createSkill = (
       (newSkill: Partial<Skill>) => {
         const newKey = firebase.ref(`/skills/${character}`)
                                .push({
-                                       ...newSkill,
-                                       name     : newSkill.name ?? "New Skill",
-                                       owner    : auth.uid,
-                                       character: character,
-                                     }).key;
+                                 ...newSkill,
+                                 name     : newSkill.name ?? "New Skill",
+                                 owner    : auth.uid,
+                                 character: character,
+                               }).key;
         const newSkillList = [...skillList, newKey];
-        firebase.ref(`/characters/${character}/skillList`).set(newSkillList);
+        firebase.ref(`/characters/${character}/skillList`)
+                .set(newSkillList);
       });
 
   const addSkills = async (skills: { [key: string]: Skill }) => {
@@ -77,12 +79,13 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
       const newKey = skillsRef.push().key;
       if (!newKey) {
         console.error("Failed to create skill",
-                      selectedKey,
-                      skills[selectedKey]);
+            selectedKey,
+            skills[selectedKey]);
         return;
       }
       newKeys.push(newKey);
-      skillsRef.child(newKey).set(skills[selectedKey]);
+      skillsRef.child(newKey)
+               .set(skills[selectedKey]);
     }
 
     const newSkillList = skillList.concat(newKeys);
@@ -94,7 +97,8 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
     firebase.ref(`/skills/${character}/${selectedSkill}`)
             .set(null);
     const newInventory = skillList.filter(skill => skill !== selectedSkill);
-    firebase.ref(`/characters/${character}/skillList`).set(newInventory);
+    firebase.ref(`/characters/${character}/skillList`)
+            .set(newInventory);
   };
 
   const [addVisible, setAddVisible] = useState(false);
@@ -104,95 +108,118 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
   };
 
   return (
-      <><Grid
-          container
-          direction={"column"}>
-        {isEmpty(skillList) ? <Grid item xs={12} className={classes.missingMessage}>
-          <Typography>Click the button below to add a skill</Typography></Grid>: ""}
-        {skillList
-            .map(skill => <Grid
-                item
-                xs={12}
-                key={skill}>
-              <SkillCard
-                  skill={skill}
-                  onEdit={() => {
-                    console.log("EDIT", skill)
-                    showDialog("edit", skill);
-                  }}
-                  onRemove={() => {
-                    showDialog("remove", skill);
-                  }} />
-              <Grid
-                  item
-                  container
-                  xs={12}>
-                <Grid item></Grid>
-              </Grid>
-            </Grid>)}</Grid>
+      <>
         <Grid
             container
-            className={classes.root}>
-          <Grid
-              item
-              container
-              direction={"row"}
-              alignItems={"center"}
-              spacing={2}
-              xs={12}>
-            <Grid item>
-              <IconButton onClick={toggleAdd}>
-                <AddCircleOutline />
-              </IconButton>
-            </Grid>
-            <>
-              <Grid item>
-                <Fade in={addVisible}>
-                  <Typography>
-                  Add New Skill
-                </Typography>
-                </Fade>
-              </Grid>
-              <Grid item>
-                <Fade in={addVisible}><Button
-                    onClick={() => {
-                      showDialog("add");
-                      setAddVisible(false);
+            direction={"column"}>
+          {isEmpty(skillList)
+           ? <Grid
+               item
+               xs={12}
+               className={classes.missingMessage}>
+             <Typography>Click the button below to add a
+                         skill</Typography>
+           </Grid>
+           : ""}
+          {skillList
+              .map(skill => <Grid
+                  item
+                  xs={12}
+                  key={skill}>
+                <SkillCard
+                    skill={skill}
+                    onEdit={() => {
+                      console.log("EDIT", skill);
+                      showDialog("edit", skill);
                     }}
-                    variant={"contained"}>From SRD</Button></Fade>
-              </Grid>
-              <Grid item>
-                <Fade in={addVisible}><Button
-                    onClick={() => {
-                      createSkill({});
-                      setAddVisible(false);
-                    }}
-                    variant={"contained"}>New</Button></Fade>
-              </Grid>
-            </>
-          </Grid>
+                    onRemove={() => {
+                      showDialog("remove", skill);
+                    }} />
+                <Grid
+                    item
+                    container
+                    xs={12}>
+                  <Grid item>
+
+                  </Grid>
+                </Grid>
+              </Grid>)}
         </Grid>
-        <AddSkillsDialog open={dialogState.add} character={character} onClose={()=>showDialog()} onAdd={addSkills}/>
-        <EditSkillDialog open={dialogState.edit} onClose={()=>showDialog()} skill={selectedSkill}/>
+
+           <Grid
+               container
+               className={classes.root}>
+             <Grid
+                 item
+                 container
+                 direction={"row"}
+                 alignItems={"center"}
+                 spacing={2}
+                 xs={12}>
+               <Grid item>
+                 <IconButton disabled={!editable} onClick={toggleAdd}>
+                   <AddCircleOutline />
+                 </IconButton>
+               </Grid>
+
+               <Grid item>
+                 <Fade in={addVisible}>
+                   <Typography>
+                     Add New Skill
+                   </Typography>
+                 </Fade>
+               </Grid>
+               <Grid item>
+                 <Fade in={addVisible}>
+                   <Button
+                       onClick={() => {
+                         showDialog("add");
+                         setAddVisible(false);
+                       }}
+                       variant={"contained"}>From SRD</Button>
+                 </Fade>
+               </Grid>
+               <Grid item>
+                 <Fade in={addVisible}>
+                   <Button
+                       onClick={() => {
+                         createSkill({});
+                         setAddVisible(false);
+                       }}
+                       variant={"contained"}>New</Button>
+                 </Fade>
+               </Grid>
+
+             </Grid>
+           </Grid>
+           <AddSkillsDialog
+               open={dialogState.add}
+               character={character}
+               onClose={() => showDialog()}
+               onAdd={addSkills} />
+           <EditSkillDialog
+               open={dialogState.edit}
+               onClose={() => showDialog()}
+               skill={selectedSkill} />
       </>);
 };
 
 const useStyles = makeStyles((theme: Theme) => {
   return (
       {
-        root        : {
+        root          : {
           paddingLeft: theme.spacing(2),
         },
-        sectionTitle: {
+        sectionTitle  : {
           backgroundColor: theme.palette.background.paper,
           paddingLeft    : theme.spacing(2),
         },
         missingMessage: {
-          color: theme.palette.text.disabled,
-          display: 'flex',
-          alignItems: 'center',
-          paddingLeft: theme.spacing(4)
-        }
+          color      : theme.palette.text.disabled,
+          display    : 'flex',
+          alignItems : 'center',
+          paddingLeft: theme.spacing(4),
+        },
       });
 });
 

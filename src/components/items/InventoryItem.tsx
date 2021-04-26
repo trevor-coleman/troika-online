@@ -97,7 +97,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
   const classes = useStyles();
   const firebase = useFirebase();
   const auth = useAuth();
-  const {character} = useContext(CharacterContext);
+  const {character, editable} = useContext(CharacterContext);
   const rollContext = useContext(GameContext);
   const game = useContext(GameContext);
   useFirebaseConnect([
@@ -194,6 +194,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
   return (
       <ItemContext.Provider value={id}>
         <Draggable
+            isDragDisabled={!editable}
             draggableId={id}
             index={index}>{(provided, snapshot) => (
             <Grid
@@ -223,6 +224,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                                                                    <div />}<FormControlLabel
                         value="bottom"
                         control={<Switch
+                            disabled={!editable}
                             checked={isEquipped}
                             onChange={(e) => handleEquip(e)}
                             color="primary" />}
@@ -231,7 +233,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                     {...provided.dragHandleProps} />
                 <Collapse in={isEncumbered()}><CardContent><Typography
                     variant={'overline'}
-                    color={'error'}>This item is too large to fit in your
+                    color={'error'}>This item is too large to fit in
                                     inventory!</Typography>
                   <Typography
                       variant={'body2'}
@@ -291,16 +293,18 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                         inactiveIcon={<SvgIcon
                             component={LightningOutline}
                             viewBox={"0 0 192.008 192.008"} />} />
-                    <SectionToggleIcon
+                    {editable ? <SectionToggleIcon
+
                         section={"settings"}
                         onToggle={toggle}
                         show={true}
                         expanded={expanded.settings}
                         activeIcon={<Delete />}
-                        inactiveIcon={<DeleteOutline />} />
+                        inactiveIcon={<DeleteOutline />} />:""}
                   </div>
                   <div className={classes.rolls}>
                     <Button
+                        disabled={!editable}
                         variant={"contained"}
                         startIcon={<WorkIcon />}
                         onClick={rollInventory}
@@ -341,6 +345,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                       onClose={toggle}
                       expanded={expanded.settings}>
                     <Button
+                        disabled={!editable}
                         onClick={() => onRemove(id)}
                         variant={"contained"}
                         color={"secondary"}>Remove</Button>

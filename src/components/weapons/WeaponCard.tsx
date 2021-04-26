@@ -28,7 +28,7 @@ type WeaponCardProps = IWeaponCardProps;
 const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps) => {
   const {weapon} = props;
   const classes = useStyles();
-  const {character} = useContext(CharacterContext);
+  const {character, editable} = useContext(CharacterContext);
   const {roll} = useContext(GameContext);
   const firebase = useFirebase();
   useFirebaseConnect([
@@ -156,6 +156,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
           >
             <Grid item>
               <Button
+                  disabled={!editable}
                   onClick={rollWeapon}
                   color={'primary'}>{name}</Button>
             </Grid>
@@ -185,6 +186,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
                 xs={12}>
               <Select
                   fullWidth
+                  disabled={!editable}
                   onChange={handleSelect}
                   value={weaponSkill}>
                 <MenuItem
@@ -198,11 +200,6 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
                 </MenuItem>)}
               </Select>
             </Grid>
-          </Grid>
-          <Grid item xs={2}>
-            {hasCharges
-             ? <ChargesStepper item={weapon} label={""} labelPosition={"top"} />
-             : <div />}
           </Grid>
         </Grid>
       </ItemContext.Provider>);
