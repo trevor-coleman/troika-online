@@ -19,7 +19,7 @@ import CharacterSheetSection
   from '../components/characterSheet/CharacterSheetSection';
 import { useCharacterRollContext } from '../contexts/CharacterRollContext';
 import { GameContext } from '../contexts/GameContext';
-import { useCharacter } from '../store/selectors';
+import { useAuth, useCharacter } from '../store/selectors';
 
 interface CharacterEditorProps {
   init?: boolean
@@ -33,6 +33,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
 
   const rollContext = useCharacterRollContext(characterKey);
   const character = useCharacter(characterKey);
+  const auth = useAuth();
 
   useEffect(()=>{
     document.title = (character?.name ?? "Character Editor") + " - Troika Online"
@@ -40,7 +41,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
 
   return (
       <GameContext.Provider value={rollContext}>
-      <CharacterContext.Provider value={{character: characterKey}}>
+      <CharacterContext.Provider value={{character: characterKey, editable: character?.owner === auth.uid }}>
         <div>
           <CharacterTitle id={characterKey} />
           <Grid

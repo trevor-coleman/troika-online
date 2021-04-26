@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { TextField } from '@material-ui/core';
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase';
 import { CharacterContext } from '../../../contexts/CharacterContext';
+import { useAuth } from '../../../store/selectors';
 import { SkillContext } from '../context/SkillContext';
 import { useTypedSelector } from '../../../store';
 import Box from '@material-ui/core/Box/Box';
@@ -15,9 +16,10 @@ type ValueBoxesProps = IValueBoxesProps;
 const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxesProps) => {
   const {unarmed} = props;
   const classes = useStyles();
-  const {character} = useContext(CharacterContext);
+  const {character, editable} = useContext(CharacterContext);
   const skill=useContext(SkillContext);
   const firebase=useFirebase();
+  const {uid}=useAuth();
 
   useFirebaseConnect([
     {
@@ -40,7 +42,6 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
 
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-
     let intValue: number = parseInt(e.target.value);
 
     const newValue = intValue > 0
@@ -70,7 +71,7 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
             label={"Rank"}
             margin={"dense"}
             id={"rank"}
-            disabled={unarmed}
+            disabled={unarmed || !editable}
             className={classes.rankSkillRoot}
             InputProps={{classes: {input: classes.rankSkillInput}}}
             InputLabelProps={{shrink:true}}

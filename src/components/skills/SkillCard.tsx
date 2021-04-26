@@ -11,6 +11,7 @@ import { Casino, Edit, Info } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { useAuth } from '../../store/selectors';
 import SkillValueBoxes from './skillSections/SkillValueBoxes';
 import IconButton from '@material-ui/core/IconButton';
 import { SkillContext } from './context/SkillContext';
@@ -33,10 +34,11 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
     onEdit,
     onRemove,
   } = props;
-  const {character} = useContext(CharacterContext);
+  const {character, editable} = useContext(CharacterContext);
   const {roll} = useContext(GameContext);
   const classes = useStyles();
   const firebase=useFirebase();
+  const auth=useAuth()
 
   useFirebaseConnect([
     {
@@ -138,7 +140,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                 alignItems={"center"}
                 justify={"center"}>
               <div><Checkbox
-                  disabled={skill == "unarmed"}
+                  disabled={skill == "unarmed" || !editable}
                   className={classes.checkBox}
                   checked={used}
                   onChange={handleUsed}
@@ -152,7 +154,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                 alignItems={"center"}
                 justify={"flex-start"}>
               <Tooltip disableHoverListener={staminaCost <= stamina} title={"Stamina too low"}><Grid item>
-                <Button color={"primary"} disabled={staminaCost > stamina} onClick={rollSkill} endIcon={isSpell ? <SvgIcon><MagicWandIcon/></SvgIcon>: undefined} >{name + (isSpell ? ` (${staminaCost})` : "" )}</Button>
+                <Button color={"primary"} disabled={staminaCost > stamina || !editable} onClick={rollSkill} endIcon={isSpell ? <SvgIcon><MagicWandIcon/></SvgIcon>: undefined} >{name + (isSpell ? ` (${staminaCost})` : "" )}</Button>
               </Grid></Tooltip>
             </Grid>
             <Grid
@@ -179,7 +181,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                 spacing={1}
             >
               <Grid item><Button
-                  disabled={skill=="unarmed"}
+                  disabled={skill=="unarmed" || !editable}
                   variant="contained"
                   fullWidth
                   onClick={() => onEdit(skill)}>
