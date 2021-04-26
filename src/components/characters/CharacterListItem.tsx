@@ -24,6 +24,7 @@ import {
 } from "react-redux-firebase";
 import { useTypedSelector } from "../../store";
 import { useHistory } from "react-router-dom";
+import { useAuth, useCharacter, useGame } from '../../store/selectors';
 
 interface CharacterListItemProps {
   characterKey: string;
@@ -43,15 +44,13 @@ const CharacterListItem: FunctionComponent<CharacterListItemProps> = (
   const firebase = useFirebase();
 
   useFirebaseConnect({ path: `/characters/${characterKey}` });
-  const character = useTypedSelector(
-    (state) =>
-      state.firebase.data?.characters?.[characterKey] ?? {
-        name: "",
-        portrait: "",
-      }
-  );
+  const character = useCharacter(characterKey);
+  const auth=useAuth();
+  const game = useGame(character?.game ?? "")
 
-
+  const hasEditPermission = (
+      character?.owner === auth.uid || game?.owner === auth.uid)
+  const showEditButton = editing && hasEditPermission;
 
   const [portraitUrl, setPortraitURL] = useState("");
 
@@ -73,18 +72,19 @@ const CharacterListItem: FunctionComponent<CharacterListItemProps> = (
 
   return isLoaded(character) ? (
     <ListItem
+        disabled={editing && !hasEditPermission}
       className={classes.root}
       button
-      onClick={editing ? ()=>setShowConfirm(true) : () => history.push(`/character/${characterKey}/edit`)}
+      onClick={showEditButton ? ()=>setShowConfirm(true) : () => history.push(`/character/${characterKey}/edit`)}
     >
       <ListItemAvatar>
-        {editing
+        {showEditButton
          ? <Avatar className={classes.deleteIcon}><Delete /></Avatar>
          : <Avatar src={portraitUrl}>{character.name.slice(0, 1)}</Avatar>}
       </ListItemAvatar>
       <ListItemText primary={character?.name ?? ""} />
       <ListItemSecondaryAction>
-      {editing && showConfirm
+      {showEditButton && showConfirm
        ?
          <><Button variant={"contained"} onClick={()=>setShowConfirm(false)}>Cancel</Button>{`  `}
          <Button variant={'contained'} color={'secondary'} onClick={()=> {
