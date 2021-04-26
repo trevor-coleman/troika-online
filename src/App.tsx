@@ -12,6 +12,7 @@ import 'firebase/auth';
 import Game from './views/Game';
 import Layout from './layouts/Layout';
 import CharacterEditor from './views/CharacterEditor';
+import Settings from './views/Settings';
 import SRD from './views/SRD';
 import Register from './components/auth/Register';
 import Play from './views/Play';
@@ -40,6 +41,7 @@ function App(props: any) {
                     <PrivateRoute path={"/srd/:type"}><SRD /></PrivateRoute>
                     <PrivateRoute path={"/home"}><Home /></PrivateRoute>
                     <PrivateRoute path={"/roll"}><RollView /></PrivateRoute>
+                    <PrivateRoute path={"/settings"}><Settings /></PrivateRoute>
                     <PrivateRoute path={"/game/:gameKey"}><Game /></PrivateRoute>
                     <PrivateRoute path={"/test"}><TestPage/></PrivateRoute>
                     <PrivateRoute restricted path={"/admin"}><Admin /></PrivateRoute>

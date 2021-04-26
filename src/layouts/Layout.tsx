@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { useFirebase } from 'react-redux-firebase';
 import { Container, Paper } from '@material-ui/core';
+import { useAuth } from '../store/selectors';
 
 interface ILayoutProps {
 }
@@ -18,6 +19,7 @@ const Layout: FunctionComponent<LayoutProps> = (props: LayoutProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const firebase = useFirebase();
+  const auth=useAuth();
 
   return (
       <Container className={classes.root}>
@@ -25,6 +27,9 @@ const Layout: FunctionComponent<LayoutProps> = (props: LayoutProps) => {
           <Link to={"/home"}>
             <Button>Home</Button>
           </Link>
+          {auth.uid ? <Link to={"/settings"}>
+            <Button>Settings</Button>
+          </Link> : ""}
           <Button onClick={firebase.logout}>Sign Out</Button>
         </nav>
         <div>{props.children ?? ""}</div>
