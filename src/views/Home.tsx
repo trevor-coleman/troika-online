@@ -9,7 +9,7 @@ import RollTester from '../components/rolls/RollTester';
 import NewGameButton from '../components/game/NewGameButton';
 import { TextField, Paper } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import CreateGame from '../components/game/CreateGame';
+import CreateGameDialog from '../components/game/CreateGameDialog';
 import AddFriend from '../components/friends/AddFriend';
 import FriendRequests from '../components/friends/FriendRequests';
 import Friends from '../components/friends/Friends';
@@ -66,15 +66,15 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
         </Typography>
         <Grid container spacing={2}>
           <Grid item container spacing={1} xs={12} sm={7} md={8}>
-          <Grid item xs={12}>
-            <CreateGame/>
-          </Grid>
+            <Grid
+                item
+                xs={12}>
+              <Games />
+            </Grid>
             <Grid item xs={12}>
               <GameInvitations />
             </Grid>
-          <Grid item xs={12}>
-            <Games/>
-          </Grid>
+
         </Grid>
         <Grid item container spacing={1} xs={12} sm={5} md={4}>
           <Grid item xs={12}>

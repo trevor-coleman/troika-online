@@ -1,32 +1,28 @@
-import Grid from '@material-ui/core/Grid';
 import React, {
-  FunctionComponent, useEffect, PropsWithChildren, useState,
+  FunctionComponent, useState,
 } from 'react';
-import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import { TextField, Paper, ListItem, ListItemText } from '@material-ui/core';
+import { Paper, ListItem} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import {
   useFirebaseConnect, useFirebase, isLoaded,
 } from 'react-redux-firebase';
-import { useTypedSelector } from '../../store';
 import List from '@material-ui/core/List';
-import ProfileListItem from '../profile/ProfileListItem';
 import {
   useAuth, useGame, useGameRef, useProfile,
 } from '../../store/selectors';
 import { Character } from '../../store/Schema';
 import { useHistory } from 'react-router-dom';
 import CharacterListItem from './CharacterListItem';
-import * as NameGen from "../../utils/namegen";
+
 
 interface CharactersProps {
   gameKey: string
 }
 
-const generator = new NameGen.Generator('Bvss Bvss')
+
 
 //COMPONENT
 const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) => {
@@ -46,18 +42,11 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
   const profile = useProfile();
   const toggleEdit = () => {setEditing(!editing);};
 
-  function toTitleCase(str:string) {
-    return str.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0)
-                .toUpperCase() + txt.substr(1)
-                                    .toLowerCase();
-    });
-  }
-
   const createCharacter = async () => {
 
-    const name = toTitleCase(generator.toString());
+    const name = `${profile.name}'s New Character`;
     const sort_name = name.toLowerCase();
+
 
     const character: Partial<Character> = {
       game : gameKey,

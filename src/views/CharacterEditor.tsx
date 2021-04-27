@@ -13,6 +13,7 @@ import Stats from '../components/stats/Stats';
 import Bio from '../components/bio/Bio';
 import CharacterItems from '../components/items/CharacterItems';
 import CharacterTitle from '../components/characters/CharacterTitle';
+import ScrollToTopOnMount from '../components/utility/ScrollToTopOnMount';
 import { CharacterContext } from '../contexts/CharacterContext';
 import CharacterWeapons from '../components/weapons/CharacterWeapons';
 import CharacterSheetSection
@@ -43,6 +44,7 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
       <GameContext.Provider value={rollContext}>
       <CharacterContext.Provider value={{character: characterKey, editable: character?.owner === auth.uid }}>
         <div>
+          <ScrollToTopOnMount/>
           <CharacterTitle id={characterKey} />
           <Grid
               container

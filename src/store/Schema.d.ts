@@ -62,7 +62,7 @@ export interface Game {
   invited?: KeyList
   characters?: KeyList
   owner: string;
-
+  slug: string;
   [key: string]: any,
 }
 

@@ -1,10 +1,11 @@
 import Divider from '@material-ui/core/Divider';
+import { GroupWork } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import {
-  ListItemText, ListItem, ListItemSecondaryAction,
+  ListItemText, ListItem, ListItemSecondaryAction, ListItemAvatar, Avatar,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useGame } from '../../store/selectors';
@@ -33,7 +34,7 @@ const GameListItem: FunctionComponent<GameListItemProps> = (props: GameListItemP
 
   return (
       <ListItem button component={CustomLink}>
-        <ListItemText primary={game?.name ?? ""} />
+        <ListItemText className={classes.gameName} primary={game?.name ?? ""} />
         {firstAction
          ? <ListItemSecondaryAction>{firstAction}</ListItemSecondaryAction>
          : ""}
@@ -44,6 +45,9 @@ const GameListItem: FunctionComponent<GameListItemProps> = (props: GameListItemP
 const useStyles = makeStyles((theme: Theme) => (
     {
       root: {},
+      gameName: {
+        color: theme.palette.primary.main
+      }
     }));
 
 export default GameListItem;

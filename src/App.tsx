@@ -2,6 +2,7 @@ import React, { PropsWithChildren } from 'react';
 import { Container } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { isLoaded, useFirebase } from 'react-redux-firebase';
+import ScrollToTopOnNavigate from './components/utility/ScrollToTopOnNavigate';
 import { RootState } from './store';
 import SignIn from './components/auth/SignIn';
 import PrivateRoute from './components/auth/PrivateRoute';
@@ -30,7 +31,7 @@ function App(props: any) {
 
   return (
       <div className="App">
-
+        <ScrollToTopOnNavigate/>
           <AuthIsLoaded>
             <Switch>
               <Route path={"/*"}>

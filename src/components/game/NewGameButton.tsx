@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { useFirebase } from 'react-redux-firebase';
+import { default as slugify } from 'slugify';
 import { useTypedSelector } from '../../store';
 import { Redirect } from 'react-router-dom';
 import { Game } from '../../store/Schema';
@@ -15,6 +16,7 @@ interface NewGameButtonProps {
   disabled?: boolean;
 }
 
+
 //COMPONENT
 const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButtonProps) => {
   const {
@@ -22,7 +24,8 @@ const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButt
     template,
     onFail = (message?: string) => console.error(`Create game error: ${message ??
                                                                        'Failed to Create Game'}`),
-    ...rest
+    navigate,
+      ...rest
   } = props;
   const classes = useStyles();
   const firebase = useFirebase();
@@ -31,13 +34,40 @@ const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButt
 
   const create = async () => {
 
-    const newGame = {
+    const newGame: Partial<Game> & {name:string} = {
       owner: auth.uid,
-      name : "New Game", ...template,
-
+      players: {[auth.uid]: true},
+      ...template,
+      name : template?.name ?? "New Game",
     };
 
+    function makeid(length:number) {
+      const result = [];
+      const characters = 'abcdefghijklmnopqrstuvwxyz';
+      for (let i = 0; i < length; i++) {
+        result.push(characters.charAt(Math.floor(Math.random() *
+                                                 characters.length)));
+      }
+      return result.join('');
+    }
+
+    async function makeUniqueSlug(name: string):Promise<string> {
+      const nameSlug = slugify(name).slice(0, 24)
+      const slug = `${nameSlug}#${makeid(4)}`
+      const snap = await firebase.ref(`/games`)
+                                     .orderByChild('slug')
+                                     .equalTo(slug)
+                                     .get()
+
+      let result = snap.val()
+                   ? await makeUniqueSlug(name)
+                   : slug
+
+      return result
+    }
+
     newGame.sort_name = newGame.name.toLowerCase();
+    newGame.slug =  await makeUniqueSlug(newGame.sort_name.toLowerCase());
 
     const gameRef = await firebase.push('/games/', newGame);
 
@@ -56,7 +86,6 @@ const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButt
   return (
       <div className={classes.root}>
         <Button
-            variant="contained"
             color={"primary"}
             onClick={create} {...rest}>Create Game</Button>
         {key
@@ -66,7 +95,7 @@ const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButt
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root: {paddingTop: theme.spacing(1)},
+      root: {}
     }));
 
 export default NewGameButton;

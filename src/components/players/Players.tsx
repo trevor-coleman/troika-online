@@ -75,20 +75,13 @@ const Players: FunctionComponent<PlayersProps> = (props: PlayersProps) => {
   return (
       <Paper className={classes.root}>
         <Box p={2}>
-          <Box py={2}><Typography variant={'h5'}>Owner</Typography>
-            {isLoaded(game)
-             ? <List>
-               <ProfileListItem key={game?.owner}
-                                profileKey={game?.owner ?? ""} />
-             </List>
-             : ""}
-          </Box>
-          <Box py={2}><Typography variant={'h5'}>Players</Typography>
+          <Typography variant={'h5'}>Players</Typography>
             <List>
               {isLoaded(players)
                ? Object.keys(players)
                        .map(item => (
                            <ProfileListItem
+                               isOwner={game?.owner === item}
                                key={item}
                                profileKey={item} />))
                : ""}
@@ -99,7 +92,7 @@ const Players: FunctionComponent<PlayersProps> = (props: PlayersProps) => {
                                                            Player</Button>
              : ""}
           </Box>
-          <Box py={2}>
+        {invited ? <Box p={2}>
             <Typography variant={'h5'}>Invited</Typography>
             <List>
               {invited
@@ -109,8 +102,7 @@ const Players: FunctionComponent<PlayersProps> = (props: PlayersProps) => {
                                             profileKey={item} />))
                : ""}
             </List>
-          </Box>
-        </Box>
+        </Box> :""}
         <Dialog open={dialogOpen}
                 onClose={handleClose}>
           <DialogTitle>Select Player to Invite</DialogTitle>
