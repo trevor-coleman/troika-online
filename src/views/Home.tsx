@@ -40,18 +40,14 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
       const update: Partial<Profile> = {}
 
       let updateRequired = false;
-      console.log(auth.displayName, profile.name)
       if(auth.displayName && (profile.name+'') !== auth.displayName ) {
         update.name = auth.displayName;
         updateRequired = true;
       }
-      console.log(auth.email, profile.email)
       if(auth.email && profile.email !== auth.email) {
         update.email = auth.email;
         updateRequired = true;
       }
-
-      console.log(updateRequired, update)
 
       if(updateRequired) {
         profileRef.update(update)

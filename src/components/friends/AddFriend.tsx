@@ -46,8 +46,6 @@ const AddFriend: FunctionComponent<AddFriendProps> = (props: AddFriendProps) => 
            : {};
   });
 
-  console.log(email, "result:", result)
-
   const friendKey = result
                     ? Object.keys(result)[0]
                     : "";
