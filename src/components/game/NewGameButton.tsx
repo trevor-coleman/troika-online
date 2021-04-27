@@ -10,22 +10,22 @@ import { Game } from '../../store/Schema';
 
 interface NewGameButtonProps {
   onCreate:(newKey: string)=>void;
-  onFail?:()=>void;
+  onFail?:(message:string)=>void;
   navigate?:boolean;
   template?: Partial<Game>;
+  disabled?: boolean;
 }
 
 //COMPONENT
 const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButtonProps) => {
-  const {onCreate, template} = props;
+  const {onCreate, template, ...rest} = props;
   const classes=useStyles();
-  const onFail = props.onFail ? props.onFail : ()=>console.log("Failed to created new game.")
+  const onFail = props.onFail ? props.onFail : (message?:string)=>console.error(`Create game error: ${message ?? 'Failed to Create Game'}` )
   const firebase = useFirebase()
   const auth = useTypedSelector(state => state.firebase.auth);
   const [key, setKey] = useState<string|null>(null);
 
   const create = async ()=>{
-
 
     const newGame = {
       owner: auth.uid,
@@ -37,12 +37,13 @@ const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButt
 
 
     const gameRef = await firebase.push('/games/',newGame)
+
     if(gameRef.key) {
       await firebase.ref(`/profiles/${auth.uid}/games/`).update({[gameRef.key]: true})
       onCreate(gameRef.key);
       setKey(gameRef.key);
     }else {
-      onFail();
+      onFail('Failed to fetch game key');
     }
 
   }
@@ -50,7 +51,7 @@ const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButt
 
   return (
       <div className={classes.root}>
-        <Button variant="contained" color={"primary"} onClick={create}>Create Game</Button>
+        <Button  variant="contained" color={"primary"} onClick={create} {...rest}>Create Game</Button>
         {key?<Redirect to={`/game/${key}`}/>:""}</div>);
 };
 

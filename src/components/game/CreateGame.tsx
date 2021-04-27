@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { ChangeEvent, FunctionComponent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -15,22 +15,37 @@ const CreateGame: FunctionComponent<CreateGameProps> = (props: CreateGameProps) 
   const classes = useStyles();
 
   const [gameName, setGameName] = useState("")
+  const [isError, setIsError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+  const onCreate = (key: string) => {}
 
-  const onCreate = (key: string) => {
-    console.log(key);
+  const onFail = (message:string) => {
+    setIsError(true);
+    setErrorMessage(message);
+  }
+
+  const handleChange = (e:ChangeEvent<HTMLTextAreaElement | HTMLInputElement >) => {
+    setIsError(false);
+    setErrorMessage("");
+    setGameName(e.target.value);
   }
 
   return (
         <Paper className={classes.root}><Box p={2}>
           <Typography variant={"h5"}>Create Game</Typography>
           <TextField value={gameName}
-                     placeholder={"New Game"}
-                     onChange={(e) => setGameName(e.target.value)} className={classes.input} />
+                     error={isError}
+                     label={"Name of Game"}
+                     variant={'outlined'}
+                     placeholder={"Saturday Night Troika Group"}
+                     onChange={handleChange} className={classes.input} />
           <NewGameButton onCreate={onCreate}
+                         onFail={onFail}
                          navigate
                          template={gameName != ""
                                    ? {name: gameName}
                                    : undefined} />
+          {isError ? <Typography color={'error'}>{errorMessage}</Typography>:""}
         </Box></Paper>);
 
 };
