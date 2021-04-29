@@ -76,15 +76,15 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
                 item
                 container
                 direction={"column"}
-                sm={5}>
-              <Players gameKey={gameKey} />
+                sm={7}>
+              <Characters gameKey={gameKey} />
             </Grid>
             <Grid
                 item
                 container
                 direction={"column"}
-                sm={7}>
-              <Characters gameKey={gameKey} />
+                sm={5}>
+              <Players gameKey={gameKey} />
             </Grid>
           </Grid>
           {game?.owner === auth.uid ? <Grid

@@ -74,15 +74,17 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
             <Grid item xs={12}>
               <GameInvitations />
             </Grid>
-
         </Grid>
         <Grid item container spacing={1} xs={12} sm={5} md={4}>
           <Grid item xs={12}>
-            <AddFriend/></Grid>
+            <AddFriend/>
+          </Grid>
           <Grid item xs={12}>
-            <FriendRequests /></Grid>
+            <FriendRequests />
+          </Grid>
           <Grid item xs={12}>
-            <Friends /></Grid>
+            <Friends />
+          </Grid>
         </Grid>
         </Grid>
 

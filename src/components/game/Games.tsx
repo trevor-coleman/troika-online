@@ -16,12 +16,15 @@ import {
   DialogContent,
   DialogActions,
   DialogTitle,
+  Card,
+  CardContent,
 } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import { Game } from '../../store/Schema';
 import CreateGameDialog from './CreateGameDialog';
+import GameCard from './GameCard';
 
 import GameListItem from './GameListItem';
 
@@ -95,87 +98,108 @@ const Games: FunctionComponent<GamesProps> = (props: GamesProps) => {
   };
 
   return (
-      <Paper className={classes.root}>
-        <Box p={2}>
-          <Typography variant={'h5'}>Games</Typography>
-          <List>
+
+      <Box p={2}>
+        <Typography variant={'h5'}>Games</Typography>
+        <Divider/>
+        <Grid container>
+          <Grid
+              item
+              xs={12}>
+            <Box py={2}>
+              <Button
+                  variant={'contained'}
+                  onClick={() => setCreateDialogOpen(true)}
+              >
+                Create New Game
+              </Button>
+              {` `}
+              <Button
+                  variant={'contained'}
+                  onClick={() => setJoinDialogOpen(true)}
+              >Join Game by ID</Button>
+            </Box>
+          </Grid>
+
+          <Grid
+              item
+              xs={12}
+              container
+              spacing={2}>
             {isLoaded(profile)
              ? Object.keys(games)
                      .map(item => (
-                         <GameListItem
-                             key={item}
-                             gameKey={item} />))
-             : <ListItem>
-               <ListItemText primary={"Loading..."} />
-             </ListItem>}
-          </List>
-          <Button
-              variant={'contained'}
-              onClick={() => setCreateDialogOpen(true)}
-          >
-            Create New Game
-          </Button>
-          {` `}
-          <Button
-              variant={'contained'}
-              onClick={() => setJoinDialogOpen(true)}
-          >Join Game by ID</Button>
-          <Dialog
-              maxWidth={'xs'}
-              fullWidth
-              open={joinDialogOpen}
-              onClose={onCloseJoinDialog}>
-            <DialogTitle>Join Game</DialogTitle>
-            <DialogContent>
-              <Grid container>
-                <Grid
-                    item
-                    xs={12}>
-                  <TextField
-                      size={"small"}
-                      error={Boolean(gameError)}
-                      fullWidth
-                      variant={'outlined'}
-                      label={"Enter Game ID"}
-                      placeholder={"my-troika-game#afed"}
-                      onChange={(e) => {
-                        setGameError("");
-                        setGameId(e.target.value);
-                      }}
-                  />{` `}</Grid>
-                <Grid
-                    item
-                    xs={12}>
-                  <div className={classes.errorMessage}>
-                    <Typography color={"error"}>{gameError ? "Game Not Found" :` `}
-                    </Typography></div>
-                </Grid>
+                         <Grid
+                             item
+                             xs={6}
+                             key={`gameCard-${item}`}>
+                           <GameCard
+                               gameKey={item} />
+                         </Grid>))
+             : <Card>
+               <CardContent>Loading...</CardContent>
+             </Card>}
+          </Grid>
+        </Grid>
+
+        <Dialog
+            maxWidth={'xs'}
+            fullWidth
+            open={joinDialogOpen}
+            onClose={onCloseJoinDialog}>
+          <DialogTitle>Join Game</DialogTitle>
+          <DialogContent>
+            <Grid container>
+              <Grid
+                  item
+                  xs={12}>
+                <TextField
+                    size={"small"}
+                    error={Boolean(gameError)}
+                    fullWidth
+                    variant={'outlined'}
+                    label={"Enter Game ID"}
+                    placeholder={"my-troika-game#afed"}
+                    onChange={(e) => {
+                      setGameError("");
+                      setGameId(e.target.value);
+                    }}
+                />{` `}</Grid>
+              <Grid
+                  item
+                  xs={12}>
+                <div className={classes.errorMessage}>
+                  <Typography color={"error"}>{gameError
+                                               ? "Game Not Found"
+                                               : ` `}
+                  </Typography>
+                </div>
               </Grid>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => onCloseJoinDialog()}>Cancel</Button>
-              <Button
-                  onClick={addGame}
-                  color={'primary'}>Join</Button>
-            </DialogActions>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => onCloseJoinDialog()}>Cancel</Button>
+            <Button
+                onClick={addGame}
+                color={'primary'}>Join</Button>
+          </DialogActions>
 
-          </Dialog>
-          <CreateGameDialog
-              open={createDialogOpen}
-              onClose={onCloseCreateDialog} />
+        </Dialog>
+        <CreateGameDialog
+            open={createDialogOpen}
+            onClose={onCloseCreateDialog} />
 
-        </Box>
-      </Paper>);
+      </Box>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root: {},
+      root        : {},
       errorMessage: {
-        height: theme.typography.body1.minHeight,
+        height     : theme.typography.body1.minHeight,
         borderWidth: 2,
-        borderColor: 'red'
-      }
+        borderColor: 'red',
+      },
     }));
 
 export default Games;

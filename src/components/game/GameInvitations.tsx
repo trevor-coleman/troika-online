@@ -24,8 +24,12 @@ const Games: FunctionComponent<GamesProps> = (props: GamesProps) => {
 
   const acceptInvitation = async (gameKey: string) => {
     await Promise.all([
-      firebase.ref(`/games/${gameKey}`).child(`players/${auth.uid}`).set(true),
-      firebase.ref(`/games/${gameKey}`).child(`invited/${auth.uid}`).set(null),
+      firebase.ref(`/games/${gameKey}`)
+              .child(`players/${auth.uid}`)
+              .set(true),
+      firebase.ref(`/games/${gameKey}`)
+              .child(`invited/${auth.uid}`)
+              .set(null),
       firebase.ref(`/profiles/${auth.uid}`)
               .child(`games/${gameKey}`)
               .set(true),
@@ -33,20 +37,22 @@ const Games: FunctionComponent<GamesProps> = (props: GamesProps) => {
               .child(`invitations/${gameKey}`)
               .set(null),
     ]);
-  }
+  };
 
   const InviteButton: FunctionComponent<PropsWithChildren<{ gameKey: string }>> = ({gameKey}: PropsWithChildren<{ gameKey: string }>) => {
     return (
         <Button
-                variant={"outlined"}
-                color={"primary"}
-                onClick={() => acceptInvitation(gameKey)}>{"Accept"}</Button>);
+            variant={"outlined"}
+            color={"primary"}
+            onClick={() => acceptInvitation(gameKey)}>{"Accept"}</Button>);
   };
 
   const invitations = profile.invitations;
 
   return (
-      <Paper className={classes.root}>
+      !isLoaded(invitations) || isEmpty(invitations) || !invitations
+      ? <div />
+      : <Paper className={classes.root}>
         <Box p={2}>
           <Typography variant={'h5'}>Game Invitations</Typography>
           <List>

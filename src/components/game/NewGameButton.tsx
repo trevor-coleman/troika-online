@@ -53,7 +53,7 @@ const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButt
 
     async function makeUniqueSlug(name: string):Promise<string> {
       const nameSlug = slugify(name).slice(0, 24)
-      const slug = `${nameSlug}#${makeid(4)}`
+      const slug = `${nameSlug}-${makeid(4)}`
       const snap = await firebase.ref(`/games`)
                                      .orderByChild('slug')
                                      .equalTo(slug)

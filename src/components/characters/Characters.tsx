@@ -4,7 +4,7 @@ import React, {
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import { Paper, ListItem} from '@material-ui/core';
+import { Paper, ListItem } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import {
   useFirebaseConnect, useFirebase, isLoaded,
@@ -16,13 +16,11 @@ import {
 import { Character } from '../../store/Schema';
 import { useHistory } from 'react-router-dom';
 import CharacterListItem from './CharacterListItem';
-
+import Collapse from '@material-ui/core/Collapse';
 
 interface CharactersProps {
   gameKey: string
 }
-
-
 
 //COMPONENT
 const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) => {
@@ -47,7 +45,6 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
     const name = `${profile.name}'s New Character`;
     const sort_name = name.toLowerCase();
 
-
     const character: Partial<Character> = {
       game : gameKey,
       owner: auth.uid,
@@ -64,9 +61,12 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
   };
 
   const removeCharacter = async (characterKey: string) => {
+
+    //remove character from game
     await gameRef.child('characters')
                  .child(characterKey)
                  .remove();
+    //remove character data
     await firebase.ref(`/skills/${characterKey}`)
                   .set(null)
                   .catch(e => console.log("error deleting skills", e));
@@ -79,6 +79,7 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
     await firebase.ref(`/rolls/${characterKey}`)
                   .set(null)
                   .catch(e => console.log("error deleting rolls", e));
+    //remove character
     await firebase.ref(`/characters/${characterKey}`)
                   .set(null)
                   .catch(e => console.log("error deleting character", e));
@@ -100,6 +101,11 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
                              editing={editing} />))
              : <ListItem />}
           </List>
+          <Collapse in={editing}>
+            <Typography color={'secondary'}>
+              <b>WARNING: Removing characters cannot be undone.</b>
+            </Typography>
+          </Collapse>
           <div className={classes.buttonRow}>
             {editing
              ? <Button
@@ -110,10 +116,11 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
              : <>
                <Button
                    variant={'contained'}
-                   disabled={!isLoaded(characters) || Object.keys(characters).length === 0}
+                   disabled={!isLoaded(characters) ||
+                             Object.keys(characters).length === 0}
                    className={classes.buttonRowButton}
                    onClick={toggleEdit}>
-                 Edit List
+                 Remove Characters
                </Button> {` `}
                <Button
                    color={'primary'}
@@ -124,14 +131,15 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
                </Button>
              </>}
           </div>
+
         </Box>
       </Paper>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root     : {},
-      buttonRow: {
+      root           : {},
+      buttonRow      : {
         display       : 'flex',
         alignItems    : 'flex-end',
         justifyContent: 'flex-end',
@@ -139,8 +147,8 @@ const useStyles = makeStyles((theme: Theme) => (
 
       },
       buttonRowButton: {
-        marginRight: theme.spacing(1)
-      }
+        marginRight: theme.spacing(1),
+      },
     }));
 
 export default Characters;
