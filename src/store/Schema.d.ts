@@ -62,6 +62,8 @@ export interface Game {
   players?: KeyList
   invited?: KeyList
   characters?: KeyList
+  enableDiscord?: boolean,
+  discordWebhookUrl?: string,
   owner: string;
   slug: string;
   [key: string]: any,

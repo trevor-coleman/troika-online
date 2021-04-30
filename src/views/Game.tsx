@@ -6,15 +6,12 @@ import {
   DialogTitle,
   FormControlLabel,
   Paper,
-  Switch,
+  Switch, TextField,
 } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import firebase from 'firebase/app';
 import React, {
-  ChangeEvent,
-  FunctionComponent,
-  useEffect,
-  useState,
+  ChangeEvent, FunctionComponent, useEffect, useState,
 } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useParams, useHistory, Link } from 'react-router-dom';
@@ -28,6 +25,7 @@ import Characters from '../components/characters/Characters';
 import { useTypedSelector } from '../store';
 import Button from '@material-ui/core/Button';
 import { PlayArrowRounded, Casino } from '@material-ui/icons';
+import Collapse from '@material-ui/core/Collapse';
 
 interface GameProps {
 
@@ -40,7 +38,7 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
   const history = useHistory();
   const classes = useStyles();
   const firebase = useFirebase();
-  const auth =  useAuth();
+  const auth = useAuth();
 
   useFirebaseConnect([`/games/${gameKey}`]);
 
@@ -52,9 +50,40 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
 
   const [showGameID, setShowGameId] = useState(false);
   const onCloseGameId = () => setShowGameId(false);
+  const [webhookErrorIsVisible, setWebhookErrorIsVisible] = useState(false);
+  const [webhookError, setWebhookError] = useState("");
+  const [webhookUrl, setWebhookURL] = useState(game?.discordWebhookUrl)
+  const [enableDiscord, setEnableDiscord] =  useState(game?.enableDiscord ?? false);
 
-  const handleChecked = (e:ChangeEvent<HTMLInputElement>) => {
-    firebase.ref(`/games/${gameKey}/public`).set(e.target.checked)
+  const handleDiscordChange = (e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=> {
+    const url = e.target.value;
+    const discordWebhookUrlRegex = /^https?:\/\/discord(app)?.com\/api\/webhooks\/[A-Za-z0-9]*\/[A-Za-z0-9_\-]*\/?$/
+
+
+    console.log(url, discordWebhookUrlRegex.test(url));
+
+    setWebhookURL(url);
+
+    if(url.length > 0 && !discordWebhookUrlRegex.test(url)){
+      setWebhookErrorIsVisible(true);
+      setWebhookError("Not a valid discord webhook");
+      return;
+    }
+
+    setWebhookErrorIsVisible(false);
+
+    firebase.ref(`/games/${gameKey}/discordWebhookUrl`).set(e.target.value)
+
+  }
+
+  const handleCheckPublic = (e: ChangeEvent<HTMLInputElement>) => {
+    firebase.ref(`/games/${gameKey}/public`)
+            .set(e.target.checked);
+  };
+
+  const handleCheckDiscord = (e: ChangeEvent<HTMLInputElement>) => {
+    firebase.ref(`/games/${gameKey}/enableDiscord`)
+            .set(e.target.checked);
   };
 
   return (
@@ -87,41 +116,85 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
               <Players gameKey={gameKey} />
             </Grid>
           </Grid>
-          {game?.owner === auth.uid ? <Grid
-              item
-              container
-              xs={12}>
-            <Box width={"100%"}>
-              <Paper>
-                <Box p={2}>
-                  <Grid
-                      container
-                      spacing={2}
-                      direction={"row"}>
-                    <Grid item xs={12}>
-                      <Typography variant={'h5'}>Sharing</Typography>
-                    </Grid>
-                    <Grid item>
-                      <FormControlLabel
-                          labelPlacement={"start"}
-                          control={<Switch
-                              checked={game?.public ?? false}
-                              onChange={handleChecked}
-                              id={"isPublic"}
-                              name="isPublic" />}
-                          label={"Allow Join by Code"} />
-                    </Grid>
-                    <Grid item>
-                      <Button
-                          disabled={!game?.public}
-                          onClick={() => setShowGameId(true)}
-                          variant={'contained'}>Get Game ID</Button>
-                    </Grid>
-                  </Grid>
-                </Box>
-              </Paper>
-            </Box>
-          </Grid>:""}
+          {game?.owner === auth.uid
+           ? <Grid
+               item
+               container
+               xs={7}>
+             <Box width={"100%"}>
+               <Paper>
+                 <Box p={2}>
+                   <Grid
+                       container
+                       spacing={2}
+                       direction={"row"}>
+                     <Grid
+                         item
+                         xs={12}>
+                       <Typography variant={'h5'}>Sharing</Typography>
+                     </Grid>
+                     <Grid item xs={4}>
+                       <FormControlLabel
+                           labelPlacement={"start"}
+                           control={<Switch
+                               checked={game?.public ?? false}
+                               onChange={handleCheckPublic}
+                               id={"isPublic"}
+                               name="isPublic" />}
+                           label={"Allow Join by Code"} />
+                     </Grid>
+                     <Grid item xs={8}>
+                       <Button
+                           disabled={!game?.public}
+                           onClick={() => setShowGameId(true)}
+                           variant={'contained'}>Get Game ID</Button>
+                     </Grid>
+                   </Grid>
+                 </Box>
+               </Paper>
+             </Box>
+           </Grid>
+           : ""}
+          {game?.owner === auth.uid
+           ? <Grid
+               item
+               container
+               xs={7}>
+             <Box width={"100%"}>
+               <Paper>
+                 <Box p={2}>
+                   <Grid
+                       container
+                       spacing={2}
+                       direction={"row"}>
+                     <Grid
+                         item
+                         xs={12}>
+                       <Typography variant={'h5'}>Discord</Typography>
+                     </Grid>
+                     <Grid item xs={4}>
+                       <FormControlLabel
+                           labelPlacement={"start"}
+                           control={<Switch
+                               checked={game?.enableDiscord ?? false}
+                               onChange={handleCheckDiscord}
+                               id={"enableDiscord"}
+                               name="enableDiscord" />}
+                           label={"Post Rolls to Discord"} />
+                     </Grid>
+                     <Grid item xs={8}>
+                       <TextField fullWidth error={webhookErrorIsVisible} label={"Webhook URL"} variant={"outlined"} value={webhookUrl ?? ""} placeholder={"https://discord.com/api/webhooks/ID/TOKEN"} onChange={handleDiscordChange}/>
+                       <Collapse in={webhookErrorIsVisible}>
+                         <Typography color={"error"}>{webhookError}</Typography>
+                       </Collapse>
+                     </Grid>
+                   </Grid>
+                 </Box>
+               </Paper>
+             </Box>
+           </Grid>
+           : ""}
+
         </Grid>
         <Dialog
             open={showGameID}
@@ -130,7 +203,8 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
             fullWidth>
           <DialogTitle>Game ID</DialogTitle>
           <DialogContent>
-            <Typography>Share this code to allow players to join your game:</Typography>
+            <Typography>Share this code to allow players to join your
+                        game:</Typography>
             <pre className={classes.pre}>{game?.slug ?? "No Game Id"}</pre>
             <DialogActions>
               <Button onClick={onCloseGameId}>Close</Button>
@@ -147,9 +221,9 @@ const useStyles = makeStyles((theme: Theme) => (
         paddingLeft : theme.spacing(8),
         paddingRight: theme.spacing(8),
       },
-      pre: {
-        fontSize:24,
-      }
+      pre       : {
+        fontSize: 24,
+      },
     }));
 
 export default Game;

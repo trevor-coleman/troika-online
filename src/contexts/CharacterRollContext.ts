@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
-import { abilityWebhook, discordWebhook } from '../api/discord';
+import { abilityWebhook, callDiscordWebhook } from '../api/discord';
 import { rollKey } from '../components/rolls/rollKey';
 import { useTypedSelector } from '../store';
+import { useGame } from '../store/selectors';
 import { Roll } from '../types/troika';
 import {
   IRollWeaponProps,
@@ -43,6 +44,10 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
   const characterName = useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.name) ??
                         "Character";
   const characterAvatar = useTypedSelector(state => state.firebase.data.characters?.[characterKey]?.portrait);
+  const gameKey = useTypedSelector(state=>state.firebase.data.characters?.[characterKey]?.game);
+
+  const {enableDiscord = false, discordWebhookUrl = ""}  = useGame(gameKey) ?? {};
+
 
   const isSnakeEyes = (roll: number[]) => roll.every(die => die === 1);
   const isBoxCars = (roll: number[]) => roll.every(die => die === 6);
@@ -425,7 +430,9 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     if (lastSeen === "firstOpen") {setLastSeen(null);}
 
     console.log(newRollProps);
-    // discordWebhook(newRollProps);
+    if(enableDiscord) {
+      callDiscordWebhook(newRollProps, discordWebhookUrl);
+    }
 
     return {
       newRef,

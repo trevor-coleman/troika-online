@@ -23,7 +23,7 @@ const rollString = ({rollerName = "Character", discordDescription = "rolls", dis
       `;
 };
 
-export async function discordWebhook(props: RollProps) {
+export async function callDiscordWebhook(props: RollProps, webhookUrl:string) {
 
 
   const content = rollString(props)
@@ -37,7 +37,7 @@ export async function discordWebhook(props: RollProps) {
   };
 
   fetch(
-      'https://discord.com/api/webhooks/827982601712435221/FqfPOT5svA0seeDUHFvoNaxHdSq7omtT4JiI2dccdX9vLaS8usvvyHEWdMmZc2Zl_E-n',
+      webhookUrl,
       requestOptions)
       .catch((e) => console.log(e));
 
