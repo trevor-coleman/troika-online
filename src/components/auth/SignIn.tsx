@@ -1,3 +1,4 @@
+import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -10,6 +11,7 @@ import { Redirect, Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { ReactComponent as MainIcon } from '../../svg/knowledge-svgrepo-com.svg';
 
 // import GoogleButton from 'react-google-button' // optional
 
@@ -37,7 +39,12 @@ function SignIn() {
 
   return (
         <div>
-          <Typography paragraph variant={"h2"}>Sign In</Typography>
+          <Box width={100}><MainIcon /></Box>
+          <Typography variant={"h1"}>
+            Troika Online
+          </Typography>
+          <Divider/>
+          <Typography paragraph variant={"h4"}>Sign In</Typography>
           <Typography paragraph>Need an account? <Link to={"/register"}>Register Here</Link></Typography>
           {isEmpty(auth)
            ? <Paper><Box p={2}><Grid container

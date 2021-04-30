@@ -1,3 +1,4 @@
+import Divider from '@material-ui/core/Divider';
 import React, {
   FunctionComponent,
   ChangeEvent,
@@ -13,6 +14,7 @@ import { useFirebase, isEmpty } from 'react-redux-firebase';
 import Typography from '@material-ui/core/Typography';
 import { Redirect, Link } from 'react-router-dom';
 import { useAuth } from '../../store/selectors';
+import { ReactComponent as MainIcon } from '../../svg/knowledge-svgrepo-com.svg';
 
 interface RegisterProps {
 }
@@ -67,7 +69,12 @@ const Register: FunctionComponent<RegisterProps> = (props: RegisterProps) => {
 
   return (
       <div className={classes.root}>
-        <Typography paragraph variant={"h2"}>Create Account</Typography>
+        <Box width={100}><MainIcon /></Box>
+        <Typography variant={"h1"}>
+          Troika Online
+        </Typography>
+        <Divider/>
+        <Typography paragraph variant={"h4"}>Create Account</Typography>
         <Typography paragraph>Already have an account? <Link to={"/sign-in"}>Sign In
                                                                       Here</Link></Typography>
         {isEmpty(auth)?
