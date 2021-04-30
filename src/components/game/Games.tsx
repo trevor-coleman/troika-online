@@ -108,6 +108,7 @@ const Games: FunctionComponent<GamesProps> = (props: GamesProps) => {
               xs={12}>
             <Box py={2}>
               <Button
+                  color={"primary"}
                   variant={'contained'}
                   onClick={() => setCreateDialogOpen(true)}
               >
@@ -115,6 +116,7 @@ const Games: FunctionComponent<GamesProps> = (props: GamesProps) => {
               </Button>
               {` `}
               <Button
+                  color={"primary"}
                   variant={'contained'}
                   onClick={() => setJoinDialogOpen(true)}
               >Join Game by ID</Button>
