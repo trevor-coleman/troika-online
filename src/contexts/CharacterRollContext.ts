@@ -425,7 +425,7 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     if (lastSeen === "firstOpen") {setLastSeen(null);}
 
     console.log(newRollProps);
-    discordWebhook(newRollProps);
+    // discordWebhook(newRollProps);
 
     return {
       newRef,
