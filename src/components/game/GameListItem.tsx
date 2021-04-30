@@ -38,7 +38,6 @@ const GameListItem: FunctionComponent<GameListItemProps> = (props: GameListItemP
         {firstAction
          ? <ListItemSecondaryAction>{firstAction}</ListItemSecondaryAction>
          : ""}
-        <Divider />
       </ListItem>);
 };
 

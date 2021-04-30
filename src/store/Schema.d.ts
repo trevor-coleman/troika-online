@@ -16,6 +16,7 @@ type CharacterEditorState = {
 
 export default interface Schema {
   [key:string]: any,
+  addPlayersSearchResult:Profile,
   characterEditor: CharacterEditorState,
   characterItems: CharacterItemsState,
   chargesStepper: ChargesStepperState,
