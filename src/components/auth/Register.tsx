@@ -67,7 +67,7 @@ const Register: FunctionComponent<RegisterProps> = (props: RegisterProps) => {
 
   return (
       <div className={classes.root}>
-        <Typography paragraph variant={"h2"}>Register</Typography>
+        <Typography paragraph variant={"h2"}>Create Account</Typography>
         <Typography paragraph>Already have an account? <Link to={"/sign-in"}>Sign In
                                                                       Here</Link></Typography>
         {isEmpty(auth)?

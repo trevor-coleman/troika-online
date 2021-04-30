@@ -48,7 +48,7 @@ function App(props: any) {
                     <PrivateRoute path={"/character/:characterKey/new"}><CharacterEditor init /></PrivateRoute>
                     <Route path={"/sign-in"}><SignIn /></Route>
                     <Route path={"/register"}><Register /></Route>
-                    <Route path={"/"}><SignIn /></Route>
+                    <Route path={"/"}><Register /></Route>
                   </Switch>
                 </Layout>
               </Route>
