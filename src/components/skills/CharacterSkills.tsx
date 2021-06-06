@@ -108,7 +108,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
   };
 
   return (
-      <>
+      <div>
         <Grid
             container
             direction={"column"}>
@@ -201,7 +201,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
                open={dialogState.edit}
                onClose={() => showDialog()}
                skill={selectedSkill} />
-      </>);
+      </div>);
 };
 
 const useStyles = makeStyles((theme: Theme) => {

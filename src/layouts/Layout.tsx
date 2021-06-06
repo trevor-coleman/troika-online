@@ -51,7 +51,11 @@ const Layout: FunctionComponent<LayoutProps> = (props: LayoutProps) => {
 
 const useStyles = makeStyles((theme: Theme) => (
     {
-      root                : {paddingBottom: 150},
+      root                : {paddingBottom: 150,
+        display:"flex",
+        flexDirection:"column",
+        flexWrap: "wrap",
+      },
       legalNoticeContainer: {
         marginTop      : theme.spacing(1),
         backgroundColor: theme.palette.grey.A100,

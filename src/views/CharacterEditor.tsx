@@ -29,7 +29,7 @@ interface CharacterEditorProps {
 //COMPONENT
 const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: CharacterEditorProps) => {
   const {characterKey} = useParams<{ characterKey: string }>();
-
+  const classes = useStyles();
   const firebase = useFirebase()
 
   const rollContext = useCharacterRollContext(characterKey);
@@ -42,11 +42,12 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
 
   return (
       <GameContext.Provider value={rollContext}>
-      <CharacterContext.Provider value={{character: characterKey, editable: character?.owner === auth.uid }}>
-        <div>
-          <ScrollToTopOnMount/>
+        <ScrollToTopOnMount/>
+        <CharacterContext.Provider value={{character: characterKey, editable: character?.owner === auth.uid }}>
+        <Grid container direction={"column"}>
           <CharacterTitle id={characterKey} />
           <Grid
+              item
               container
               direction={'column'}
               spacing={0}>
@@ -94,18 +95,20 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
               </Grid>
             </Grid>
           </Grid>
-        </div>
+        </Grid>
         <RollDialog parent={"rolls"} id={characterKey} open={false}/>
 
       </CharacterContext.Provider>
       </GameContext.Provider>);
 
-  const classes = useStyles();
-  const dispatch = useDispatch();
+
 };
 
 const useStyles = makeStyles((theme: Theme) => (
     {
+      gridContainer: {
+        flexWrap:"revert",
+      },
       statInput: {
         textAlign: "center",
         paddingLeft: "1rem",
