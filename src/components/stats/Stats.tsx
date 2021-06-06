@@ -134,7 +134,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
   }
 
   return (
-      <Grid
+      <div><Grid
           container
           className={classes.container}
           direction={"column"}
@@ -289,7 +289,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
         <RestDialog
             open={open}
             handleClose={handleCloseRestDialog} />
-      </Grid>);
+      </Grid></div>);
 };
 
 const useStyles = makeStyles((theme: Theme) => (
