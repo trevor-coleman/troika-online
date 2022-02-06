@@ -52,3 +52,6 @@ export const useItems = (characterKey: string) => useTypedSelector(state => stat
 export const useItem = (itemKey: string) => useTypedSelector(state => state.firebase.data?.items?.[itemKey]);
 export const useMonies = (characterKey: string) => useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.monies ?? 0);
 export const useProvisions = (characterKey: string) => useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.provisions ?? 0);
+export const useStamina = (characterKey: string) => useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.stamina_current ?? 0);
+export const useMaxStamina = (characterKey: string) => useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.stamina_max ?? 0);
+

@@ -9,6 +9,7 @@ export type RollProps =
     | IRollInventoryProps
     | IRollToAdvanceProps
     | IRollToAdvanceSecondRollProps
+    | IRollProvisionsProps
 
 export type RollType =
     "skill"
@@ -19,6 +20,7 @@ export type RollType =
     | "inventory"
     | "advance"
     | "second"
+    |"provisions"
 
 export type RollFormatter = (props: RollProps) => IRollResult
 
@@ -47,6 +49,13 @@ export interface IRollBaseProps {
   lastRoll?: { key: string, value: RollProps | null } | null,
   dialogResult?: string,
   discordResult?: string,
+}
+
+export interface IRollProvisionsProps extends IRollBaseProps {
+  type: "provisions"
+  currentStamina:number,
+  maxStamina:number,
+  currentProvisions: number,
 }
 
 export interface IRollDamageProps extends IRollBaseProps {

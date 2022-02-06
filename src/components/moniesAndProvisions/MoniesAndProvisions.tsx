@@ -2,13 +2,14 @@ import React, {ChangeEvent, FunctionComponent, PropsWithChildren, useContext, us
 import {useDispatch} from 'react-redux';
 import {makeStyles, Theme} from '@material-ui/core/styles';
 import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
-import {useAuth, useMonies, useProvisions} from '../../store/selectors';
+import {useAuth, useMaxStamina, useMonies, useProvisions, useStamina} from '../../store/selectors';
 import {useCharacter} from "../../store/selectors";
 import {CharacterContext} from "../../contexts/CharacterContext";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import {TextField} from "@material-ui/core";
+import {GameContext} from "../../contexts/GameContext";
 
 interface IMoniesAndProvisionsProps {
 }
@@ -21,8 +22,21 @@ const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props:
     const firebase = useFirebase();
     const auth = useAuth();
     const {character, editable} = useContext(CharacterContext);
+    const {roll} = useContext(GameContext);
+    const {name} = useCharacter(character) ?? {};
+    const monies = useMonies(character);
+    const provisions = useProvisions(character);
+    const currentStamina = useStamina(character);
+    const maxStamina = useMaxStamina(character);
 
     useFirebaseConnect([
+        {
+            path: `/characters/${character}/stamina_current`,
+            storeAs: `characterSkills/${character}/stamina_current`,
+        }, {
+            path: `/characters/${character}/stamina_max`,
+            storeAs: `characterSkills/${character}/stamina_max`,
+        },
         {
             path: `/characters/${character}/monies`,
             storeAs: `characterSkills/${character}/monies`,
@@ -33,8 +47,7 @@ const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props:
         },
     ]);
 
-    const monies = useMonies(character);
-    const provisions = useProvisions(character);
+
 
     const [values, setValues] = useState({
         monies, provisions
@@ -52,6 +65,22 @@ const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props:
                 ? "0"
                 : e.target.value));
     }
+
+    async function eatProvision() {
+        const dice = [6];
+
+        const result = await roll({
+            type: 'provisions',
+            rollerKey: character,
+            dice: dice,
+            rollerName: name ?? "Someone",
+            currentProvisions: provisions,
+            currentStamina,
+            maxStamina
+        });
+    }
+
+
 
 
     return (
@@ -87,7 +116,7 @@ const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props:
                 className={classes.gridItem}>
                 <Grid item><Typography>Provisions</Typography></Grid>
                 <Grid container item spacing={1} direction={"row"} className={classes.provisionsRow}>
-                    <Grid item >
+                    <Grid item>
                         <TextField
                             value={provisions}
                             id={"provisions"}
@@ -105,11 +134,14 @@ const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props:
                                 },
                             }}/>
                     </Grid>
-                    <Grid item className={classes.eatButtonContainer}><Button variant={"contained"} color={"primary"} className={classes.eatButton}>Eat</Button></Grid>
+                    <Grid item className={classes.eatButtonContainer}>
+                        <Button onClick={eatProvision} variant={"contained"} color={"primary"}
+                                className={classes.eatButton}>Eat</Button>
+                    </Grid>
                 </Grid>
-            <div className={"dummy"}/>
-        </Grid>
-</Grid>)
+                <div className={"dummy"}/>
+            </Grid>
+        </Grid>)
 
 };
 
@@ -122,7 +154,7 @@ const useStyles = makeStyles((theme: Theme) => (
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            justifyContent:"flex-start"
+            justifyContent: "flex-start"
         },
         textField: {},
         inputProps: {
@@ -130,16 +162,16 @@ const useStyles = makeStyles((theme: Theme) => (
             fontSize: "1.5rem",
         },
         provisionsRow: {
-            alignItems:"center",
-            justifyContent:"center",
+            alignItems: "center",
+            justifyContent: "center",
         },
-        eatButton:{
+        eatButton: {
             height: theme.spacing(6)
         },
-        eatButtonContainer:{
-            display:"flex",
-            alignItems:"center",
-            justifyContent:"center",
+        eatButtonContainer: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             height: theme.spacing(6)
         }
 
