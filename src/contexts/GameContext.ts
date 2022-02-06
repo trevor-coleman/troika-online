@@ -117,6 +117,7 @@ export type TGameContext = {
   id: string; lastRoll: { key: string, value: RollProps | null } | null; lastSeen: string | null; setLastSeen: (key: string) => void; roll: (props: RollProps) => Promise<string | null>
 }
 
+// noinspection JSUnusedLocalSymbols
 export const GameContext = React.createContext<TGameContext>({
   id         : "",
   lastSeen   : "",
