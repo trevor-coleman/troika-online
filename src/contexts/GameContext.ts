@@ -32,6 +32,7 @@ export interface IRollResult {
   discordDescription: string,
   dialogResult: string,
   success?: boolean,
+  damage?: number[]
 }
 
 export interface IRollBaseProps {
@@ -49,6 +50,7 @@ export interface IRollBaseProps {
   lastRoll?: { key: string, value: RollProps | null } | null,
   dialogResult?: string,
   discordResult?: string,
+  damage?: number[]
 }
 
 export interface IRollProvisionsProps extends IRollBaseProps {

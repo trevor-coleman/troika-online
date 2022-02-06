@@ -116,7 +116,7 @@ const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props:
                 className={classes.gridItem}>
                 <Grid item><Typography>Provisions</Typography></Grid>
                 <Grid container item spacing={1} direction={"row"} className={classes.provisionsRow}>
-                    <Grid item>
+                    <Grid item xs={9}>
                         <TextField
                             value={provisions}
                             id={"provisions"}
@@ -134,7 +134,7 @@ const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props:
                                 },
                             }}/>
                     </Grid>
-                    <Grid item className={classes.eatButtonContainer}>
+                    <Grid item xs={3} className={classes.eatButtonContainer}>
                         <Button onClick={eatProvision} variant={"contained"} color={"primary"}
                                 className={classes.eatButton}>Eat</Button>
                     </Grid>

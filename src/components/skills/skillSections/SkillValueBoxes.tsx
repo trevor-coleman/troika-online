@@ -124,6 +124,7 @@ const useStyles = makeStyles((theme: Theme) => (
     {
       root: {
         width:"100%",
+          height:"100%",
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
       },

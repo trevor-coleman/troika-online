@@ -213,7 +213,7 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
                 return (
                     {
                         title: `${rollerName} attacks with ${rolledWeapon} (${rolledSkill})`,
-                        dialogDetail: `roll to attack with ${rolledWeapon} using ${rolledSkill}`,
+                        dialogDetail: `Roll to attack with ${rolledWeapon} using ${rolledSkill}`,
                         discordDescription: `attacks with ***${rolledWeapon}*** using ***${rolledSkill}***`,
                         dialogResult: `Attacks with ${total + rank +
                         skill} power (Roll: ${total ??
@@ -251,6 +251,7 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
                 discordDescription: `rolls ***damage*** with ***${rolledWeapon}***`,
                 dialogResult: `Rolled a ${total} for ${damage[total -
                 1]} damage`,
+                damage,
             });
 
         const {key} = await pushNewRoll(props, formatter);

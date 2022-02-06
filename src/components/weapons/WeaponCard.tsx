@@ -6,24 +6,19 @@ import { GameContext } from '../../contexts/GameContext';
 import { useTypedSelector } from '../../store';
 import Grid from '@material-ui/core/Grid';
 import { MenuItem, Select } from '@material-ui/core';
-import ChargesStepper from '../items/ChargesStepper';
 import SkillSelectItem from '../skills/SkillSelectItem';
 import Button from '@material-ui/core/Button';
 import {
-  Casino as CasinoIcon,
   Check,
-  FiberManualRecord, FiberManualRecordOutlined,
-  FormatListBulletedSharp,
+  FiberManualRecordOutlined,
+
 } from '@material-ui/icons';
 import SkillInfoButton from '../skills/skillSections/SkillInfoButton';
 import { ItemContext } from '../../contexts/ItemContext';
 import WeaponInfoPopperContent from './WeaponInfoPopperContent';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 
 interface IWeaponCardProps {weapon: string}
-
-type WeaponCardProps = IWeaponCardProps;
 
 const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps) => {
   const {weapon} = props;
@@ -42,10 +37,8 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
   ]);
   const {
     name = weapon == "unarmed" ? "Unarmed" : "",
-    damage = weapon == "unarmed" ? [1,1,1,2,2,3,4] : [0, 0, 0, 0, 0, 0, 0],
     ranged = false,
     twoHanded = false,
-      hasCharges = false,
       isEquipped = false,
     armourPiercing = false,
     skill: weaponSkill = "none",
@@ -65,7 +58,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
       storeAs: `/weaponTableRow/${weapon}/skill`,
     },
   ]);
-  const weaponSkillValues = useTypedSelector(state => (
+  useTypedSelector(state => (
       {
         rank : state.firebase.data?.weaponTableRow?.[weapon]?.weaponSkillValues?.rank ??
                0,
@@ -73,9 +66,9 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
       }));
 
   const skillKeys = Object.keys(skills);
-  const showAttributes = ranged || twoHanded || armourPiercing;
 
-  const attributes = [
+
+  [
     {
       name : "Ranged",
       value: ranged,
@@ -86,7 +79,7 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
       name : "AP",
       value: armourPiercing,
     },
-  ].reduce<string>((prev, curr, index) => curr.value
+  ].reduce<string>((prev, curr) => curr.value
                                           ? prev === ""
                                             ? prev + curr.name
                                             : prev + `, ${curr.name}`
@@ -106,8 +99,8 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
     const characterSkill = characterSkillSnap.val();
 
     let rank=0;
-    let rolledSkill="";
-    let target =0;
+    let rolledSkill: string;
+
 
     if (weaponSkill == "none") {
       rolledSkill = "Base Skill"
@@ -228,7 +221,6 @@ const useStyles = makeStyles((theme: Theme) => (
         textAlign: "left",
       },
       weaponNameButtonContainer: {
-
         width: "100%"
       },
       weaponNameButtonRoot: {

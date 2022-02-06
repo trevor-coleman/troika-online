@@ -139,36 +139,37 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
           className={classes.container}
           direction={"column"}
           spacing={2}>
-        {editable ? <Grid
-            item
-            xs={12}
-            className={classes.basicRoll}>
-          <Button
-              className={classes.basicRollButton}
-              color={"primary"}
-              onClick={() => basicRoll(2)}
-              variant={"outlined"}>
-            Roll 2d6
-          </Button>
-          <Button
-              className={classes.basicRollButton}
-              color={"primary"}
-              onClick={() => basicRoll(1)}
-              variant={"outlined"}>
-            Roll 1d6
-          </Button>
 
-        </Grid> :""}
         {editable ? <Grid
             item
             xs={12}>
           <Box marginX={2}>
             <Button
                 fullWidth
-                color={'primary'}
+                color={'secondary'}
                 onClick={() => setOpen(true)}
                 variant={"contained"}>Rest</Button></Box>
         </Grid> :""}
+          {editable ? <Grid
+              item
+              xs={12}
+              className={classes.basicRoll}>
+              <Button
+                  className={classes.basicRollButton}
+                  color={"primary"}
+                  onClick={() => basicRoll(2)}
+                  variant={"outlined"}>
+                  Roll 2d6
+              </Button>
+              <Button
+                  className={classes.basicRollButton}
+                  color={"primary"}
+                  onClick={() => basicRoll(1)}
+                  variant={"outlined"}>
+                  Roll 1d6
+              </Button>
+
+          </Grid> : ""}
         <Grid
             item
             xs={12}

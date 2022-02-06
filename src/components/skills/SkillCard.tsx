@@ -172,7 +172,10 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                     {/*Fields*/}
                     <Grid
                         item
-                        xs={5}>
+                       xs={5}
+                        alignItems={"center"}
+                        justify={"center"}
+                    >
                         <SkillValueBoxes unarmed={skill == "unarmed"}/>
                     </Grid>
                     {/*Button*/}
