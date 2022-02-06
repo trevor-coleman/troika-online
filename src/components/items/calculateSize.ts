@@ -2,6 +2,7 @@ import {FormValueChange} from './forms/FormValueChange';
 import {Item} from '../../store/Item';
 
 export function calculateSize(currentValues: Item, update: FormValueChange<any>) {
+    debugger;
     const sizeOverride: Partial<Item> = {};
     const {
         id,
@@ -46,8 +47,7 @@ export function calculateSize(currentValues: Item, update: FormValueChange<any>)
 
     //reject changes if custom size is enabled
     if (currentValues.customSize && id === "size") {
-
-        sizeOverride.size = source === "customSizeSection" ? value.size : currentValues.size;
+        sizeOverride.size = source === "customSizeSection" ? value : currentValues.size;
     }
 
     //recalculate size if disabling custom size
@@ -80,6 +80,6 @@ export function calculateSize(currentValues: Item, update: FormValueChange<any>)
     else if (id === "protection" && !currentValues.customSize) {
         sizeOverride.size = protectionSize(currentValues.protects, value);
     }
-
+    debugger;
     return sizeOverride;
 }
