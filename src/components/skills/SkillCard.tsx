@@ -154,7 +154,9 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                 alignItems={"center"}
                 justify={"flex-start"}>
               <Tooltip disableHoverListener={staminaCost <= stamina} title={"Stamina too low"}><Grid item>
-                <Button color={"primary"} disabled={staminaCost > stamina || !editable} onClick={rollSkill} endIcon={isSpell ? <SvgIcon><MagicWandIcon/></SvgIcon>: undefined} >{name + (isSpell ? ` (${staminaCost})` : "" )}</Button>
+                <Button color={"primary"} classes={{
+                  text: classes.skillNameButtonText
+                }} disabled={staminaCost > stamina || !editable} onClick={rollSkill} endIcon={isSpell ? <SvgIcon><MagicWandIcon/></SvgIcon>: undefined} >{name + (isSpell ? ` (${staminaCost})` : "" )}</Button>
               </Grid></Tooltip>
             </Grid>
             <Grid
@@ -215,6 +217,9 @@ const useStyles = makeStyles((theme: Theme) => (
       },
       SkillCard   : {
         backgroundColor: theme.palette.background.paper,
+      },
+      skillNameButtonText:{
+        textAlign:"left",
       },
 
       expandButton: {},

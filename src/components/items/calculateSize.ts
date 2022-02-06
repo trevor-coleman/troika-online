@@ -69,7 +69,7 @@ export function calculateSize(currentValues: Item, update: FormValueChange<any>)
         }
     }
 
-    //adjust size if needed for two handed weapons
+    //adjust size if needed for two-handed weapons
     else if (id === "twoHanded" && !currentValues.customSize) {
         sizeOverride.size = twoHandedSize(value);
     } else if (id == "protects" && !currentValues.customSize) {
