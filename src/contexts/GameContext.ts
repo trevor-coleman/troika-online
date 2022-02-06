@@ -52,7 +52,7 @@ export interface IRollBaseProps {
 }
 
 export interface IRollProvisionsProps extends IRollBaseProps {
-  type: "provisions"
+  type: "provisions",
   currentStamina:number,
   maxStamina:number,
   currentProvisions: number,
