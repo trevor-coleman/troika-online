@@ -154,8 +154,13 @@ const WeaponCard: FunctionComponent<IWeaponCardProps> = (props: IWeaponCardProps
               alignItems={"center"}
               justify={"flex-start"}
           >
-            <Grid item>
+            <Grid item className={classes.weaponNameButtonContainer}>
               <Button
+                  classes={{
+                    root: classes.weaponNameButtonRoot,
+                    text:classes.weaponNameButtonText
+                  }}
+                  fullWidth
                   disabled={!editable}
                   onClick={rollWeapon}
                   color={'primary'}>{name}</Button>
@@ -212,10 +217,6 @@ const useStyles = makeStyles((theme: Theme) => (
         alignItems    : "flex-start",
         justifyContent: "flex-start",
       },
-      buttonText: {
-        textAlign: "left",
-      },
-
       selectContainer: {
         paddingRight: theme.spacing(2),
       },
@@ -223,6 +224,18 @@ const useStyles = makeStyles((theme: Theme) => (
       buttons: {
         padding: theme.spacing(1),
       },
+      weaponNameButtonText: {
+        textAlign: "left",
+      },
+      weaponNameButtonContainer: {
+
+        width: "100%"
+      },
+      weaponNameButtonRoot: {
+        justifyContent: "flex-start",
+        alignItems: "center",
+        width: "100%"
+      }
     }));
 
 export default WeaponCard;
