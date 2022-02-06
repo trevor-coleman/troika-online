@@ -21,6 +21,7 @@ import CharacterSheetSection
 import { useCharacterRollContext } from '../contexts/CharacterRollContext';
 import { GameContext } from '../contexts/GameContext';
 import { useAuth, useCharacter } from '../store/selectors';
+import MoniesAndProvisions from '../components/moniesAndProvisions/MoniesAndProvisions';
 
 interface CharacterEditorProps {
   init?: boolean
@@ -77,6 +78,13 @@ const CharacterEditor: FunctionComponent<CharacterEditorProps> = (props: Charact
                     <CharacterWeapons />
                   </CharacterSheetSection>
                 </Grid>
+                  <Grid
+                      item
+                      xs={12}>
+                      <CharacterSheetSection title={"Monies & Provisions"}>
+                          <MoniesAndProvisions/>
+                      </CharacterSheetSection>
+                  </Grid>
                 <Grid
                     item
                     xs={12}>
