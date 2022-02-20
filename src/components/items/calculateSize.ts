@@ -2,7 +2,6 @@ import {FormValueChange} from './forms/FormValueChange';
 import {Item} from '../../store/Item';
 
 export function calculateSize(currentValues: Item, update: FormValueChange<any>) {
-    debugger;
     const sizeOverride: Partial<Item> = {};
     const {
         id,

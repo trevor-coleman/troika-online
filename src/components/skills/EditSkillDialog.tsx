@@ -1,6 +1,6 @@
 import { DeleteOutline } from '@material-ui/icons';
 import React, {
-  FunctionComponent, useState, ChangeEvent, useEffect, useContext,
+  FunctionComponent, ChangeEvent, useContext,
 } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -8,10 +8,9 @@ import {
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { Skill } from '../../store/Schema';
-import { useAuth, useSkill } from '../../store/selectors';
+import { useAuth} from '../../store/selectors';
 import {
-  useFirebase, useFirebaseConnect, isLoaded,
+  useFirebase, useFirebaseConnect,
 } from 'react-redux-firebase';
 import { CharacterContext } from '../../contexts/CharacterContext';
 import { useTypedSelector } from '../../store';
@@ -29,8 +28,8 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
     onClose,
       skill
   } = props;
-  const auth = useAuth();
-  const classes = useStyles();
+  useAuth();
+    const classes = useStyles();
   const firebase = useFirebase();
   const {character} = useContext(CharacterContext);
   useFirebaseConnect([
@@ -52,7 +51,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
 
   }
 
-  const handleClose = async (undo?:boolean)=> {
+  const handleClose = async ()=> {
     onClose();
   }
 
@@ -69,7 +68,7 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
 
   return (
       <Dialog open={open}
-              onClose={()=>handleClose(false)}
+              onClose={()=>handleClose()}
               maxWidth={"xs"}
               fullWidth>
         <DialogTitle>{name ?? "Unnamed Skill"}</DialogTitle>
@@ -144,14 +143,14 @@ const EditSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditSki
                   xs={3} />
               <Grid item
                     xs={3}>
-                <Button onClick={()=>handleClose(true)}
+                <Button onClick={()=>handleClose()}
                         variant={"outlined"}
                         fullWidth>Cancel</Button>
               </Grid>
               <Grid item
                     xs={3}>
                 <Button disabled={!isValid}
-                        onClick={()=>handleClose(false)}
+                        onClick={()=>handleClose()}
                         color={'primary'}
                         variant={"contained"}
                         fullWidth>Save</Button>

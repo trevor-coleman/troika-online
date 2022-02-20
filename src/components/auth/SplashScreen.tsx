@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 interface SplashScreenProps {
@@ -10,15 +10,15 @@ interface SplashScreenProps {
 const SplashScreen: FunctionComponent<SplashScreenProps> = (props: SplashScreenProps) => {
   const {} = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
+  useDispatch();
 
-  return (
+    return (
       <div className={classes.root}>
         <Typography variant={"h1"}>Splash Screen</Typography>
       </div>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {},
     }));

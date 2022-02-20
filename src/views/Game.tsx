@@ -2,14 +2,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControlLabel,
   Paper,
   Switch, TextField,
 } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import firebase from 'firebase/app';
 import React, {
   ChangeEvent, FunctionComponent, useEffect, useState,
 } from 'react';
@@ -22,9 +20,7 @@ import { useAuth, useGame } from '../store/selectors';
 import Grid from '@material-ui/core/Grid';
 import Players from '../components/players/Players';
 import Characters from '../components/characters/Characters';
-import { useTypedSelector } from '../store';
 import Button from '@material-ui/core/Button';
-import { PlayArrowRounded, Casino } from '@material-ui/icons';
 import Collapse from '@material-ui/core/Collapse';
 
 interface GameProps {
@@ -35,25 +31,26 @@ interface GameProps {
 const Game: FunctionComponent<GameProps> = (props: GameProps) => {
   const {} = props;
   const {gameKey} = useParams<{ gameKey: string }>();
-  const history = useHistory();
-  const classes = useStyles();
+  useHistory();
+    const classes = useStyles();
   const firebase = useFirebase();
   const auth = useAuth();
 
   useFirebaseConnect([`/games/${gameKey}`]);
 
   const game = useGame(gameKey);
+  const gameName = game?.name ?? "Game"
 
   useEffect(() => {
-    document.title = `${game?.name ?? "Game"} - Troika Online`;
-  }, [game]);
+    document.title = `${gameName} - Troika Online`;
+  }, [gameName]);
 
   const [showGameID, setShowGameId] = useState(false);
   const onCloseGameId = () => setShowGameId(false);
   const [webhookErrorIsVisible, setWebhookErrorIsVisible] = useState(false);
   const [webhookError, setWebhookError] = useState("");
   const [webhookUrl, setWebhookURL] = useState(game?.discordWebhookUrl)
-  const [enableDiscord, setEnableDiscord] =  useState(game?.enableDiscord ?? false);
+
 
   const handleDiscordChange = (e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=> {
     const url = e.target.value;

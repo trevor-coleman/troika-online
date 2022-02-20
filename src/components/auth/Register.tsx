@@ -5,7 +5,7 @@ import React, {
   useState, useEffect,
 } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { TextField, Box, Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -23,8 +23,8 @@ interface RegisterProps {
 const Register: FunctionComponent<RegisterProps> = (props: RegisterProps) => {
   const {} = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const firebase = useFirebase();
+  useDispatch();
+    const firebase = useFirebase();
   const auth = useAuth();
   const [values, setValues] = useState({
     displayName: "",
@@ -152,7 +152,7 @@ const Register: FunctionComponent<RegisterProps> = (props: RegisterProps) => {
 
 }
 
-  const useStyles = makeStyles((theme: Theme) => (
+  const useStyles = makeStyles(() => (
       {
         root: {},
       }));

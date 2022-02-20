@@ -1,22 +1,16 @@
 import React, {
   FunctionComponent,
   ChangeEvent,
-  useState, useContext,
+  useState,
 } from 'react';
-import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   DialogTitle, DialogContent, Dialog, DialogActions, TextField,
 } from '@material-ui/core';
-import { useFirebase } from 'react-redux-firebase';
-import { useAuth } from '../../store/selectors';
 import SrdSkillsList from './SrdSkillList';
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { Skill } from '../../store/Schema';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import CharacterEditor from '../../views/CharacterEditor';
-import { CharacterContext } from '../../contexts/CharacterContext';
 
 interface AddSkillsDialogProps {
   open: boolean,
@@ -33,7 +27,7 @@ const AddSkillsDialog: FunctionComponent<AddSkillsDialogProps> = (props: AddSkil
     onClose,
       onAdd,
   } = props;
-  const {character} = useContext(CharacterContext)
+
   const classes = useStyles();
 
   const [search, setSearch] = useState("");

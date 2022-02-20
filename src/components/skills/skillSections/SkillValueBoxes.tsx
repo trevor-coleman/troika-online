@@ -4,14 +4,11 @@ import Grid from '@material-ui/core/Grid';
 import { TextField } from '@material-ui/core';
 import { useFirebaseConnect, useFirebase } from 'react-redux-firebase';
 import { CharacterContext } from '../../../contexts/CharacterContext';
-import { useAuth } from '../../../store/selectors';
+import {useSkillStat} from '../../../store/selectors';
 import { SkillContext } from '../context/SkillContext';
 import { useTypedSelector } from '../../../store';
-import Box from '@material-ui/core/Box/Box';
 
 interface IValueBoxesProps {unarmed?: boolean}
-
-type ValueBoxesProps = IValueBoxesProps;
 
 const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxesProps) => {
   const {unarmed} = props;
@@ -19,12 +16,11 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
   const {character, editable} = useContext(CharacterContext);
   const skill=useContext(SkillContext);
   const firebase=useFirebase();
-  const {uid}=useAuth();
+
 
   useFirebaseConnect([
     {
-      path   : `/characters/${character}/skill`,
-      storeAs: `skillValues/${character}/totalSkill`,
+      path   : `/baseStats/${character}/skill`,
     },
   ]);
 
@@ -35,9 +31,8 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
 
   const stateRank = useTypedSelector(state => state.firebase.data?.skillValues?.[character]?.[skill]?.rank) ?? 0;
 
-  const stateSkill = useTypedSelector(state => state.firebase.data?.skillValues?.[character]?.totalSkill) ?? 0;
+  const skillStat = useSkillStat(character);
 
-  const skillSkill  = parseInt(stateSkill);
   const skillRank = parseInt(stateRank)
 
 
@@ -51,7 +46,7 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
 
     const newValues = {
       rank: skillRank,
-      skill: skillSkill,
+      skill: skillStat,
       [e.target.id]: newValue,
     };
 
@@ -95,7 +90,7 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
               margin={"dense"}
               label={"Skill"}
               id={"skill"}
-              value={skillSkill}
+              value={skillStat}
               className={classes.skillRoot}
               onChange={handleChange} />
         </Grid>
@@ -114,7 +109,7 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
                 }}}
               value={(
                          skillRank) + (
-                         skillSkill)}
+                         skillStat)}
               type={"number"} />
         </Grid>
       </Grid>);

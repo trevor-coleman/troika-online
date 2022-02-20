@@ -24,10 +24,10 @@ function random(seed:number|null = null) {
             18000 * (
             m_w & 65535) + (
                 m_w >> 16)) & mask;
-  var result = (
-                   (
-                       m_z << 16) + (
-                       m_w & 65535)) >>> 0;
+  let result = (
+      (
+          m_z << 16) + (
+          m_w & 65535)) >>> 0;
   result /= 4294967296;
   return result;
 }

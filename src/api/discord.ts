@@ -8,13 +8,13 @@ const successString = `\`\`\`diff
 + Success
 \`\`\``
 
-const rollString = ({rollerName = "Character", discordDescription = "rolls", discordResult, total = 0, success}:RollProps) => {
+const rollString = ({rollerName = "Character", discordDescription = "rolls", discordResult, total = 0, success}:RollProps, roll:number[]) => {
   console.log("discordResult",discordResult)
   const resultText = discordResult ?? `**${total}**`
   console.log("resultText",resultText)
   return `\n**${rollerName}** ${discordDescription}
-  > Result: 
-  > ${resultText}
+> Result: ${roll.reduce<string>((prev, curr) => `${prev} \`[${curr}]\``, "")} 
+> Total: ${resultText}
   ${discordResult
     ? ``
     : success
@@ -23,10 +23,10 @@ const rollString = ({rollerName = "Character", discordDescription = "rolls", dis
       `;
 };
 
-export async function callDiscordWebhook(props: RollProps, webhookUrl:string) {
+export async function callDiscordWebhook(props: RollProps, roll:number[], webhookUrl:string) {
 
 
-  const content = rollString(props)
+  const content = rollString(props, roll)
   const requestOptions = {
     method : 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -76,6 +76,9 @@ export async function abilityWebhook(props: IRollSkillProps, roll: number[]) {
                                        ? `tests ${rolledSkill}`
                                        : `rolling under **${target}** for **${rolledSkill}**`}
 > Result: 
+>
+> ${roll.reduce<string>((prev, curr) => `${prev} [${curr}]`, "")}
+>
 > **${total}**
 ${target
   ? total > target

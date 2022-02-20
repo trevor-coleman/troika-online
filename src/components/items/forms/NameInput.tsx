@@ -1,11 +1,8 @@
 import React, {
   FunctionComponent,
-  PropsWithChildren, ChangeEvent,
+  ChangeEvent,
 } from 'react';
-import { useDispatch } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
-import { useAuth } from '../../../store/selectors';
+import { makeStyles} from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
 
 interface INameInputProps {
@@ -18,9 +15,9 @@ interface INameInputProps {
 //COMPONENT
 const NameInput: FunctionComponent<INameInputProps> = (props: INameInputProps) => {
   const {name, onChange}=props;
-  const classes = useStyles();
+  useStyles();
 
-  return (
+    return (
       <TextField variant={"outlined"}
                  label={"Name"}
                  id={"item-name"}
@@ -30,7 +27,7 @@ const NameInput: FunctionComponent<INameInputProps> = (props: INameInputProps) =
                  fullWidth />);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {},
     }));

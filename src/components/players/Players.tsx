@@ -1,5 +1,4 @@
-import IconButton from '@material-ui/core/IconButton';
-import { Person, PersonAdd } from '@material-ui/icons';
+import { PersonAdd } from '@material-ui/icons';
 import React, {
   ChangeEvent, FunctionComponent, PropsWithChildren, useState,
 } from 'react';
@@ -15,8 +14,6 @@ import {
   Dialog,
   DialogTitle,
   ListItem,
-  ListItemSecondaryAction,
-  CardContent,
   DialogContent,
   DialogActions,
   ListItemText,
@@ -41,9 +38,9 @@ interface PlayersProps {
 const Players: FunctionComponent<PlayersProps> = (props: PlayersProps) => {
   const {gameKey} = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const theme = useTheme();
-  const firebase = useFirebase();
+  useDispatch();
+    useTheme();
+    const firebase = useFirebase();
   const profile = useProfile();
   const auth = useAuth();
   const game = useGame(gameKey);
@@ -65,8 +62,6 @@ const Players: FunctionComponent<PlayersProps> = (props: PlayersProps) => {
   });
 
   const resultProfile = useTypedSelector(state => state.firebase.ordered?.addPlayersSearchResult);
-
-  console.log(resultProfile);
 
   const handleClose = () => {
     setAddFriendDialogOpen(false);
@@ -110,9 +105,9 @@ const Players: FunctionComponent<PlayersProps> = (props: PlayersProps) => {
     invitePlayer(playerToAdd);
   }
 
-  const disableAddFriend = isEmpty(resultProfile) || !isLoaded(resultProfile)
+  isEmpty(resultProfile) || !isLoaded(resultProfile);
 
-  return (
+    return (
       <Paper className={classes.root}>
         <Box p={2}>
           <Typography variant={'h5'}>Players</Typography>

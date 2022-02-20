@@ -1,17 +1,16 @@
 import {
     Card,
-    Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableRow, TextField,
+    Dialog, DialogActions, DialogContent, DialogTitle,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import React, {
     FunctionComponent, PropsWithChildren, useContext, useEffect, useState,
 } from 'react';
-import {useDispatch} from 'react-redux';
 import {makeStyles, Theme} from '@material-ui/core/styles';
-import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
+import {useFirebase} from 'react-redux-firebase';
 import {
-    GameContext, IRollWeaponProps, RollProps,
+    GameContext,
 } from '../../../contexts/GameContext';
 import {useAuth} from '../../../store/selectors';
 import Roll from '../Roll';
@@ -29,10 +28,10 @@ interface IRollDialogProps {
 type RollDialogProps = PropsWithChildren<IRollDialogProps>
 
 //COMPONENT
-const RollDialog: FunctionComponent<RollDialogProps> = (props: RollDialogProps) => {
-    const classes = useStyles();
+const RollDialog: FunctionComponent<RollDialogProps> = () => {
+    useStyles();
     const firebase = useFirebase();
-    const auth = useAuth();
+    useAuth();
     const {
         lastRoll,
         lastSeen,

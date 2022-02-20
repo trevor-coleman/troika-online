@@ -1,5 +1,4 @@
 import React, {ChangeEvent, FunctionComponent, PropsWithChildren, useContext, useState} from 'react';
-import {useDispatch} from 'react-redux';
 import {makeStyles, Theme} from '@material-ui/core/styles';
 import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
 import {useAuth, useMaxStamina, useMonies, useProvisions, useStamina} from '../../store/selectors';
@@ -17,10 +16,10 @@ interface IMoniesAndProvisionsProps {
 type MoniesAndProvisionsProps = PropsWithChildren<IMoniesAndProvisionsProps>
 
 //COMPONENT
-const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props: MoniesAndProvisionsProps) => {
+const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = () => {
     const classes = useStyles();
     const firebase = useFirebase();
-    const auth = useAuth();
+    useAuth();
     const {character, editable} = useContext(CharacterContext);
     const {roll} = useContext(GameContext);
     const {name} = useCharacter(character) ?? {};
@@ -30,21 +29,10 @@ const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props:
     const maxStamina = useMaxStamina(character);
 
     useFirebaseConnect([
-        {
-            path: `/characters/${character}/stamina_current`,
-            storeAs: `characterSkills/${character}/stamina_current`,
-        }, {
-            path: `/characters/${character}/stamina_max`,
-            storeAs: `characterSkills/${character}/stamina_max`,
-        },
-        {
-            path: `/characters/${character}/monies`,
-            storeAs: `characterSkills/${character}/monies`,
-        },
-        {
-            path: `/characters/${character}/provisions`,
-            storeAs: `characterSkills/${character}/provisions`,
-        },
+        `/baseStats/${character}/stamina_current`,
+        `/baseStats/${character}/stamina_max`,
+        `/moniesAndProvisions/${character}/monies`,
+        `/moniesAndProvisions/${character}/provisions`,
     ]);
 
 
@@ -53,23 +41,23 @@ const MoniesAndProvisions: FunctionComponent<MoniesAndProvisionsProps> = (props:
         monies, provisions
     });
 
-    function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
+    async function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): Promise<any> {
+
+        const newValue = Math.max(parseInt(e.target.value ?? "0"), 0)
 
         setValues({
             ...values,
-            [e.target.id]: parseInt(e.target.value),
+            [e.target.id]: newValue,
         });
 
-        firebase.ref(`/characters/${character}/${e.target.id}`)
-            .set(parseInt(e.target.value == ""
-                ? "0"
-                : e.target.value));
+        await firebase.ref(`/moniesAndProvisions/${character}/${e.target.id}`)
+            .set(newValue);
     }
 
     async function eatProvision() {
         const dice = [6];
 
-        const result = await roll({
+        await roll({
             type: 'provisions',
             rollerKey: character,
             dice: dice,

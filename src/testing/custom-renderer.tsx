@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, JSXElementConstructor } from "react";
+import React, { PropsWithChildren} from "react";
 import { render, RenderOptions } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import store from '../store'
@@ -10,7 +10,7 @@ const Wrapper = ({children}:PropsWithChildren<any>) => {
       <MemoryRouter><Provider store={store}>{children}</Provider></MemoryRouter>);
 };
 
-const customRender = (ui: React.ReactElement<any, string | JSXElementConstructor<any>>, options?: Pick<RenderOptions<any>, "container" | "baseElement" | "hydrate" | "wrapper">) => render(ui,
+const customRender = (ui: React.ReactElement, options?: Pick<RenderOptions<any>, "container" | "baseElement" | "hydrate" | "wrapper">) => render(ui,
     {wrapper: Wrapper, ...options});
 
 // re-export everything

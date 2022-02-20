@@ -1,7 +1,6 @@
 import React, { PropsWithChildren } from 'react';
-import { Container } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { isLoaded, useFirebase } from 'react-redux-firebase';
+import { isLoaded} from 'react-redux-firebase';
 import ScrollToTopOnNavigate from './components/utility/ScrollToTopOnNavigate';
 import { RootState } from './store';
 import SignIn from './components/auth/SignIn';
@@ -25,10 +24,7 @@ function AuthIsLoaded({children}: PropsWithChildren<any>) {
   return children;
 }
 
-function App(props: any) {
-  const auth = useSelector((state: RootState) => state.firebase.auth);
-  const firebase = useFirebase();
-
+function App() {
   return (
       <div className="App">
         <ScrollToTopOnNavigate/>

@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
-import ScrollToTopOnNavigate from './components/utility/ScrollToTopOnNavigate';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import {

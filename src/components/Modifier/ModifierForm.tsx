@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modifier, Target } from '../../types/troika';
+import { Modifier} from '../../types/troika';
 import {
   TextField,
   Checkbox,
@@ -13,8 +13,7 @@ interface ModifierFormProps {
 }
 
 
-
-const ModifierForm = (props: ModifierFormProps) => {
+const ModifierForm = ({modifiers, addModifier}:ModifierFormProps) => {
   const [targetSelf, setTargetSelf] = useState(false);
   const [targetEnemy, setTargetEnemy] = useState(false);
   const [targetPlayer, setTargetPlayer] = useState(false);

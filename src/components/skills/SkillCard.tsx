@@ -6,14 +6,12 @@ import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
 import {GameContext} from '../../contexts/GameContext';
 import {useTypedSelector} from '../../store';
 import {CharacterContext} from '../../contexts/CharacterContext';
-import {Checkbox, Popper, SvgIcon, Tooltip} from '@material-ui/core';
-import {Casino, Edit, Info} from '@material-ui/icons';
+import {Checkbox, SvgIcon, Tooltip} from '@material-ui/core';
+import {Edit} from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import {useAuth} from '../../store/selectors';
+import {useAuth, useCharacterName, useStamina} from '../../store/selectors';
 import SkillValueBoxes from './skillSections/SkillValueBoxes';
-import IconButton from '@material-ui/core/IconButton';
 import {SkillContext} from './context/SkillContext';
 import SkillInfoButton from './skillSections/SkillInfoButton';
 import SkillInfoPopperContent from './SkillInfoPopperContent';
@@ -26,19 +24,17 @@ interface ISkillCardProps {
     onRemove: (key: string) => void,
 }
 
-type SkillCardProps = ISkillCardProps;
-
 const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) => {
     const {
         skill,
         onEdit,
-        onRemove,
+
     } = props;
     const {character, editable} = useContext(CharacterContext);
     const {roll} = useContext(GameContext);
     const classes = useStyles();
     const firebase = useFirebase();
-    const auth = useAuth()
+    useAuth();
 
     useFirebaseConnect([
         {
@@ -54,29 +50,20 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
             path: `/skills/${character}/${skill}/used`,
             storeAs: `/skillTableRow/${character}/${skill}/used`,
         }, {
-            path: `/characters/${character}/name`,
-            storeAs: `/skillTableRow/${character}/name`,
+            path: `/bios/${character}/name`,
         }, {
-            path: `/characters/${character}/stamina_current`,
-            storeAs: `/skillTableRow/${character}/stamina_current`,
-        },
-        {
-            path: `/characters/${character}/skill`,
-            storeAs: `/skillTableRow/${character}/totalSkill`,
-        }, {
-            path: `/skillValues/${character}/${skill}/rank`,
-            storeAs: `skillTableRow/${character}/${skill}/rank`,
+            path: `/baseStats/${character}`,
         },
     ]);
+
+    const stamina = useStamina(character);
+    const characterName = useCharacterName(character);
 
     const used = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.used) ?? false;
 
     const name = skill == "unarmed" ? "Unarmed" : useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.name) ??
         "";
-    const characterName = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.name) ??
-        "";
-    const stamina = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.stamina_current) ??
-        0;
+
     const rank = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.rank) ??
         0;
     const total = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.totalSkill) ??
@@ -87,7 +74,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
 
     const [expand, setExpand] = useState(false);
 
-    const toggleExpand = useCallback(() => {
+    useCallback(() => {
         setExpand(!expand);
     }, [expand]);
 
@@ -100,7 +87,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
     async function rollSkill(): Promise<void> {
         if (isSpell) {
             console.log("ROLLING SPELL")
-            await firebase.ref(`/characters/${character}/stamina_current`).set(stamina - staminaCost);
+            await firebase.ref(`/baseStats/${character}/stamina_current`).set(stamina - staminaCost);
             await roll({
                 type: 'spell',
                 dice: [6, 6],
@@ -172,7 +159,8 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                     {/*Fields*/}
                     <Grid
                         item
-                       xs={5}
+                        container
+                        xs={5}
                         alignItems={"center"}
                         justify={"center"}
                     >
@@ -181,10 +169,10 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                     {/*Button*/}
                     <Grid
                         item
+                        container
                         xs={2}
                         alignItems={"center"}
                         justify={"center"}
-                        container
                         spacing={1}
                     >
                         <Grid item><Button

@@ -1,10 +1,7 @@
-import React, { PropsWithChildren, useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import './die.css';
 
-const seedRandom = (s: number) => {
-  s = Math.sin(s) * 10000;
-  return s - Math.floor(s);
-};
+
 
 interface DieProps {
   dieRoll: number;

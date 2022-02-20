@@ -3,24 +3,22 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
+
+
+
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
-import { Casino } from '@material-ui/icons';
 import React, {
-  FunctionComponent, PropsWithChildren, useContext, useEffect, useState,
+  FunctionComponent, PropsWithChildren, useContext, useState,
 } from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import {
-  isLoaded, useFirebase, useFirebaseConnect,
+  useFirebaseConnect,
 } from 'react-redux-firebase';
 import { CharacterContext } from '../../contexts/CharacterContext';
 import { GameContext, IRollToAdvanceProps } from '../../contexts/GameContext';
 import { useTypedSelector } from '../../store';
-import { Character, Skill } from '../../store/Schema';
 import { useCharacter } from '../../store/selectors';
 import SkillListItem, { ISkillListItem } from '../rolls/RollDialog/SkillListItem';
 
@@ -37,8 +35,8 @@ const RestDialog: FunctionComponent<RestDialogProps> = (props: RestDialogProps) 
     open,
     handleClose,
   } = props;
-  const classes = useStyles();
-  const {character} = useContext(CharacterContext);
+  useStyles();
+    const {character} = useContext(CharacterContext);
   useFirebaseConnect([
     {
       path       : `/skills/${character}`,
@@ -112,7 +110,7 @@ const RestDialog: FunctionComponent<RestDialogProps> = (props: RestDialogProps) 
       </Dialog>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {},
     }));

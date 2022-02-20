@@ -1,16 +1,14 @@
 import React, {
   FunctionComponent,
-  useState,
-  ChangeEvent, useContext,
+  useContext,
 } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   DialogTitle,
-  DialogContent,
   Dialog, DialogActions,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { useAuth, useSkill } from '../../store/selectors';
+import { useAuth} from '../../store/selectors';
 import {
   useFirebase, useFirebaseConnect, isLoaded,
 } from 'react-redux-firebase';
@@ -30,9 +28,9 @@ const RemoveSkillDialog: FunctionComponent<EditSkillDialogProps> = (props: EditS
     onClose,
     skillKey,
   } = props;
-  const auth = useAuth();
-  const firebase = useFirebase();
-  const classes = useStyles();
+  useAuth();
+    useFirebase();
+    const classes = useStyles();
   const {character} = useContext(CharacterContext);
   useFirebaseConnect([{path:`skills/${character}/${skillKey}/name`, storeAs:`editSkill/${skillKey}/name`}]);
   const name = useTypedSelector(state => state.firebase.data?.editSkill?.[character]?.name) ?? ""

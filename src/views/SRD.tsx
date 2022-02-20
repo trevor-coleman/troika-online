@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import { useFirebase } from 'react-redux-firebase';
 
 import { useParams } from 'react-router-dom';
@@ -16,8 +16,8 @@ const SRD: FunctionComponent<SRDProps> = (props: SRDProps) => {
   const {} = props;
   const {type} = useParams<{ type: string }>()
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const firebase = useFirebase();
+  useDispatch();
+    const firebase = useFirebase();
 
   console.log(type);
 
@@ -34,7 +34,7 @@ const SRD: FunctionComponent<SRDProps> = (props: SRDProps) => {
       </div>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {},
     }));

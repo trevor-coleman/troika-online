@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -8,21 +8,20 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import ModifierForm from '../Modifier/ModifierForm';
-import { Modifier } from '../../types/troika';
 
 interface ItemFormProps {
   parent: string;
 }
 
 //COMPONENT
-const ItemForm: FunctionComponent<ItemFormProps> = (props: ItemFormProps) => {
+export const ItemForm: FunctionComponent<ItemFormProps> = (props: ItemFormProps) => {
   const {parent} = props;
   const classes = useStyles();
   const firebase = useFirebase();
   useFirebaseConnect(() => []);
-  const dispatch = useDispatch();
+  useDispatch();
 
-  const [name, setName] = useState("");
+    const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [hasCharges, setHasCharges] = useState(false);
   const [chargesRemaining, setChargesRemaining] = useState("");
@@ -79,7 +78,7 @@ const ItemForm: FunctionComponent<ItemFormProps> = (props: ItemFormProps) => {
           </Grid>
           <Grid item>
             <ModifierForm modifiers={[]}
-                          addModifier={(modifier: Modifier) => {return;}} />
+                          addModifier={() => {return;}} />
           </Grid>
           <Grid item>
             <Button color={"primary"}
@@ -93,11 +92,9 @@ const ItemForm: FunctionComponent<ItemFormProps> = (props: ItemFormProps) => {
       </form>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {
         width: "100%",
       },
     }));
-
-export default ItemForm;

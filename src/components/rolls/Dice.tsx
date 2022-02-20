@@ -1,11 +1,10 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent} from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Die from './Die';
 import Grid from '@material-ui/core/Grid';
-import random from '../../utils/SeededRandom';
 
 interface DiceProps {
   rollKey: string,
@@ -14,10 +13,7 @@ interface DiceProps {
   animate?: boolean;
 }
 
-const seedRandom = (s:number) => () => {
-  s = Math.sin(s) * 10000;
-  return s - Math.floor(s);
-};
+
 
 //COMPONENT
 const Dice: FunctionComponent<DiceProps> = (props: DiceProps) => {
@@ -25,12 +21,12 @@ const Dice: FunctionComponent<DiceProps> = (props: DiceProps) => {
   const animate = props.animate ?? true;
 
 
-  const numberOfDice = dice.length;
-  const theme =useTheme();
-  const classes = useStyles();
-  const dispatch = useDispatch();
 
-  return (
+  useTheme();
+    const classes = useStyles();
+  useDispatch();
+
+    return (
         <Grid container >
       <Box className={classes.dieContainer} >
           <Paper>

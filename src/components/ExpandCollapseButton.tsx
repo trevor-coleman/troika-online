@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles} from "@material-ui/core/styles";
 import IconButton from '@material-ui/core/IconButton';
-import { Fade, Zoom } from '@material-ui/core';
+import { Zoom } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 
 interface IExpandCollapseButtonProps {
@@ -9,17 +9,15 @@ interface IExpandCollapseButtonProps {
   onClick: () => void
 }
 
-type ExpandCollapseButtonProps = IExpandCollapseButtonProps;
-
 const ExpandCollapseButton: FunctionComponent<IExpandCollapseButtonProps> = (props: IExpandCollapseButtonProps) => {
   const {
     expand,
     onClick,
     ...rest
   } = props;
-  const classes = useStyles();
+  useStyles();
 
-  const [less, setLess] = useState(false);
+    const [less, setLess] = useState(false);
 
   return (
       less ?
@@ -46,7 +44,7 @@ const ExpandCollapseButton: FunctionComponent<IExpandCollapseButtonProps> = (pro
         </Zoom>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       ExpandCollapseButton: {},
     }));

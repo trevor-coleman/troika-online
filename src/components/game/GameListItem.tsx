@@ -1,11 +1,9 @@
-import Divider from '@material-ui/core/Divider';
-import { GroupWork } from '@material-ui/icons';
 import React, { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import {
-  ListItemText, ListItem, ListItemSecondaryAction, ListItemAvatar, Avatar,
+  ListItemText, ListItem, ListItemSecondaryAction,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useGame } from '../../store/selectors';
@@ -22,9 +20,9 @@ const GameListItem: FunctionComponent<GameListItemProps> = (props: GameListItemP
     firstAction,
   } = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
+  useDispatch();
 
-  useFirebaseConnect({path: `/games/${gameKey}`});
+    useFirebaseConnect({path: `/games/${gameKey}`});
 
   const CustomLink = React.useMemo(() => React.forwardRef((linkProps,
                                                            ref: any) => (

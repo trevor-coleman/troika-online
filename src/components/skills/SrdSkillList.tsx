@@ -1,8 +1,7 @@
 import React, {
   FunctionComponent, ChangeEvent, useState, useEffect,
 } from 'react';
-import { useDispatch } from 'react-redux';
-import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
+import { makeStyles, Theme} from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { useTypedSelector } from '../../store';
@@ -12,7 +11,7 @@ import {
   Collapse,
   ListItemSecondaryAction,
   ListItemAvatar,
-  CircularProgress,
+
 } from '@material-ui/core';
 import { useFirebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
 import { ExpandMore } from '@material-ui/icons';
@@ -47,13 +46,12 @@ const SrdSkillsList: FunctionComponent<SkillsListProps> = (props: SkillsListProp
                      ]);
 
   const skills = useTypedSelector(state => state.firebase.ordered.addSrdSkills);
-  const skillKeys: string[] = isLoaded(skills) && !isEmpty(skills)
+  isLoaded(skills) && !isEmpty(skills)
                              ? Object.keys(skills)
                              : [];
 
 
-
-  const handleChange = (key: string, value: Skill | null) => {
+    const handleChange = (key: string, value: Skill | null) => {
     const newValues = {...values};
     if (value === null) {
       delete newValues[key];

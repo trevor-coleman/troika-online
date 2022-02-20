@@ -13,7 +13,7 @@ import List from '@material-ui/core/List';
 import {
   useAuth, useGame, useGameRef, useProfile,
 } from '../../store/selectors';
-import { Character } from '../../store/Schema';
+import {Bio, Character} from '../../store/Schema';
 import { useHistory } from 'react-router-dom';
 import CharacterListItem from './CharacterListItem';
 import Collapse from '@material-ui/core/Collapse';
@@ -48,14 +48,21 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
     const character: Partial<Character> = {
       game : gameKey,
       owner: auth.uid,
-      name,
       sort_name,
     };
 
+    const bio: Partial<Bio> = {
+      name,
+    }
+
     const newCharacterRef = await firebase.ref('/characters')
                                           .push(character);
-    await gameRef.child(`characters/${newCharacterRef.key}`)
+
+    const bioPromise = firebase.ref(`/bios/${character}`).push(bio);
+    const gamePromise = gameRef.child(`characters/${newCharacterRef.key}`)
                  .set(true);
+
+    await Promise.all([bioPromise, gamePromise])
     history.push(`/character/${newCharacterRef.key}/new`);
 
   };
@@ -70,6 +77,18 @@ const Characters: FunctionComponent<CharactersProps> = (props: CharactersProps) 
     await firebase.ref(`/skills/${characterKey}`)
                   .set(null)
                   .catch(e => console.log("error deleting skills", e));
+    await firebase.ref(`/bios/${characterKey}`)
+        .set(null)
+        .catch(e => console.log("error deleting bio", e));
+    await firebase.ref(`/baseStats/${characterKey}`)
+        .set(null)
+        .catch(e => console.log("error deleting baseStats", e));
+    await firebase.ref(`/portraits/${characterKey}`)
+        .set(null)
+        .catch(e => console.log("error deleting portraits", e));
+    await firebase.ref(`/moniesAndProvisions/${characterKey}`)
+        .set(null)
+        .catch(e => console.log("error deleting moniesAndProvisions", e));
     await firebase.ref(`/items/${characterKey}`)
                   .set(null)
                   .catch(e => console.log("error deleting items", e));

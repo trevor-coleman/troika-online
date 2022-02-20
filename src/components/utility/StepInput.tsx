@@ -1,4 +1,4 @@
-import { FormControlLabel, Switch } from '@material-ui/core';
+import { FormControlLabel} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
@@ -14,8 +14,6 @@ interface IStepInputProps {
   onIncrease: ()=>void,
   onDecrease: ()=>void,
 }
-
-type StepInputProps = IStepInputProps;
 
 const StepInput: FunctionComponent<IStepInputProps> = (props: IStepInputProps) => {
   const {

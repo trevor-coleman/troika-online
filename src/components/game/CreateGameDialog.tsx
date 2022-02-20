@@ -1,11 +1,9 @@
 import Button from '@material-ui/core/Button';
 import React, { ChangeEvent, FunctionComponent, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
+import { makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {
-  TextField, Paper, Dialog, DialogTitle, DialogActions, DialogContent,
+  TextField, Dialog, DialogTitle, DialogActions, DialogContent,
 } from '@material-ui/core';
 import NewGameButton from './NewGameButton';
 
@@ -22,7 +20,7 @@ const CreateGameDialog: FunctionComponent<CreateGameProps> = (props: CreateGameP
   const [gameName, setGameName] = useState("")
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
-  const onCreate = (key: string) => {}
+  const onCreate = () => {}
 
   const onFail = (message:string) => {
     setIsError(true);
@@ -64,7 +62,7 @@ const CreateGameDialog: FunctionComponent<CreateGameProps> = (props: CreateGameP
 
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {flexGrow: 1},
       input: {width: "100%"}

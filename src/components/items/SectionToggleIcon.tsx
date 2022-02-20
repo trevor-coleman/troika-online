@@ -35,7 +35,7 @@ const SectionToggleIcon = ({
 
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+makeStyles((theme: Theme) => (
     {
     }));
 

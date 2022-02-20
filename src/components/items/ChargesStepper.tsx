@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles} from "@material-ui/core/styles";
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
 import { CharacterContext } from '../../contexts/CharacterContext';
@@ -10,8 +10,6 @@ interface IChargesStepperProps {
   labelPosition?: "bottom" | "end" | "start" | "top",
   label?: string,
 }
-
-type ChargesStepperProps = IChargesStepperProps;
 
 export type ChargesStepperState = {
   charges: {
@@ -51,10 +49,9 @@ const ChargesStepper: FunctionComponent<IChargesStepperProps> = (props: ICharges
             onDecrease={() => handleChange(-1)}
             onIncrease={() => handleChange(1)} />
       </div>);
-  0;
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       ChargesStepper: {},
     }));

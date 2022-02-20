@@ -16,7 +16,7 @@ const CollapsingSection: FunctionComponent<CollapsingSectionProps> = (props: Col
       </Collapse>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+makeStyles((theme: Theme) => (
     {
       CollapsingSection: {},
     }));

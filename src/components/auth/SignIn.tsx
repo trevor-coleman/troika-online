@@ -6,7 +6,7 @@ import { useFirebase, isEmpty } from 'react-redux-firebase';
 
 import { RootState } from '../../store';
 import GoogleButton from 'react-google-button';
-import { Container, TextField, Paper, Box } from '@material-ui/core';
+import { TextField, Paper, Box } from '@material-ui/core';
 import { Redirect, Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';

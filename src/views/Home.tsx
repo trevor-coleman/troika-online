@@ -1,19 +1,12 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { FunctionComponent, useEffect} from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useFirebase } from 'react-redux-firebase';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Dice from '../components/rolls/Dice';
-import RollTester from '../components/rolls/RollTester';
-import NewGameButton from '../components/game/NewGameButton';
-import { TextField, Paper } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import CreateGameDialog from '../components/game/CreateGameDialog';
 import AddFriend from '../components/friends/AddFriend';
 import FriendRequests from '../components/friends/FriendRequests';
 import Friends from '../components/friends/Friends';
-import { useTypedSelector } from '../store';
 import Games from '../components/game/Games';
 import GameInvitations from '../components/game/GameInvitations';
 import { Profile } from '../store/Schema';
@@ -92,7 +85,7 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
       </div>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+makeStyles((theme: Theme) => (
     {
       root: {},
     }));

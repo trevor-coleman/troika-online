@@ -5,11 +5,10 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { Casino, Check } from '@material-ui/icons';
 import React, { FunctionComponent, useContext } from 'react';
-import { isLoaded, useFirebaseConnect } from 'react-redux-firebase';
+import { useFirebaseConnect } from 'react-redux-firebase';
 import { CharacterContext } from '../../../contexts/CharacterContext';
 import { useTypedSelector } from '../../../store';
 import { Skill } from '../../../store/Schema';
-import { useCharacter } from '../../../store/selectors';
 
 export interface ISkillListItem {
   key: string,

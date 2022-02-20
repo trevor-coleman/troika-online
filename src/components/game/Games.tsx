@@ -7,11 +7,7 @@ import { useFirebase, isLoaded } from 'react-redux-firebase';
 import { useHistory } from 'react-router-dom';
 import { useTypedSelector } from '../../store';
 import {
-  Paper,
-  ListItem,
-  ListItemText,
   TextField,
-  GridList,
   Dialog,
   DialogContent,
   DialogActions,
@@ -21,12 +17,9 @@ import {
 } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
 import { Game } from '../../store/Schema';
 import CreateGameDialog from './CreateGameDialog';
 import GameCard from './GameCard';
-
-import GameListItem from './GameListItem';
 
 interface GamesProps {
 }

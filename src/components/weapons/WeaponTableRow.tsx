@@ -12,8 +12,6 @@ import { Skill, SkillValues } from '../../store/Schema';
 
 interface IWeaponTableRowProps {weapon: string}
 
-type WeaponTableRowProps = IWeaponTableRowProps;
-
 export interface WeaponTableRowState {
   weapon: Item,
   skills: { [key: string]: Skill },
@@ -22,11 +20,11 @@ export interface WeaponTableRowState {
 }
 
 const WeaponTableHeader: FunctionComponent = () => {
-  const classes = useStyles();
+  useStyles();
 
-  const damage = Array.from(Array(7).keys());
+    Array.from(Array(7).keys());
 
-  return (
+    return (
       <TableRow>
         <TableCell>
           Weapon
@@ -86,7 +84,7 @@ const WeaponTableRow: FunctionComponent<IWeaponTableRowProps> = (props: IWeaponT
       name : "AP",
       value: armourPiercing,
     },
-  ].reduce<string>((prev, curr, index) => curr.value
+  ].reduce<string>((prev, curr) => curr.value
                                           ? prev === ""
                                             ? prev + curr.name
                                             : prev + `, ${curr.name}`
@@ -157,8 +155,8 @@ const SkillText: FunctionComponent<SkillTextProps> = ({
                        },
                      ]);
 
-  const test = useTypedSelector(state => state.firebase.data?.skillText?.[id]);
-  const {
+  useTypedSelector(state => state.firebase.data?.skillText?.[id]);
+    const {
     rank = 0,
     skill = 0,
   } = useTypedSelector(state => state.firebase.data?.skillText?.[id]) ?? {};

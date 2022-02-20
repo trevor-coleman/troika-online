@@ -122,8 +122,6 @@ interface IDamageSectionProps {
   onChange:FormValueChangeHandler
 }
 
-type DamageSectionProps = IDamageSectionProps;
-
 const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSectionProps) => {
   const {
     onChange

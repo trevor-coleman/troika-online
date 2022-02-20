@@ -1,5 +1,5 @@
 import React, { FunctionComponent, PropsWithChildren } from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import { useFirebase, isLoaded, isEmpty } from 'react-redux-firebase';
 import { useTypedSelector } from '../../store';
 import { Paper, ListItem, ListItemText } from '@material-ui/core';
@@ -71,7 +71,7 @@ const Games: FunctionComponent<GamesProps> = (props: GamesProps) => {
         </Box></Paper>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {},
     }));

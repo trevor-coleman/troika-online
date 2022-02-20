@@ -6,14 +6,9 @@ import fb from 'firebase';
 import React, { FunctionComponent, useState } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { useFirebaseConnect } from 'react-redux-firebase';
-import { useTypedSelector } from '../../../store';
-import { Profile } from '../../../store/Schema';
 import { useAuth } from '../../../store/selectors';
-import SettingsSection from '../SettingsSection';
 
 interface IPasswordSectionProps {}
-
-type PasswordSectionProps = IPasswordSectionProps;
 
 const initialPasswordState= {
   "new-pw"    : "",
@@ -72,9 +67,9 @@ const PasswordSection: FunctionComponent<IPasswordSectionProps> = (props: IPassw
               passwordState['current-pw']);
 
       user?.reauthenticateWithCredential(credential)
-          .then(result => {
+          .then(() => {
             user?.updatePassword(passwordState['new-pw'])
-                .then(result => {
+                .then(() => {
                   setStatus("success");
                   setPasswordState(initialPasswordState)
                 })

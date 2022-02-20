@@ -2,8 +2,12 @@ import {useState} from 'react';
 import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
 import {callDiscordWebhook} from '../api/discord';
 import {rollKey} from '../components/rolls/rollKey';
-import {useTypedSelector} from '../store';
-import {useGame} from '../store/selectors';
+import {
+    useCharacterGameKey,
+    useCharacterName,
+    useGame,
+    useLastRolls
+} from '../store/selectors';
 import {
     IRollWeaponProps,
     RollProps,
@@ -31,18 +35,13 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
     const firebase = useFirebase();
     const [lastSeen, setLastSeen] = useState<string | null>("firstOpen");
     useFirebaseConnect([
-        {
-            path: `/rolls/${characterKey}`,
-            storeAs: `/lastRoll/`,
-            queryParams: ['orderByKey', 'limitToLast=1'],
-        }, {path: `/characters/${characterKey}/name`},
+        {path: `/bios/${characterKey}/name`},
     ]);
 
-    const lastRolls = useTypedSelector(state => state.firebase.ordered?.lastRoll);
-    const characterName = useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.name) ??
+    const lastRolls = useLastRolls(characterKey);
+    const characterName = useCharacterName(characterKey) ??
         "Character";
-    useTypedSelector(state => state.firebase.data.characters?.[characterKey]?.portrait);
-    const gameKey = useTypedSelector(state => state.firebase.data.characters?.[characterKey]?.game);
+    const gameKey = useCharacterGameKey(characterKey);
 
     const {enableDiscord = false, discordWebhookUrl = ""} = useGame(gameKey) ?? {};
 
@@ -304,10 +303,10 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
             const isMaxStamina = totalNewStamina >= maxStamina
 
             setTimeout(() => {
-                    firebase.ref(`/characters/${characterKey}/provisions`)
+                    firebase.ref(`/moniesAndProvisions/${characterKey}/provisions`)
                         .set(currentProvisions - 1);
 
-                    firebase.ref(`/characters/${characterKey}/stamina_current`)
+                    firebase.ref(`/baseStats/${characterKey}/stamina_current`)
                         .set(newStamina);
                 },1000);
 
@@ -468,7 +467,7 @@ export const useCharacterRollContext = (characterKey: string): TGameContext => {
 
         console.log(newRollProps);
         if (enableDiscord) {
-            await callDiscordWebhook(newRollProps, discordWebhookUrl);
+            await callDiscordWebhook(newRollProps, roll, discordWebhookUrl);
         }
 
         return {

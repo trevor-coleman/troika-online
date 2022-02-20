@@ -1,24 +1,18 @@
 import React, {
-  FunctionComponent, useState, ChangeEvent, useCallback, useContext,
+  FunctionComponent, useState, ChangeEvent,
 } from 'react';
-import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
   DialogTitle,
   DialogContent,
   TextField,
   Dialog,
-  GridListTile,
-  Checkbox,
   Switch,
   FormControlLabel,
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { Skill } from '../../store/Schema';
-import { useAuth } from '../../store/selectors';
-import { useFirebase } from 'react-redux-firebase';
-import { CharacterContext } from '../../contexts/CharacterContext';
 
 interface NewSkillDialogProps {
   open: boolean;

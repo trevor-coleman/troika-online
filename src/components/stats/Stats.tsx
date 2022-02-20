@@ -3,15 +3,14 @@ import React, {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import { Paper, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import {
   useFirebaseConnect, isLoaded, useFirebase,
 } from 'react-redux-firebase';
 import { GameContext } from '../../contexts/GameContext';
-import { useCharacter } from '../../store/selectors';
+import {useBaseStats, useCharacterName} from '../../store/selectors';
 import Grid from '@material-ui/core/Grid';
 import { CharacterContext } from '../../contexts/CharacterContext';
 import RestDialog from '../rest/RestDialog';
@@ -19,14 +18,15 @@ import RestDialog from '../rest/RestDialog';
 interface StatsProps {}
 
 //COMPONENT
-const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
+const Stats: FunctionComponent<StatsProps> = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const firebase = useFirebase();
-  const {character: characterKey, editable} = useContext(CharacterContext);
+  useDispatch();
+    const firebase = useFirebase();
+  const {character, editable} = useContext(CharacterContext);
   const {roll} = useContext(GameContext);
-  useFirebaseConnect(`/characters/${characterKey}`);
-  const character = useCharacter(characterKey);
+  useFirebaseConnect([`/baseStats/${character}`, `/bios/${character}/name`]);
+  const baseStats = useBaseStats(character);
+  const characterName = useCharacterName(character)
   const [open, setOpen] = useState(false);
   const handleCloseRestDialog = () => {setOpen(false);};
 
@@ -40,19 +40,19 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): any {
 
+    const newValue = Math.max(parseInt(e.target.value ? e.target.value : "0"), 0)
+
     setValues({
       ...values,
-      [e.target.id]: parseInt(e.target.value),
+      [e.target.id]: newValue,
     });
 
-    firebase.ref(`/characters/${characterKey}/${e.target.id}`)
-            .set(parseInt(e.target.value == ""
-                          ? "0"
-                          : e.target.value));
+    firebase.ref(`/baseStats/${character}/${e.target.id}`)
+            .set(newValue);
   }
 
   useEffect(() => {
-    if (isLoaded(character)) {
+    if (isLoaded(baseStats)) {
 
       const {
         luck_current = 0,
@@ -60,7 +60,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
         stamina_current = 0,
         stamina_max = 0,
         skill = 0,
-      } = character ?? {};
+      } = baseStats ?? {};
 
       setValues({
         luck_current,
@@ -71,36 +71,31 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
       });
     }
 
-  }, [character]);
+  }, [baseStats]);
 
   async function spendLuck() {
     setValues({
       ...values,
       luck_current: values.luck_current - 1,
     });
-    await firebase.ref(`/characters/${characterKey}/luck_current`)
-                  .set(character?.luck_current
-                       ? character.luck_current - 1
+    await firebase.ref(`/baseStats/${character}/luck_current`)
+                  .set(baseStats?.luck_current
+                       ? Math.max(baseStats.luck_current - 1, 0)
                        : 0);
   }
-
-  const allowRollStats = values.luck_current === 0 && values.luck_max === 0 &&
-                         values.stamina_current === 0 && values.stamina_max ===
-                         0 && values.skill === 0;
 
   async function basicRoll(numberOfDice: number) {
     const dice = [];
 
     for (let i = 0; i < numberOfDice; i++) {
       dice.push(6);
-
     }
 
     await roll({
       type      : 'basic',
-      rollerKey : characterKey,
+      rollerKey : character,
       dice      : dice,
-      rollerName: character?.name ?? "Someone",
+      rollerName: characterName ?? "Someone",
     });
   }
 
@@ -126,8 +121,8 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
       type       : "skill",
       dice       : [6, 6],
       rolledSkill: ability,
-      rollerKey  : characterKey,
-      rollerName : character?.name ?? "Character",
+      rollerKey  : character,
+      rollerName : characterName ?? "Character",
       target     : target,
     });
 
@@ -212,6 +207,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
               variant={"outlined"}
               type={"number"}
               id={"stamina_current"}
+              error={values.stamina_current > values.stamina_max}
               onChange={handleChange}
               className={classes.skillField}
               InputLabelProps={{
@@ -230,6 +226,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
               type={"number"}
               id={"stamina_max"}
               onChange={handleChange}
+              error={values.stamina_current > values.stamina_max}
               label={"max"}
               className={classes.skillMaxField}
               InputLabelProps={{
@@ -237,7 +234,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
               }}
               InputProps={{
                 classes: {
-                  input: classes.skillMaxInput,
+                    input: values.stamina_current > values.stamina_max ? classes.skillMaxInputError : classes.skillMaxInput,
                 },
               }} />
         </Grid>
@@ -256,6 +253,7 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
               variant={"outlined"}
               id={"luck_current"}
               type={"number"}
+              error={values.luck_current > values.luck_max}
               onChange={handleChange}
               className={classes.skillField}
               InputLabelProps={{
@@ -280,9 +278,10 @@ const Stats: FunctionComponent<StatsProps> = (props: StatsProps) => {
                 shrink: true,
               }}
               onChange={handleChange}
+              error={values.luck_current > values.luck_max}
               InputProps={{
                 classes: {
-                  input: classes.skillMaxInput,
+                  input: values.luck_current > values.luck_max ? classes.skillMaxInputError : classes.skillMaxInput,
                 },
               }} />
         </Grid>
@@ -333,7 +332,7 @@ const useStyles = makeStyles((theme: Theme) => (
         [theme.breakpoints.down('sm')]: {
           paddingLeft: "0.2rem",
           fontSize   : "1.5rem",
-        },
+        }
       },
       skillMaxInput : {
         paddingLeft                   : ".5rem",
@@ -344,6 +343,17 @@ const useStyles = makeStyles((theme: Theme) => (
           fontSize   : "1.5rem",
         },
       },
+        skillMaxInputError: {
+            paddingLeft: ".5rem",
+            textAlign: "center",
+            fontSize: "1rem",
+            color: theme.palette.error.main,
+            backgroundColor: "#fcdfdf",
+            [theme.breakpoints.down('sm')]: {
+                paddingLeft: "0.2rem",
+                fontSize: "1.5rem",
+            },
+        },
       basicRoll     : {
         alignItems    : "center",
         display       : "flex",

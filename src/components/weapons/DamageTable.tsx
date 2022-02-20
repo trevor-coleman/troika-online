@@ -5,8 +5,6 @@ import Typography from '@material-ui/core/Typography';
 
 interface IDamageTableProps {damage:number[]}
 
-type DamageTableProps = IDamageTableProps;
-
 const DamageTable: FunctionComponent<IDamageTableProps> = (props: IDamageTableProps) => {
   const {damage} = props;
   const classes = useStyles();

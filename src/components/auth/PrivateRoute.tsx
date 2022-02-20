@@ -1,8 +1,7 @@
-import React, { FunctionComponent, PropsWithChildren, Props } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { FunctionComponent, PropsWithChildren} from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import {
-  BrowserRouter, Switch, Route, Redirect
+  Route, Redirect
 } from 'react-router-dom';
 import { useSelector } from 'react-redux'
 import { isLoaded, isEmpty } from 'react-redux-firebase'
@@ -31,7 +30,7 @@ const PrivateRoute: FunctionComponent<PropsWithChildren<PrivateRouteProps>> = ({
                                                 }} />)} />);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+makeStyles((theme: Theme) => (
     {
       root: {},
     }));

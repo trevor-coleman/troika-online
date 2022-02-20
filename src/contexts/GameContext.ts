@@ -23,9 +23,6 @@ export type RollType =
     |"provisions"
 
 export type RollFormatter = (props: RollProps) => IRollResult
-
-export type RollSuccessChecker = (roll: number[], total: number) => boolean;
-
 export interface IRollResult {
   title: string,
   dialogDetail: string,

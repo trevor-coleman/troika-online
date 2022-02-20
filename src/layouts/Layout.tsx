@@ -17,8 +17,8 @@ type LayoutProps = PropsWithChildren<ILayoutProps>
 const Layout: FunctionComponent<LayoutProps> = (props: LayoutProps) => {
   const {} = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const firebase = useFirebase();
+  useDispatch();
+    const firebase = useFirebase();
   const auth=useAuth();
 
   return (
@@ -40,7 +40,7 @@ const Layout: FunctionComponent<LayoutProps> = (props: LayoutProps) => {
             <Typography
                 className={classes.legalNoticeText}
                 variant={'caption'}>Troika-Online is an independent production
-                                    by <a href={"http://www.github.com/trevor-coleman"} target={"_blank"}>Trevor Coleman</a> and is not affiliated with the
+                                    by <a href={"https://www.github.com/trevor-coleman"} target={"_blank"}>Trevor Coleman</a> and is not affiliated with the
                                     Melsonian Arts Council. If you like Troika, <a
                   target={"_blank"}
                   href={"https://www.troikarpg.com/"}>support the creators!</a></Typography>

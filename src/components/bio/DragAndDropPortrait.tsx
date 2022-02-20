@@ -1,15 +1,13 @@
-import { ReactComponent } from '*.svg';
 import React, {
   FunctionComponent, useContext, useEffect, useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Avatar } from '@material-ui/core';
 import { CharacterContext } from '../../contexts/CharacterContext';
 import DragAndDrop from '../DragAndDrop';
 import { usePortrait, useCharacter } from '../../store/selectors';
 import {
-  useFirebaseConnect, isLoaded, useFirebase, isEmpty,
+  useFirebaseConnect, useFirebase, isEmpty,
 } from 'react-redux-firebase';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -29,26 +27,28 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
     editable,
   } = useContext(CharacterContext);
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const firebase = useFirebase();
+  useDispatch();
+    const firebase = useFirebase();
   useFirebaseConnect([
-    `/portraits/${characterKey}`, `/characters/${characterKey}/portrait`,
+    `/portraits/${characterKey}`,
   ]);
   const character = useCharacter(characterKey);
   const portrait = usePortrait(characterKey);
   const [portraitUrl, setPortraitURL] = useState("");
 
-  async function getPortrait() {
-    setPortraitURL(character?.portrait
-                   ? await firebase.storage()
-                                   .ref(character?.portrait)
-                                   .getDownloadURL()
-                   : portraitUrl);
+  async function getPortrait(portrait: string) {
+    const nextPortrait = portrait
+        ? await firebase.storage().ref(portrait).getDownloadURL()
+        : portraitUrl
+
+    if (portraitUrl !== nextPortrait) {
+      setPortraitURL(nextPortrait);
+    }
   }
 
   useEffect(() => {
-    getPortrait();
-  }, [portrait, character]);
+    getPortrait(portrait);
+  }, [portrait]);
 
   const handleDrop = async (files: FileList): Promise<void> => {
     if (!isValidFiles(files)) return;
@@ -62,7 +62,7 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
 
     const ref = await firebase.uploadFile('portraits',
         files[0],
-        `/characters/${characterKey}/portraits`,
+        `/portraits/${characterKey}/portraits`,
         {name});
 
     if (ref) {
@@ -71,7 +71,7 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
                       .ref(character?.portrait)
                       .delete();
       }
-      await firebase.ref(`/characters/${characterKey}/portrait`)
+      await firebase.ref(`/portraits/${characterKey}/portrait`)
                     .set(ref.uploadTaskSnapshot.metadata.fullPath);
     }
   };
@@ -82,8 +82,8 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
     const file = files[0];
     const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
     if (!acceptedImageTypes.includes(file.type)) return false;
-    if (file.size > 1048576) return false;
-    return true;
+    return file.size <= 1048576;
+
   }
 
   return (

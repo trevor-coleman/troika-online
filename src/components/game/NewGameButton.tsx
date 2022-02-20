@@ -1,12 +1,11 @@
-import React, { FunctionComponent, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import React, {FunctionComponent, useState} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { useFirebase } from 'react-redux-firebase';
-import { default as slugify } from 'slugify';
-import { useTypedSelector } from '../../store';
-import { Redirect } from 'react-router-dom';
-import { Game } from '../../store/Schema';
+import {useFirebase} from 'react-redux-firebase';
+import {default as slugify} from 'slugify';
+import {useTypedSelector} from '../../store';
+import {Redirect} from 'react-router-dom';
+import {Game} from '../../store/Schema';
 
 interface NewGameButtonProps {
   onCreate: (newKey: string) => void;
@@ -59,11 +58,9 @@ const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButt
                                      .equalTo(slug)
                                      .get()
 
-      let result = snap.val()
-                   ? await makeUniqueSlug(name)
-                   : slug
-
-      return result
+      return snap.val()
+          ? await makeUniqueSlug(name)
+          : slug
     }
 
     newGame.sort_name = newGame.name.toLowerCase();
@@ -93,7 +90,7 @@ const NewGameButton: FunctionComponent<NewGameButtonProps> = (props: NewGameButt
          : ""}</div>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {}
     }));

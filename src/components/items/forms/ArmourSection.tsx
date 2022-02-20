@@ -3,13 +3,13 @@ import React, {
   ChangeEvent,
   useState, useContext,
 } from 'react';
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles} from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import {
   FormControlLabel, Switch, FormControl, Select, MenuItem, TextField, FormGroup,
 } from '@material-ui/core';
 import { CharacterContext } from '../../../contexts/CharacterContext';
-import { FormValueChange, FormValueChangeHandler } from './FormValueChange';
+import { FormValueChangeHandler } from './FormValueChange';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
 
@@ -19,17 +19,7 @@ interface IArmourSectionProps {
   onChange: FormValueChangeHandler,
 }
 
-interface ArmourEnabledUpdate extends FormValueChange<boolean> {
-  id: "protects",
-  value: boolean,
-}
-
-interface ProtectionUpdate extends FormValueChange<number> {
-  id: "protection",
-  value: number,
-}
-
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       ArmourSection: {},
       selectControl: {

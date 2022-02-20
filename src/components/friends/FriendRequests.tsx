@@ -17,13 +17,13 @@ interface FriendRequestsProps {
 const FriendRequests: FunctionComponent<FriendRequestsProps> = (props: FriendRequestsProps) => {
   const {} = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const firebase = useFirebase();
+  useDispatch();
+    const firebase = useFirebase();
 
   const auth = useTypedSelector(state => state.firebase.auth);
-  const profile = useTypedSelector(state => state.firebase.profile);
+  useTypedSelector(state => state.firebase.profile);
 
-  const requests = useTypedSelector(state => (
+    const requests = useTypedSelector(state => (
       {
         sent: state.firebase.profile.sentRequests,
         received: state.firebase.profile.receivedRequests,

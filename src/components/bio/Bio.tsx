@@ -1,75 +1,71 @@
-import React, {ChangeEvent, useState, useEffect, useContext, useMemo} from 'react';
+import React, {ChangeEvent, useState, useContext} from 'react';
 import {makeStyles, Theme} from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import {FormControl, InputLabel, Paper, TextareaAutosize} from '@material-ui/core';
+import {CircularProgress, FormControl, InputLabel, Paper, TextareaAutosize} from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import {CharacterContext} from '../../contexts/CharacterContext';
-import {Character} from '../../store/Schema';
-import {useCharacter} from '../../store/selectors';
-import {blankCharacter} from '../../store/templates';
+import {useCharacterBackground, useCharacterName, useCharacterSpecial} from '../../store/selectors';
 import {
     useFirebaseConnect, useFirebase, isLoaded,
 } from 'react-redux-firebase';
 import DragAndDropPortrait from './DragAndDropPortrait';
-import {useTypedSelector} from '../../store';
-import {Popper} from '@material-ui/core';
-import debounce from "lodash/debounce";
 
 interface BioAndInfoProps {
 
 }
 
-let timer;
+
 
 //COMPONENT
-const Bio = (props: BioAndInfoProps) => {
+const Bio = () => {
     const classes = useStyles();
     const {character: characterKey, editable} = useContext(CharacterContext);
     useFirebaseConnect([
-        {path: `/characters/${characterKey}/name`, storeAs: `/bio/${characterKey}/name`},
-        {path: `/characters/${characterKey}/background`, storeAs: `/bio/${characterKey}/background`},
-        {path: `/characters/${characterKey}/special`, storeAs: `/bio/${characterKey}/special`},
+        {path: `/bios/${characterKey}/name`, storeAs: `/bios/${characterKey}/name`},
+        {path: `/bios/${characterKey}/background`, storeAs: `/bios/${characterKey}/background`},
+        {path: `/bios/${characterKey}/special`, storeAs: `/bios/${characterKey}/special`},
     ]);
 
     const [specialState, setSpecialState] = useState({
         focused: false, shrink: false
     });
 
-    const name = useTypedSelector(state => state.firebase.data?.bio?.[characterKey]?.name);
-    const special = useTypedSelector(state => state.firebase.data?.bio?.[characterKey]?.special);
-    const background = useTypedSelector(state => state.firebase.data?.bio?.[characterKey]?.background);
+    const name = useCharacterName(characterKey)
+    const special = useCharacterSpecial(characterKey);
+    const background = useCharacterBackground(characterKey);
     const firebase = useFirebase();
 
-    const updateDatabase = useMemo(()=>debounce((id, value)=>{
-        firebase.ref(`/characters/${characterKey}`).update({
+    const updateDatabase = async (id: string, value: string) => {
+        await firebase.ref(`/bios/${characterKey}`).update({
             [id]: value,
         });
-    }, 500),[characterKey, firebase, debounce])
+    };
 
     const handleChange = async (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): Promise<void> => {
-        setSpecialValue(e.target.value);
-        if (e.target.id === "special" && specialState.shrink !== Boolean(e.target.value)) {
-            console.log("handleChange - UpdatingSpecialState")
-            setSpecialState({
-                ...specialState,
-                shrink: specialState.focused || Boolean(e.target.value)
-            })
+        if (e.target.id === "special") {
+            setSpecialValue(e.target.value);
+            if (specialState.shrink !== Boolean(e.target.value)) {
+                setSpecialState({
+                    ...specialState,
+                    shrink: specialState.focused || Boolean(e.target.value)
+                })
+            }
         }
 
-        updateDatabase(e.target.id, e.target.value);
+        await updateDatabase(e.target.id, e.target.value);
     };
 
     const [specialValue, setSpecialValue] = useState(special);
-    console.log("specialValue", specialValue);
-
+    const fullyLoaded = isLoaded(`bios/${characterKey}/name`)
+    && isLoaded(`bios/${characterKey}/special`)
+    && isLoaded(`bios/${characterKey}/background`)
+    && isLoaded(`portraits/${characterKey}/portrait`);
 
     return (
         <div>
             <Paper>
-                <Box p={2}>
+                {fullyLoaded ? <Box p={2}>
                     <form noValidate
                           autoComplete={"off"}>
                         <Grid container
@@ -150,7 +146,8 @@ const Bio = (props: BioAndInfoProps) => {
                                 </Grid>
                             </Grid></Grid>
                     </form>
-                </Box></Paper>
+                </Box>:<Box><CircularProgress/></Box>
+                }</Paper>
         </div>);
 };
 

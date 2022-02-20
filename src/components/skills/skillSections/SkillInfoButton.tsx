@@ -5,21 +5,17 @@ import React, {
 } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import IconButton from '@material-ui/core/IconButton';
-import { Info, Close, ChatBubble, ChatBubbleTwoTone } from '@material-ui/icons';
+import { Info} from '@material-ui/icons';
 import Popper from '@material-ui/core/Popper';
 import {
   Paper,
-  Card,
-  CardContent,
-  CardActions, CardHeader,
+
+
+
 } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
 import { useFirebaseConnect } from 'react-redux-firebase';
-import { useTypedSelector } from '../../../store';
 import { CharacterContext } from '../../../contexts/CharacterContext';
 import { SkillContext } from '../context/SkillContext';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 
 interface ISkillInfoButtonProps {disabled?:boolean}
 
@@ -44,8 +40,7 @@ const SkillInfoButton: FunctionComponent<SkillInfoButtonProps> = (props: SkillIn
                        },
                      ]);
 
-  const {name = "", description=""} = useTypedSelector(state => state.firebase.data?.skillInfoButton?.[character]?.[skill]) ??
-               "";
+
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl
@@ -60,9 +55,7 @@ const SkillInfoButton: FunctionComponent<SkillInfoButtonProps> = (props: SkillIn
 
 
   const open = Boolean(anchorEl);
-  const id = open
-             ? 'simple-popper'
-             : undefined;
+
 
   return (
         <PopperContext.Provider value={closePopper}>

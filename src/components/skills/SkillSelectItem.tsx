@@ -22,8 +22,8 @@ const SkillSelectItem: FunctionComponent<SkillTextProps> = ({
                        },
                      ]);
 
-  const test = useTypedSelector(state => state.firebase.data?.skillText?.[id]);
-  const {
+  useTypedSelector(state => state.firebase.data?.skillText?.[id]);
+    const {
     rank = 0,
     skill = 0,
   } = useTypedSelector(state => state.firebase.data?.skillText?.[id]) ?? {};

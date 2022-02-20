@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
+import { makeStyles} from '@material-ui/core/styles';
+import { useFirebase} from 'react-redux-firebase';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -16,9 +16,9 @@ const SkillForm: FunctionComponent<SkillFormProps> = (props: SkillFormProps) => 
   const {owner, character} = props;
   const classes = useStyles();
   const firebase = useFirebase();
-  const dispatch = useDispatch();
+  useDispatch();
 
-  const [name, setName] = useState("");
+    const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
   const skill = {
@@ -70,7 +70,7 @@ const SkillForm: FunctionComponent<SkillFormProps> = (props: SkillFormProps) => 
       </form>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {
         width: "100%",

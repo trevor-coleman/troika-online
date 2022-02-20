@@ -12,7 +12,6 @@ import Grid from '@material-ui/core/Grid';
 import {Fade} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import {AddCircleOutline} from '@material-ui/icons';
 
 interface CharacterSkillsProps {
@@ -27,7 +26,7 @@ const initialState: { add: boolean; new: boolean; edit: boolean; remove: boolean
 };
 
 //COMPONENT
-const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: CharacterSkillsProps) => {
+const CharacterSkills: FunctionComponent<CharacterSkillsProps> = () => {
 
     const classes = useStyles();
     const firebase = useFirebase();
@@ -84,7 +83,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
                 return;
             }
             newKeys.push(newKey);
-            skillsRef.child(newKey)
+            await skillsRef.child(newKey)
                 .set(skills[selectedKey]);
         }
 
@@ -93,13 +92,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = (props: Charact
             .set(newSkillList);
     };
 
-    const removeSkill = (selectedSkill: string) => {
-        firebase.ref(`/skills/${character}/${selectedSkill}`)
-            .set(null);
-        const newInventory = skillList.filter(skill => skill !== selectedSkill);
-        firebase.ref(`/characters/${character}/skillList`)
-            .set(newInventory);
-    };
+
 
     const [addVisible, setAddVisible] = useState(false);
 

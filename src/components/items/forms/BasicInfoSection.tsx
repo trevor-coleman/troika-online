@@ -1,18 +1,17 @@
 import React, {
   FunctionComponent,
   ChangeEvent,
-  KeyboardEvent,
   FocusEvent,
   useContext,
   useState,
   useEffect, useRef,
 } from 'react';
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles} from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import {
-  FormControlLabel, Switch, FormGroup, TextField,
+  TextField,
 } from '@material-ui/core';
-import { FormValueChangeHandler, FormValueChange } from './FormValueChange';
+import { FormValueChangeHandler} from './FormValueChange';
 import { useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
 import { ItemContext } from '../../../contexts/ItemContext';
@@ -21,13 +20,6 @@ import { CharacterContext } from '../../../contexts/CharacterContext';
 interface IChargesSectionProps {
   onChange: FormValueChangeHandler
 }
-
-interface EventTarget {
-  value: any;
-  id: string;
-}
-
-type ChargesSectionProps = IChargesSectionProps;
 
 const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: IChargesSectionProps) => {
   const {
@@ -57,10 +49,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
     setValues(sectionInfo);
   },[sectionInfo]);
 
-  const {
-    name="New Item",
-      description = ""
-  } = sectionInfo;
+
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setValues({
@@ -152,7 +141,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
         </Grid></Grid>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+makeStyles(() => (
     {
       ChargesSection: {},
     }));

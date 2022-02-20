@@ -1,6 +1,5 @@
-import React, { FunctionComponent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import React, { FunctionComponent} from 'react';
+import { makeStyles} from '@material-ui/core/styles';
 import { rollKey } from './rollKey';
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 import Button from '@material-ui/core/Button';
@@ -16,8 +15,8 @@ interface RollTesterProps {
 //COMPONENT
 const RollTester: FunctionComponent<RollTesterProps> = (props: RollTesterProps) => {
   const {gameKey} = props;
-  const classes = useStyles();
-  const firebase=useFirebase();
+  useStyles();
+    const firebase=useFirebase();
 
   useFirebaseConnect([
     {path: `rolls/${gameKey}`, queryParams:['orderByKey', 'limitToLast=10']}
@@ -30,7 +29,7 @@ const RollTester: FunctionComponent<RollTesterProps> = (props: RollTesterProps) 
            : {};
   });
 
-  let results: { [key:number]: number }= {};
+
 
   const newRoll=async (dice:number[])=> {
     const rollsRef = firebase.ref(`/rolls/${gameKey}`)
@@ -58,7 +57,7 @@ const RollTester: FunctionComponent<RollTesterProps> = (props: RollTesterProps) 
       </div>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       root: {},
     }));

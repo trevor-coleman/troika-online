@@ -1,7 +1,6 @@
-import React, { FunctionComponent, ChangeEvent } from 'react';
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import React, { ChangeEvent } from 'react';
+import { makeStyles} from "@material-ui/core/styles";
 import { TextField } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
 
 interface IDescriptionInputProps {
   description:string;
@@ -10,16 +9,16 @@ interface IDescriptionInputProps {
 
 type DescriptionInputProps = IDescriptionInputProps;
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       DescriptionInput: {},
     }));
 
 const DescriptionInput = (props: DescriptionInputProps) => {
   const {description, onChange}=props;
-  const classes = useStyles();
+  useStyles();
 
-  return (
+    return (
       <TextField variant={"outlined"}
                  multiline
                  id={"item-description"}

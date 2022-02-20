@@ -3,10 +3,9 @@ import Grid from '@material-ui/core/Grid';
 import React, {
   ChangeEvent,
   FunctionComponent,
-  useEffect,
   useState,
 } from 'react';
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles} from "@material-ui/core/styles";
 import { useFirebase, useFirebaseConnect } from 'react-redux-firebase';
 import { useTypedSelector } from '../../../store';
 import { Profile } from '../../../store/Schema';
@@ -14,12 +13,10 @@ import { useAuth } from '../../../store/selectors';
 
 interface IProfileSectionProps {}
 
-type ProfileSectionProps = IProfileSectionProps;
-
 const ProfileSection: FunctionComponent<IProfileSectionProps> = (props: IProfileSectionProps) => {
   const {} = props;
-  const classes = useStyles();
-  const auth = useAuth();
+  useStyles();
+    const auth = useAuth();
   const firebase = useFirebase();
   useFirebaseConnect([`/profiles/${auth.uid}`]);
   const profile: Partial<Profile> = useTypedSelector(state => state.firebase?.data?.profiles?.[auth.uid]) ?? {};
@@ -65,7 +62,7 @@ const ProfileSection: FunctionComponent<IProfileSectionProps> = (props: IProfile
       </Grid>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
+const useStyles = makeStyles(() => (
     {
       ProfileSection: {},
     }));

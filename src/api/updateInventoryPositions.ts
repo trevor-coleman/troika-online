@@ -22,7 +22,7 @@ export default async function updateInventoryPositions (character: string, key:s
     const itemSize = await getSize(inventory[i])
     sizes[inventory[i]] = itemSize;
     positions[inventory[i]] = position;
-    position = (1*position) + (1*itemSize);
+    position = (position) + (itemSize);
   }
 
 

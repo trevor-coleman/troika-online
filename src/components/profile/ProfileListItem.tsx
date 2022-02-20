@@ -26,11 +26,11 @@ const ProfileListItem: FunctionComponent<ProfileListItemProps> = (props: Profile
     firstAction
   } = props;
   const classes = useStyles(props);
-  const dispatch = useDispatch();
+  useDispatch();
 
-  useFirebaseConnect({path: `/profiles/${profileKey}`});
-  const auth = useAuth()
-  const profile = useTypedSelector(state => (state.firebase.data.profiles && state.firebase.data.profiles[profileKey]) ? state.firebase.data.profiles[profileKey] :{})
+    useFirebaseConnect({path: `/profiles/${profileKey}`});
+  useAuth();
+    const profile = useTypedSelector(state => (state.firebase.data.profiles && state.firebase.data.profiles[profileKey]) ? state.firebase.data.profiles[profileKey] :{})
   return (
       <ListItem>
         <ListItemAvatar><Avatar className={classes.avatar}>{isOwner ? <FlagIcon/>:<PersonIcon/>}</Avatar></ListItemAvatar>

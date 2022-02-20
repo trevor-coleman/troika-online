@@ -4,7 +4,7 @@ import React, {
   useState,
   useContext,
   ChangeEvent,
-  useEffect,
+
 } from 'react';
 import {
   useFirebase, useFirebaseConnect, isLoaded,
@@ -27,16 +27,12 @@ import Grid from '@material-ui/core/Grid';
 import {
   SecurityTwoTone,
   SecurityOutlined,
-  Casino,
-  ChevronRight,
-  ChevronLeft,
   Delete,
   DeleteOutline,
   Edit,
-  EditOutlined, Work,
+  EditOutlined,
 } from '@material-ui/icons';
 import WorkIcon from '@material-ui/icons/Work';
-import { KeyList } from '../../store/KeyList';
 import { Item } from '../../store/Item';
 import { GameContext } from '../../contexts/GameContext';
 import ChargesStepper from './ChargesStepper';
@@ -91,16 +87,15 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
   const {
     id,
     onRemove,
-    dragHandleProps,
     index,
   } = props;
   const classes = useStyles();
   const firebase = useFirebase();
-  const auth = useAuth();
-  const {character, editable} = useContext(CharacterContext);
+  useAuth();
+    const {character, editable} = useContext(CharacterContext);
   const rollContext = useContext(GameContext);
-  const game = useContext(GameContext);
-  useFirebaseConnect([
+  useContext(GameContext);
+    useFirebaseConnect([
     {
       path   : `/items/${character}/${id}`,
       storeAs: `/inventoryItem/${id}`,
@@ -119,7 +114,6 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
     isEquipped = false,
     hasCharges = false,
     doesDamage = false,
-    hasModifiers = false,
     size = 0,
     protects = false,
     customSize = false,
@@ -159,7 +153,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
 
   const handleChange: FormValueChangeHandler = (updates) => {
 
-    const update = updates.reduce<Partial<Item>>((prev, curr, index) => {
+    const update = updates.reduce<Partial<Item>>((prev, curr) => {
       const sizeOverride = calculateSize(item, curr);
 
       return {
@@ -179,7 +173,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
 
   if (!isLoaded(item)) return <Card><CardContent>Loading</CardContent></Card>;
 
-  const isEncumbered = () => 1 * position + 1 * size > 12;
+  const isEncumbered = () => (position + size) > 12;
 
   const rollInventory = () => {
     rollContext.roll({
@@ -196,7 +190,7 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
         <Draggable
             isDragDisabled={!editable}
             draggableId={id}
-            index={index}>{(provided, snapshot) => (
+            index={index}>{(provided) => (
             <Grid
                 item
                 xs={12}
@@ -385,7 +379,7 @@ const FadingSection = (props: PropsWithChildren<{ expanded: boolean, onClose: ()
   </Fade>;
 };
 
-const useFadingStyles = makeStyles((theme: Theme) => (
+const useFadingStyles = makeStyles(() => (
     {
       spacer: {
         flexGrow: 1,

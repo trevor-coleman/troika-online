@@ -2,7 +2,7 @@ import React, { FunctionComponent, useContext, useMemo } from 'react';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { CardHeader, CardContent, CardActions, Card } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
-import { Close, ChatBubbleTwoTone } from '@material-ui/icons';
+import { Close} from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { CharacterContext } from '../../contexts/CharacterContext';
@@ -13,8 +13,6 @@ import { useTypedSelector } from '../../store';
 import DamageTable from './DamageTable';
 
 interface IWeaponInfoPopperContentProps {}
-
-type WeaponInfoPopperContentProps = IWeaponInfoPopperContentProps;
 
 const WeaponInfoPopperContent: FunctionComponent<IWeaponInfoPopperContentProps> = (props: IWeaponInfoPopperContentProps) => {
   const {} = props;

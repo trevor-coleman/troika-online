@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { Paper, TextField } from '@material-ui/core';
@@ -15,7 +14,6 @@ interface AddFriendProps {
 const AddFriend: FunctionComponent<AddFriendProps> = (props: AddFriendProps) => {
   const {} = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const firebase = useFirebase();

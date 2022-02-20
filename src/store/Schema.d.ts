@@ -9,6 +9,7 @@ import { CharacterItemsState } from '../components/items/CharacterItems';
 import { KeyList } from './KeyList';
 import { Item } from './Item';
 import { WeaponTableRowState } from '../components/weapons/WeaponTableRow';
+import MoniesAndProvisions from "../components/moniesAndProvisions/MoniesAndProvisions";
 
 type CharacterEditorState = {
     rolls: RollProps[]
@@ -37,10 +38,13 @@ export default interface Schema {
   addFriendResult: any,
   sentRequests: any,
   portraits: any,
+  moniesAndProvisions: MoniesAndProvisions,
   characterSkills: {
     [key: string]: Skill
   },
   profiles: Profile,
+  baseStats: BaseStats,
+  bios: Bio,
   skills: Skill,
   items: Item,
   spells: {
@@ -54,6 +58,10 @@ export default interface Schema {
   characters: Character,
 }
 
+export interface MoniesAndProvisions {
+  monies: number,
+  provisions: number
+}
 
 export interface Game {
   name: string,
@@ -86,29 +94,43 @@ export interface Profile {
 }
 
 export interface Character {
-  game: string;
-  portrait: string;
-  owner: string;
-  player: string;
-  isTemplate: boolean;
-  name: string;
-  sort_name: string;
   background: string;
-  special: string;
-  skill: number;
-  skillList: string[];
-  stamina_current: number;
-  stamina_max: number;
+  equipped: KeyList;
+  game: string;
+  inventory: string[];
+  inventoryPositions: {[key:string]: number},
+  isTemplate: boolean;
+  items: { [key:string]:Item };
   luck_current: number;
   luck_max: number;
   monies: number;
+  name: string;
+  owner: string;
+  player: string;
+  portrait: string;
   provisions: number;
-  items: { [key:string]:Item };
-  inventory: string[];
-  inventoryPositions: {[key:string]: number},
-  equipped: KeyList;
-  skills: { [key:string] : Skill };
+  skill: number;
+  skillList: string[];
   skillValues: { [key: string]: SkillValues }
+  skills: { [key:string] : Skill };
+  sort_name: string;
+  special: string;
+  stamina_current: number;
+  stamina_max: number;
+}
+
+export interface BaseStats {
+  luck_current: number;
+  luck_max: number;
+  skill: number;
+  stamina_current: number;
+  stamina_max: number;
+}
+
+export interface Bio {
+  name:string,
+  special:string,
+  background:string,
 }
 
 export interface SkillValues {

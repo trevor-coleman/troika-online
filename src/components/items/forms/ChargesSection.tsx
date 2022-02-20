@@ -1,5 +1,4 @@
 import React, { FunctionComponent, ChangeEvent, useContext } from 'react';
-import { makeStyles, Theme } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import {
   FormControlLabel, Switch, FormGroup, TextField,
@@ -13,9 +12,6 @@ import { CharacterContext } from '../../../contexts/CharacterContext';
 interface IChargesSectionProps {
   onChange: FormValueChangeHandler
 }
-
-type ChargesSectionProps = IChargesSectionProps;
-
 const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: IChargesSectionProps) => {
   const {
     onChange,
@@ -126,9 +122,5 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
         </Grid></Grid>);
 };
 
-const useStyles = makeStyles((theme: Theme) => (
-    {
-      ChargesSection: {},
-    }));
 
 export default ChargesSection;

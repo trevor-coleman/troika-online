@@ -1,20 +1,17 @@
 import {
-  Avatar,
   Card,
   CardActions,
-  CardContent,
   CardHeader,
-  CardMedia, Collapse,
+  Collapse,
   ListItem,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, { FunctionComponent, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { isLoaded, useFirebaseConnect } from 'react-redux-firebase';
 import { useGame } from '../../store/selectors';
@@ -22,8 +19,6 @@ import CharacterListItem from '../characters/CharacterListItem';
 import PlayersTextList from '../players/PlayersTextList';
 
 interface IGameCardProps {gameKey: string}
-
-type GameCardProps = IGameCardProps;
 
 const GameCard: FunctionComponent<IGameCardProps> = (props: IGameCardProps) => {
   const {gameKey} = props;

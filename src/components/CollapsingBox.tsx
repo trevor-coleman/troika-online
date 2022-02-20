@@ -24,8 +24,8 @@ const CollapsingBox: FunctionComponent<CollapsingBoxProps> = (props: CollapsingB
   const startOpen = props.startOpen ?? true;
 
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const [open, setOpen] = useState(startOpen)
+  useDispatch();
+    const [open, setOpen] = useState(startOpen)
 
   return (
       <Paper>

@@ -6,12 +6,8 @@ import { CharacterContext } from '../../contexts/CharacterContext';
 import { useTypedSelector } from '../../store';
 import Grid from '@material-ui/core/Grid';
 import WeaponCard from './WeaponCard';
-import Button from '@material-ui/core/Button';
 
 interface IWeaponsProps {}
-
-type WeaponsProps = IWeaponsProps;
-
 export interface WeaponsState {
   weapons: string[]
 }
