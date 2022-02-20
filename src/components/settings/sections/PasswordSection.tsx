@@ -77,7 +77,7 @@ const PasswordSection: FunctionComponent<IPasswordSectionProps> = (props: IPassw
                   if(e.code ==="auth/wrong-password") {
                     setStatus('wrong-pw')
                   } else {
-                    console.log("ELSE")
+
                     setStatus('other')
                     otherMessage = e.message;
                   }
@@ -88,7 +88,7 @@ const PasswordSection: FunctionComponent<IPasswordSectionProps> = (props: IPassw
               setStatus('wrong-pw')
             }
             else {
-              console.log("ELSE")
+
               setStatus('other')
               otherMessage = e.message;
             }

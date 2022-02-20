@@ -55,10 +55,6 @@ const Game: FunctionComponent<GameProps> = (props: GameProps) => {
   const handleDiscordChange = (e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=> {
     const url = e.target.value;
     const discordWebhookUrlRegex = /^https?:\/\/discord(app)?.com\/api\/webhooks\/[A-Za-z0-9]*\/[A-Za-z0-9_\-]*\/?$/
-
-
-    console.log(url, discordWebhookUrlRegex.test(url));
-
     setWebhookURL(url);
 
     if(url.length > 0 && !discordWebhookUrlRegex.test(url)){

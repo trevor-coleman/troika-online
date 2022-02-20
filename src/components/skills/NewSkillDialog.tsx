@@ -53,7 +53,7 @@ const NewSkillDialog: FunctionComponent<NewSkillDialogProps> = (props: NewSkillD
   };
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    console.log(e.target.value);
+
     if (e.target.id === 'staminaCost') {
       const staminaCost = parseInt(e.target.value) >= 0
                           ? parseInt(e.target.value)
@@ -63,14 +63,14 @@ const NewSkillDialog: FunctionComponent<NewSkillDialogProps> = (props: NewSkillD
         ...values,
         staminaCost,
       });
-      console.log(values);
+
       return;
     }
     setValues({
       ...values,
       [e.target.id]: e.target.value,
     });
-    console.log(values);
+
     return;
   };
 

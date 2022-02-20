@@ -122,7 +122,7 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = () => {
                         <SkillCard
                             skill={skill}
                             onEdit={() => {
-                                console.log("EDIT", skill);
+
                                 showDialog("edit", skill);
                             }}
                             onRemove={() => {

@@ -68,8 +68,6 @@ const AddFriend: FunctionComponent<AddFriendProps> = (props: AddFriendProps) => 
   }
 
   const addFriend = async () => {
-    console.log(`FriendKey: ${friendKey} || userKey: ${userKey}`);
-    console.log(`/profiles/${userKey}/sentRequests/${friendKey}`)
     await firebase.ref(`/profiles/${userKey}/sentRequests/${friendKey}`)
                   .set(true);
     await firebase.ref(`/profiles/${friendKey}/receivedRequests/${userKey}`)

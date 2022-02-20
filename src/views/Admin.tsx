@@ -19,7 +19,7 @@ const Admin: FunctionComponent<AdminProps> = (props: AdminProps) => {
     const firebase = useFirebase();
 
     async function testDice() {
-        console.log("BEGINNING TEST");
+
         const result: { [key: number]: number } = {};
         for (let i = 0; i < 100; i++) {
             if (i % 100 == 0) console.log(i);
@@ -37,7 +37,7 @@ const Admin: FunctionComponent<AdminProps> = (props: AdminProps) => {
             }
         }
 
-        console.log(result)
+
     }
 
     async function srdSkillSortNames() {
@@ -122,7 +122,7 @@ const Admin: FunctionComponent<AdminProps> = (props: AdminProps) => {
             }
         }
 
-        console.log(baseStats);
+
         const baseStatsRef = firebase.ref("/baseStats")
 
         await baseStatsRef.update(baseStats)
@@ -151,7 +151,7 @@ const Admin: FunctionComponent<AdminProps> = (props: AdminProps) => {
             }
         }
 
-        console.log(moniesAndProvisions);
+
         const ref = firebase.ref("/moniesAndProvisions")
 
         await ref.update(moniesAndProvisions)

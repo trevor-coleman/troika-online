@@ -31,7 +31,7 @@ const SkillForm: FunctionComponent<SkillFormProps> = (props: SkillFormProps) => 
   async function createSkill() {
     const skillRef = await firebase.ref(`/skills`).push(skill);
     if(skillRef.key) {
-      console.log(skillRef.key);
+
       await firebase.ref(`/characters/${character}/skills`).child(skillRef.key).set(true);
     }
   }

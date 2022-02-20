@@ -63,7 +63,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
 
 
   function handleBlur(e:FocusEvent<HTMLInputElement>): any {
-    console.log("blur");
+
 
     onChange([
                {

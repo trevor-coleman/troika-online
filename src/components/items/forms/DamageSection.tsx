@@ -166,7 +166,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
 
     if(id=="doesDamage") {
       const newWeapons = weapons?.filter(weapon => weapon !== item) ?? [];
-      console.log(newWeapons);
+
 
       if (value) {
         newWeapons.push(item);
@@ -212,7 +212,7 @@ const DamageSection: FunctionComponent<IDamageSectionProps> = (props: IDamageSec
                    value: attributes?.ranged ?? false,
                  });
 
-        console.log(updates);
+
 
     onChange(updates);
 

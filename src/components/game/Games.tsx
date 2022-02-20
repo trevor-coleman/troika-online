@@ -42,7 +42,7 @@ const Games: FunctionComponent<GamesProps> = (props: GamesProps) => {
   const games = profile.games ?? {};
 
   async function addGame() {
-    console.log("addGame", gameId);
+
     const gameSnap = await firebase.ref(`/games`)
                                    .orderByChild('slug')
                                    .equalTo(gameId)

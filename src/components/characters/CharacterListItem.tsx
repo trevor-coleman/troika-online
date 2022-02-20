@@ -65,7 +65,6 @@ const CharacterListItem: FunctionComponent<CharacterListItemProps> = (
   },[portrait]);
 
 
-  console.log("rendering");
 
   async function getPortrait(portrait:string) {
       const nextPortrait = portrait

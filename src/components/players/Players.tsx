@@ -161,7 +161,7 @@ const Players: FunctionComponent<PlayersProps> = (props: PlayersProps) => {
                       disabled><ListItemText primary={'No friends to add.'} /></ListItem>
                   : <div>{Object.keys(friends)
                                 .map(item => {
-                                  console.log("friend item ->", item);
+
                                   return (
                                       <ProfileListItem
                                           key={item}

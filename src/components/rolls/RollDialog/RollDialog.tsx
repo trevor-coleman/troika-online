@@ -47,7 +47,7 @@ const RollDialog: FunctionComponent<RollDialogProps> = () => {
         "firstOpen") ?? false;
 
     async function handleClose(rollDamage?: boolean): Promise<void> {
-        console.log(key);
+
         setLastSeen(key ?? "");
 
         if (rollDamage && rollValue?.type === "weapon") {

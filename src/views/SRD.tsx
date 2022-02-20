@@ -19,7 +19,7 @@ const SRD: FunctionComponent<SRDProps> = (props: SRDProps) => {
   useDispatch();
     const firebase = useFirebase();
 
-  console.log(type);
+
 
   async function handleCreateSkill (skill: Partial<Skill>) {
     await firebase.ref(`/srdSkills`).push(skill)

@@ -34,7 +34,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
   const sectionInfo = useTypedSelector(state => state.firebase.data?.chargesSection?.[item]) ??
                       {};
 
-  console.log(sectionInfo);
+
   const {
     hasCharges = false,
       charges = {initial: 0, max: 0}
@@ -57,7 +57,7 @@ const ChargesSection: FunctionComponent<IChargesSectionProps> = (props: ICharges
       },
     ];
 
-    console.log(updates);
+
     onChange(updates);
   };
 

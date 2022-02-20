@@ -55,7 +55,7 @@ const SrdItemsList: FunctionComponent<ItemsListProps> = (props: ItemsListProps) 
       newValues[key] = value;
     }
     setValues(newValues);
-    console.log(newValues[key],  Boolean(newValues[key]))
+
   };
 
   return (

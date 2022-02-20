@@ -107,7 +107,7 @@ const Stats: FunctionComponent<StatsProps> = () => {
         ability = "Skill";
         break;
       case 'luck_current':
-        console.log("rolling luck");
+
         await spendLuck();
         ability = "Luck";
         break;

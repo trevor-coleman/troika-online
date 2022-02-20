@@ -86,7 +86,6 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
 
     async function rollSkill(): Promise<void> {
         if (isSpell) {
-            console.log("ROLLING SPELL")
             await firebase.ref(`/baseStats/${character}/stamina_current`).set(stamina - staminaCost);
             await roll({
                 type: 'spell',
@@ -219,5 +218,4 @@ const useStyles = makeStyles((theme: Theme) => (
 
         name: {},
     }));
-
 export default SkillCard;
