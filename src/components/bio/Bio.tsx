@@ -16,7 +16,6 @@ interface BioAndInfoProps {
 }
 
 
-
 //COMPONENT
 const Bio = () => {
     const classes = useStyles();
@@ -58,9 +57,9 @@ const Bio = () => {
 
     const [specialValue, setSpecialValue] = useState(special);
     const fullyLoaded = isLoaded(`bios/${characterKey}/name`)
-    && isLoaded(`bios/${characterKey}/special`)
-    && isLoaded(`bios/${characterKey}/background`)
-    && isLoaded(`portraits/${characterKey}/portrait`);
+        && isLoaded(`bios/${characterKey}/special`)
+        && isLoaded(`bios/${characterKey}/background`)
+        && isLoaded(`portraits/${characterKey}/portrait`);
 
     return (
         <div>
@@ -75,10 +74,12 @@ const Bio = () => {
                                   xs={12}
                                   sm={4}
                                   md={3}
-                                  alignItems={"center"}
+                                  alignItems={"flex-start"}
                                   justify={"center"}>
-                                <Grid item><DragAndDropPortrait alt={name ??
-                                    "avatar placeholder"}/></Grid>
+
+                                <DragAndDropPortrait
+                                    alt={name ?? "avatar placeholder"}/>
+                                
                             </Grid>
                             <Grid item
                                   container
@@ -146,7 +147,7 @@ const Bio = () => {
                                 </Grid>
                             </Grid></Grid>
                     </form>
-                </Box>:<Box><CircularProgress/></Box>
+                </Box> : <Box><CircularProgress/></Box>
                 }</Paper>
         </div>);
 };
