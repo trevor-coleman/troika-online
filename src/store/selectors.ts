@@ -3,6 +3,7 @@ import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
 import {useSelector} from 'react-redux';
 import {Game, Character} from './Schema';
 import {KeyList} from './KeyList';
+import {useEffect, useMemo, useRef, useState} from "react";
 
 export const useGame = (gameKey: string) => useSelector<RootState, Partial<Game> | undefined>(
     state => state.firebase.data.games
@@ -53,7 +54,6 @@ export const useItems = (characterKey: string) => useTypedSelector(state => stat
 export const useItem = (itemKey: string) => useTypedSelector(state => state.firebase.data?.items?.[itemKey]);
 export const useMonies = (characterKey: string) => useTypedSelector(state => state.firebase.data?.moniesAndProvisions?.[characterKey]?.monies ?? 0);
 export const useProvisions = (characterKey: string) => useTypedSelector(state => state.firebase.data?.moniesAndProvisions?.[characterKey]?.provisions ?? 0);
-
 export const useStamina = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.stamina_current ?? 0)
 export const useMaxStamina = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.stamina_max ?? 0);
 export const useLuck = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.luck_current ?? 0)
@@ -76,4 +76,33 @@ export const useLastRolls = (characterKey:string)=> {
         }])
 
     return useTypedSelector(state => state.firebase.ordered?.lastRoll);
+}
+
+export const usePortraitUrl = (character:string)=>{
+    const portrait = usePortrait(character);
+    const firebase = useFirebase();
+    const mountedRef = useRef(true);
+
+    const [portraitUrl, setPortraitURL] = useState("");
+
+    useEffect(() => {
+        getPortrait(portrait);
+
+        return (() => {
+            mountedRef.current = false;
+        })
+    }, [portrait]);
+
+    async function getPortrait(portrait: string) {
+
+        const nextPortrait = portrait
+            ? await firebase.storage().ref(portrait).getDownloadURL()
+            : portraitUrl
+
+        if (portraitUrl !== nextPortrait && mountedRef.current) {
+            setPortraitURL(nextPortrait);
+        }
+    }
+
+    return portraitUrl;
 }

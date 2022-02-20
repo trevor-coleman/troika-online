@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { CharacterContext } from '../../contexts/CharacterContext';
 import DragAndDrop from '../DragAndDrop';
-import { usePortrait, useCharacter } from '../../store/selectors';
+import { usePortraitUrl, useCharacter } from '../../store/selectors';
 import {
   useFirebaseConnect, useFirebase, isEmpty,
 } from 'react-redux-firebase';
@@ -33,22 +33,7 @@ const DragAndDropPortrait: FunctionComponent<DragAndDropAvatarProps> = (props: D
     `/portraits/${characterKey}`,
   ]);
   const character = useCharacter(characterKey);
-  const portrait = usePortrait(characterKey);
-  const [portraitUrl, setPortraitURL] = useState("");
-
-  async function getPortrait(portrait: string) {
-    const nextPortrait = portrait
-        ? await firebase.storage().ref(portrait).getDownloadURL()
-        : portraitUrl
-
-    if (portraitUrl !== nextPortrait) {
-      setPortraitURL(nextPortrait);
-    }
-  }
-
-  useEffect(() => {
-    getPortrait(portrait);
-  }, [portrait]);
+  const portraitUrl = usePortraitUrl(characterKey);
 
   const handleDrop = async (files: FileList): Promise<void> => {
     if (!isValidFiles(files)) return;

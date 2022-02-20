@@ -3,7 +3,7 @@ import { Delete } from '@material-ui/icons';
 import React, {
   FunctionComponent,
   useState,
-  useEffect, useMemo,
+  useEffect, useMemo, useRef,
 } from "react";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
@@ -25,7 +25,7 @@ import {
   useCharacterGameKey,
   useCharacterName,
   useGame,
-  usePortrait
+  usePortrait, usePortraitUrl
 } from '../../store/selectors';
 
 interface CharacterListItemProps {
@@ -52,29 +52,13 @@ const CharacterListItem: FunctionComponent<CharacterListItemProps> = (
   const game=useGame(gameKey ?? "")
   const name=useCharacterName(characterKey)
   const character = useCharacter(characterKey);
-  const portrait = usePortrait(characterKey);
+  const portraitUrl = usePortraitUrl(characterKey);
 
   const hasEditPermission = (
       character?.owner === auth.uid || game?.owner === auth.uid)
   const showEditButton = editing && hasEditPermission;
 
-  const [portraitUrl, setPortraitURL] = useState("");
 
-  useEffect(() => {
-    getPortrait(portrait);
-  },[portrait]);
-
-
-
-  async function getPortrait(portrait:string) {
-      const nextPortrait = portrait
-        ? await firebase.storage().ref(portrait).getDownloadURL()
-        : portraitUrl
-
-      if(portraitUrl !== nextPortrait) {
-        setPortraitURL(nextPortrait);
-      }
-  }
 
   const [showConfirm, setShowConfirm] = useState(false);
 
