@@ -42,6 +42,8 @@ import { ReactComponent as LightningOutline } from './lightning-outline-svgrepo-
 import { ReactComponent as LightningFilled } from './lightning-filled-svgrepo-com.svg';
 import { ReactComponent as WeightOutline } from './svg/weight-outline-svgrepo-com.svg';
 import { ReactComponent as WeightFilled } from './svg/weight-filled-svgrepo-com.svg';
+import { ReactComponent as StarOutline } from './svg/star-large-svgrepo-com.svg';
+import { ReactComponent as StarFilled } from './svg/star-large-filled-svgrepo-com.svg';
 import { FormValueChangeHandler } from './forms/FormValueChange';
 import { calculateSize } from './calculateSize';
 import Button from '@material-ui/core/Button';
@@ -59,6 +61,7 @@ import { CharacterContext } from '../../contexts/CharacterContext';
 import { ItemContext } from '../../contexts/ItemContext';
 import BasicInfoSection from './forms/BasicInfoSection';
 import CollapsingSection from './forms/CollapsingSection';
+import ModifierSection from "./forms/ModifierSection";
 
 interface IInventoryItemProps {
   id: string;
@@ -287,6 +290,18 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                         inactiveIcon={<SvgIcon
                             component={LightningOutline}
                             viewBox={"0 0 192.008 192.008"} />} />
+                    <SectionToggleIcon
+                        section={"customSize"}
+                        onToggle={toggle}
+                        enabled={customSize}
+                        show={customSize || expanded.sectionToggles}
+                        expanded={expanded.customSize}
+                        activeIcon={<SvgIcon
+                            component={StarFilled}
+                            viewBox={"0 0 299.799 299.799"}/>}
+                        inactiveIcon={<SvgIcon
+                            component={StarOutline}
+                            viewBox={"0 0 512 512"}/>}/>
                     {editable ? <SectionToggleIcon
 
                         section={"settings"}
@@ -334,6 +349,11 @@ const InventoryItem: FunctionComponent<InventoryItemProps> = (props: InventoryIt
                       onClose={toggle}
                       expanded={expanded.charges}>
                     <ChargesSection onChange={handleChange} />
+                  </FadingSection>
+                  <FadingSection
+                      onClose={toggle}
+                      expanded={expanded.charges}>
+                    <ModifierSection onChange={handleChange}/>
                   </FadingSection>
                   <FadingSection
                       onClose={toggle}

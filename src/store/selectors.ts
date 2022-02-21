@@ -1,7 +1,7 @@
 import {useTypedSelector, RootState} from './index';
 import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
 import {useSelector} from 'react-redux';
-import {Game, Character} from './Schema';
+import {Game, Character, Skill} from './Schema';
 import {KeyList} from './KeyList';
 import {useEffect, useMemo, useRef, useState} from "react";
 
