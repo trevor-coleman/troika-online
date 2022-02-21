@@ -106,3 +106,14 @@ export const usePortraitUrl = (character:string)=>{
 
     return portraitUrl;
 }
+
+export function useCharacterSkillNames(characterKey:string) {
+    return useTypedSelector(state => {
+        const {data} = state.firebase;
+
+        const skillList = data?.characters?.[characterKey]?.skillList;
+
+        return skillList?.map(skill=> data?.skills?.[skill]?.name)
+    })
+
+}
