@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {CharacterContext} from "../../../contexts/CharacterContext";
 import {ItemContext} from "../../../contexts/ItemContext";
-import {useCharacterModifier, useCharacterSkillNames, useItemModifier} from '../../../store/selectors';
+import {useCharacter, useCharacterModifier, useCharacterSkillNames, useItemModifier} from '../../../store/selectors';
 import Grid from "@material-ui/core/Grid";
 import {FormControl, FormControlLabel, FormGroup, MenuItem, Select, Switch, TextField} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {useFirebase} from "react-redux-firebase";
+import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
 import IconButton from "@material-ui/core/IconButton";
 import {DeleteOutline as DeleteOutlineIcon} from "@material-ui/icons";
 
@@ -16,6 +16,7 @@ interface ModifierRowProps {
 export function ModifierRow({modifier}: ModifierRowProps) {
     const firebase = useFirebase();
     const {character, editable} = useContext(CharacterContext);
+    useFirebaseConnect( [`/modifiers/${character}`,])
     const skillList = useCharacterSkillNames(character);
     const selectOptions = skillList ?? ["no options"];
     const modifierData = useCharacterModifier(character, modifier) ?? {}

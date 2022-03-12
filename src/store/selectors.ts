@@ -80,9 +80,7 @@ export const useCharacterSpecial = (characterKey: string) => useTypedSelector(st
 export const useHasModifiers = (itemKey: string) => useTypedSelector(({firebase}) => Boolean(firebase?.data?.itemModifiers ??
                                                                                              false));
 export const useItemModifiers = (itemKey: string) => useTypedSelector(state => {
-    const modifiers = state.firebase.data?.itemModifiers?.[itemKey] ??
-        {};
-    return Object.keys(modifiers) ?? [];
+    return Object.keys(state.firebase.data?.itemModifiers?.[itemKey]?? {})
 });
 export const useItemEffects = (characterKey: string, itemKey: string) => useTypedSelector(state => {
     const effects: Record<string, Effect> = state.firebase.data?.effects?.[characterKey] ?? {};

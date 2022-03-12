@@ -25,11 +25,14 @@ const ModifierSection: FunctionComponent<IModifierSectionProps> = ({onChange, se
     useFirebaseConnect([
         `/characters/${character}/skillList`,
         `/skills/${character}`,
-        {path: `/modifiers/${character}`, queryParams: [`orderByChild=parent`, `equalTo=${item}`]},
+        `/modifiers/${character}`,
+        {path: `/modifiers/${character}`, queryParams: [`orderByChild=parent`, `equalTo=${item}`], storeAs: `/itemModifiers/${item}`, type:'value'},
         {path: `/effects/${character}`, queryParams: [`orderByChild=parent`, `equalTo=${item}`]},
     ], )
 
     const modifiers = useItemModifiers(item);
+
+    console.log({modifiers});
 
     const createModifier = ()=>{
         const blankModifier:Modifier = {delta: 0, onlyWhenEquipped: true, parent: item, skill: "", character}

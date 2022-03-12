@@ -27,7 +27,7 @@ export default interface Schema {
   skillText: SkillValues,
   skillModifiers: Record<string, Modifier>
   skillSelectItem: Skill,
-  itemModifiers: Item,
+  itemModifiers: Record<string, Modifier>,
   lastRoll: RollProps,
   skillInfoButton: {[key:string]: Skill}
   itemInfoButton: {[key:string]: Item}
