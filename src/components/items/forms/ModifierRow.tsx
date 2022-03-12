@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from 'react';
 import {CharacterContext} from "../../../contexts/CharacterContext";
 import {ItemContext} from "../../../contexts/ItemContext";
 import {useCharacterModifier, useCharacterSkillNames, useItemModifier} from '../../../store/selectors';
