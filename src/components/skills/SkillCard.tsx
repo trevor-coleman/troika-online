@@ -35,6 +35,9 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
     useAuth();
 
     useFirebaseConnect([
+        `/skillValues/${character}/${skill}`,
+        `/baseStats/${character}/skill`,
+
         {
             path: `/skills/${character}/${skill}/name`,
             storeAs: `/skillTableRow/${character}/${skill}/name`,
@@ -74,10 +77,10 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                  : useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.name) ??
                    '';
 
-    const rank = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.rank) ??
+    const rank = useTypedSelector(state => state.firebase.data?.skillValues?.[character]?.[skill]?.rank) ??
                  0;
-    const total = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.totalSkill) ??
-                  0;
+    const skillStat = useTypedSelector(state => state.firebase.data?.baseStats?.[character]?.skill) ??
+                      0;
 
     const staminaCost = useTypedSelector(state => state.firebase.data?.skillTableRow?.[character]?.[skill]?.staminaCost) ??
                         0;
@@ -149,7 +152,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
         await firebase.ref(`/skills/${character}/${skill}/used`).set(newValue ?? false);
     }
 
-    async function rollSkill(): Promise<void> {
+    const rollSkill = useCallback(async () => {
         if (isSpell) {
             await firebase.ref(`/baseStats/${character}/stamina_current`).set(stamina - staminaCost);
             await roll({
@@ -158,11 +161,13 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
                 rolledSkill: name,
                 rollerKey: character,
                 rollerName: characterName,
-                target: rank + total,
+                target: rank + skillStat,
                 delta,
             });
             return;
         }
+
+        console.log({rank, total: skillStat});
 
         await roll({
             type: 'skill',
@@ -170,10 +175,10 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
             rolledSkill: name,
             rollerKey: character,
             rollerName: characterName,
-            target: rank + total,
+            target: rank + skillStat,
         });
 
-    }
+    }, [delta, name, character, characterName, rank, skillStat, isSpell, stamina, staminaCost ])
 
     return (
         <SkillContext.Provider value={skill}>
