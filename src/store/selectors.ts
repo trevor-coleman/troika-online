@@ -1,23 +1,23 @@
-import {useTypedSelector, RootState} from './index';
-import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {Game, Character, Skill} from './Schema';
+import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
+import {RootState, useTypedSelector} from './index';
 import {KeyList} from './KeyList';
-import {useEffect, useMemo, useRef, useState} from "react";
+import {Character, Effect, Game} from './Schema';
 
 export const useGame = (gameKey: string) => useSelector<RootState, Partial<Game> | undefined>(
     state => state.firebase.data.games
-        ? state.firebase.data.games[gameKey]
-        : undefined);
+             ? state.firebase.data.games[gameKey]
+             : undefined);
 
 export const useGameRef = (gameKey: string) => useFirebase()
     .ref(`/games/${gameKey}`);
 
 export const usePlayers = (gameKey: string) => useSelector<RootState, KeyList | undefined>(
     (state: RootState) => state.firebase.data.games &&
-    state.firebase.data.games[gameKey]
-        ? state.firebase.data.games[gameKey].players
-        : undefined);
+                          state.firebase.data.games[gameKey]
+                          ? state.firebase.data.games[gameKey].players
+                          : undefined);
 
 export const useAuth = () => useTypedSelector(state => state.firebase.auth);
 export const useProfile = () => useTypedSelector(state => state.firebase.profile);
@@ -25,9 +25,9 @@ export const useProfile = () => useTypedSelector(state => state.firebase.profile
 export const useOtherProfile = (friendKey: string) => (
     {
         data: useTypedSelector(state => state.firebase.data.profiles &&
-        state.firebase.data.profiles['friendKey']
-            ? state.firebase.data.profiles['friendKey']
-            : undefined),
+                                        state.firebase.data.profiles['friendKey']
+                                        ? state.firebase.data.profiles['friendKey']
+                                        : undefined),
         ref: useFirebase().ref(`/profiles/${friendKey}`),
     });
 
@@ -35,69 +35,100 @@ export const useInvitations = () => useTypedSelector(state => state.firebase.pro
 
 export const useCharacter = (characterKey: string) => useSelector<RootState, Character | undefined>(
     state => state.firebase.data.characters
-        ? (
-            state.firebase.data.characters[characterKey])
-        : undefined);
+             ? (
+                 state.firebase.data.characters[characterKey])
+             : undefined);
 
 export const useCharacterSkills = (characterKey: string) => useTypedSelector(
     state => state.firebase.data?.characters?.[characterKey]?.skills);
 
 export const useSkill = (skillKey: string) => useTypedSelector(state => state.firebase.data.skills?.[skillKey]);
-export const useCharacterSkillValues = (character: string,
-                                        skill: string) => useTypedSelector(state => state.firebase.data.characters?.[character]?.skillValues?.[skill]);
+export const useCharacterSkillValues = (
+    character: string,
+    skill: string,
+) => useTypedSelector(state => state.firebase.data.characters?.[character]?.skillValues?.[skill]);
 
-export const usePortrait = (characterKey: string) => useTypedSelector(state => state.firebase.data?.portraits?.[characterKey]?.portrait)
-export const useCharacterGameKey = (characterKey: string)=> useTypedSelector(state => state.firebase.data.characters?.[characterKey]?.game)
-export const useCharacterOwner = (characterKey: string)=> useTypedSelector(state => state.firebase.data.characters?.[characterKey]?.owner)
+export const usePortrait = (characterKey: string) => useTypedSelector(state => state.firebase.data?.portraits?.[characterKey]?.portrait);
+export const useCharacterGameKey = (characterKey: string) => useTypedSelector(state => state.firebase.data.characters?.[characterKey]?.game);
+export const useCharacterOwner = (characterKey: string) => useTypedSelector(state => state.firebase.data.characters?.[characterKey]?.owner);
 export const useInventory = (characterKey: string) => useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.inventory);
 export const useItems = (characterKey: string) => useTypedSelector(state => state.firebase.data?.characters?.[characterKey]?.items);
 export const useItem = (itemKey: string) => useTypedSelector(state => state.firebase.data?.items?.[itemKey]);
-export const useMonies = (characterKey: string) => useTypedSelector(state => state.firebase.data?.moniesAndProvisions?.[characterKey]?.monies ?? 0);
-export const useProvisions = (characterKey: string) => useTypedSelector(state => state.firebase.data?.moniesAndProvisions?.[characterKey]?.provisions ?? 0);
-export const useStamina = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.stamina_current ?? 0)
-export const useMaxStamina = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.stamina_max ?? 0);
-export const useLuck = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.luck_current ?? 0)
-export const useSkillStat = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.skill ?? 0)
-export const useLuckMax = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.luck_max ?? 0);
-export const useBio = (characterKey:string) => useTypedSelector(state => state.firebase.data?.bios?.[characterKey])
-export const useBaseStats = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey])
+export const useMonies = (characterKey: string) => useTypedSelector(state => state.firebase.data?.moniesAndProvisions?.[characterKey]?.monies ??
+                                                                             0);
+export const useProvisions = (characterKey: string) => useTypedSelector(state => state.firebase.data?.moniesAndProvisions?.[characterKey]?.provisions ??
+                                                                                 0);
+export const useStamina = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.stamina_current ??
+                                                                              0);
+export const useMaxStamina = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.stamina_max ??
+                                                                                 0);
+export const useLuck = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.luck_current ??
+                                                                           0);
+export const useSkillStat = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.skill ??
+                                                                                0);
+export const useLuckMax = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]?.luck_max ??
+                                                                              0);
+export const useBio = (characterKey: string) => useTypedSelector(state => state.firebase.data?.bios?.[characterKey]);
+export const useBaseStats = (characterKey: string) => useTypedSelector(state => state.firebase.data?.baseStats?.[characterKey]);
 export const useCharacterName = (characterKey: string) => {
-    return useTypedSelector(state => state.firebase.data?.bios?.[characterKey]?.name ?? "");
+    return useTypedSelector(state => state.firebase.data?.bios?.[characterKey]?.name ?? '');
 };
-export const useCharacterBackground = (characterKey: string) => useTypedSelector(state => state.firebase.data?.bios?.[characterKey]?.background ?? "");
-export const useCharacterSpecial = (characterKey: string) => useTypedSelector(state => state.firebase.data?.bios?.[characterKey]?.special ?? "");
+export const useCharacterBackground = (characterKey: string) => useTypedSelector(state => state.firebase.data?.bios?.[characterKey]?.background ??
+                                                                                          '');
+export const useCharacterSpecial = (characterKey: string) => useTypedSelector(state => state.firebase.data?.bios?.[characterKey]?.special ??
+                                                                                       '');
+export const useHasModifiers = (itemKey: string) => useTypedSelector(({firebase}) => Boolean(firebase?.data?.itemModifiers ??
+                                                                                             false));
+export const useItemModifiers = (itemKey: string) => useTypedSelector(state => {
+    const modifiers = state.firebase.data?.itemModifiers?.[itemKey] ??
+        {};
+    return Object.keys(modifiers) ?? [];
+});
+export const useItemEffects = (characterKey: string, itemKey: string) => useTypedSelector(state => {
+    const effects: Record<string, Effect> = state.firebase.data?.effects?.[characterKey] ?? {};
+    return useMemo(() => Object.keys(effects).filter(key => effects[key]?.parent === itemKey) ?? [], [effects]);
+});
 
-export const useLastRolls = (characterKey:string)=> {
+export const useItemModifier = (itemKey: string, modifierKey: string) => {
+    return useTypedSelector(state => state.firebase.data?.itemModifiers?.[itemKey]?.[modifierKey]);
+};
+
+export const useCharacterModifier = (character:string, modifierKey:string) => {
+    return useTypedSelector(state => state.firebase.data?.modifiers?.[character]?.[modifierKey]);
+}
+
+export const useLastRolls = (characterKey: string) => {
     useFirebaseConnect([
         {
             path: `/rolls/${characterKey}`,
             storeAs: `/lastRoll/`,
             queryParams: ['orderByKey', 'limitToLast=1'],
-        }])
+        },
+    ]);
 
     return useTypedSelector(state => state.firebase.ordered?.lastRoll);
-}
+};
 
-export const usePortraitUrl = (character:string)=>{
+export const usePortraitUrl = (character: string) => {
     const portrait = usePortrait(character);
     const firebase = useFirebase();
     const mountedRef = useRef(true);
 
-    const [portraitUrl, setPortraitURL] = useState("");
+    const [portraitUrl, setPortraitURL] = useState('');
 
     useEffect(() => {
         getPortrait(portrait);
 
         return (() => {
             mountedRef.current = false;
-        })
+        });
     }, [portrait]);
 
     async function getPortrait(portrait: string) {
 
         const nextPortrait = portrait
-            ? await firebase.storage().ref(portrait).getDownloadURL()
-            : portraitUrl
+                             ? await firebase.storage().ref(portrait).getDownloadURL()
+                             : portraitUrl;
 
         if (portraitUrl !== nextPortrait && mountedRef.current) {
             setPortraitURL(nextPortrait);
@@ -105,15 +136,26 @@ export const usePortraitUrl = (character:string)=>{
     }
 
     return portraitUrl;
-}
+};
 
-export function useCharacterSkillNames(characterKey:string) {
+export function useCharacterSkillNames(characterKey: string) {
+
+    useFirebaseConnect([`/skills/${characterKey}`, `/characters/${characterKey}/skillList`]);
+
     return useTypedSelector(state => {
         const {data} = state.firebase;
 
         const skillList = data?.characters?.[characterKey]?.skillList;
 
-        return skillList?.map(skill=> data?.skills?.[skill]?.name)
-    })
+        // @ts-ignore
+        return skillList?.map(id => ({
+            name: data?.skills?.[characterKey]?.[id]?.name,
+            id,
+        }));
+    });
 
 }
+
+export const useEquippedItems = (characterKey: string) => useTypedSelector(({firebase}) => {
+    return firebase.data?.equippedItems?.[characterKey] ?? {};
+}) ?? [];

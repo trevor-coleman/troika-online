@@ -79,6 +79,6 @@ export function calculateSize(currentValues: Item, update: FormValueChange<any>)
     else if (id === "protection" && !currentValues.customSize) {
         sizeOverride.size = protectionSize(currentValues.protects, value);
     }
-    debugger;
+
     return sizeOverride;
 }

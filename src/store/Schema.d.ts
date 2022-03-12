@@ -22,9 +22,12 @@ export default interface Schema {
   characterItems: CharacterItemsState,
   chargesStepper: ChargesStepperState,
   editSkill: Skill,
+  equippedItems:KeyList,
   skillTableRow: SkillTableRow,
   skillText: SkillValues,
+  skillModifiers: Record<string, Modifier>
   skillSelectItem: Skill,
+  itemModifiers: Item,
   lastRoll: RollProps,
   skillInfoButton: {[key:string]: Skill}
   itemInfoButton: {[key:string]: Item}
@@ -44,8 +47,10 @@ export default interface Schema {
   },
   profiles: Profile,
   baseStats: BaseStats,
+  modifiers: Record<string,Modifier>,
+  effects: Record<string,Effect>,
   bios: Bio,
-  skills: Skill,
+  skills: Record<string, Skill>,
   items: Item,
   spells: {
     [key: string]: Spell
@@ -150,22 +155,26 @@ export interface Skill {
 
 
 export interface SkillTableRow {
-  [key:string]: Skill & {rank: number, used: boolean},
+  [key:string]: Skill & {rank: number, used: boolean, modifiers: Record<string, Modifier>},
   name: string,
   stamina_current: number,
   totalSkill: number,
 }
 
 
-
-export type Target = "self" | "enemy" | "player" | "object";
-
 export interface Modifier {
-  skills: string[] | "*",
-  value: number;
-  type: "equipped" | "permanent" | "one-roll",
-  targetTypes: Target[],
-  targets: string[],
+  parent:string,
+  character: string,
+  skill: string,
+  delta: number;
+  onlyWhenEquipped: boolean,
+}
+
+export interface Effect {
+  parent: string,
+  character: string,
+  effect: string,
+  onlyWhenEquipped: boolean,
 }
 
 export type Damage = [number, number, number, number, number, number, number];

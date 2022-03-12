@@ -47,7 +47,8 @@ export interface IRollBaseProps {
   lastRoll?: { key: string, value: RollProps | null } | null,
   dialogResult?: string,
   discordResult?: string,
-  damage?: number[]
+  damage?: number[],
+  delta?:number
 }
 
 export interface IRollProvisionsProps extends IRollBaseProps {

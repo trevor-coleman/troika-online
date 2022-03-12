@@ -131,7 +131,7 @@ const CharacterItems: FunctionComponent<CharacterItemsProps> = () => {
                                 ? inventory.map((key, index) => (
                                     <InventoryItem key={key}
                                                    index={index}
-                                                   id={key}
+                                                   item={key}
                                                    onRemove={removeItem}/>))
 
                                 : <div/>}

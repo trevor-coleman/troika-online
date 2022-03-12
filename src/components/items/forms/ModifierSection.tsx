@@ -1,99 +1,49 @@
-import React, {
-    FunctionComponent,
-    ChangeEvent,
-    useState, useContext,
-} from 'react';
+import React, {ChangeEvent, FunctionComponent, useContext, useEffect, useState,} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
-import {
-    FormControlLabel, Switch, FormControl, Select, MenuItem, TextField, FormGroup,
-} from '@material-ui/core';
+import {FormControlLabel, Switch,} from '@material-ui/core';
 import {CharacterContext} from '../../../contexts/CharacterContext';
 import {FormValueChangeHandler} from './FormValueChange';
-import {useFirebaseConnect} from 'react-redux-firebase';
-import {useTypedSelector} from '../../../store';
-import {useCharacterSkillNames} from "../../../store/selectors";
+import {useFirebase, useFirebaseConnect} from 'react-redux-firebase';
+import {useCharacterSkillNames, useItemEffects, useItemModifiers} from '../../../store/selectors';
 import {ItemContext} from "../../../contexts/ItemContext";
+import {ModifierRow} from "./ModifierRow";
+import Button from "@material-ui/core/Button";
+import {Modifier} from "../../../store/Schema";
+import firebase from "firebase/app";
 
 
 interface IModifierSectionProps {
     onChange: FormValueChangeHandler,
+    sectionId: string,
 }
 
-const useStyles = makeStyles(() => (
-    {
-        ModifierSection: {},
-        selectControl: {
-            flexGrow: 1,
-        },
-    }));
-
-const ModifierSection: FunctionComponent<IModifierSectionProps> = ({onChange}: IModifierSectionProps) => {
-    const {character, editable} = useContext(CharacterContext);
+const ModifierSection: FunctionComponent<IModifierSectionProps> = ({onChange, sectionId}: IModifierSectionProps) => {
+    const {character} = useContext(CharacterContext);
+    const firebase = useFirebase();
     const item = useContext(ItemContext);
-    const classes = useStyles();
-    const [isTooHigh, setIsTooHigh] = useState(false);
-
     useFirebaseConnect([
         `/characters/${character}/skillList`,
         `/skills/${character}`,
-        `/modifiers/${item}`
-    ])
+        {path: `/modifiers/${character}`, queryParams: [`orderByChild=parent`, `equalTo=${item}`]},
+        {path: `/effects/${character}`, queryParams: [`orderByChild=parent`, `equalTo=${item}`]},
+    ], )
 
-    const skillList = useCharacterSkillNames(character);
+    const modifiers = useItemModifiers(item);
 
-    const [selected, setSelected] = useState<string>(skillList[0]);
+    const createModifier = ()=>{
+        const blankModifier:Modifier = {delta: 0, onlyWhenEquipped: true, parent: item, skill: "", character}
+        const modifiersRef = firebase.ref(`/modifiers/${character}`);
+        const newKey = modifiersRef.push().key;
+        if(!newKey) throw new Error("Missing key when creating new modifier");
+        modifiersRef.child(newKey).set(blankModifier);
+    }
 
-    const selectOptions = skillList;
-
-
-    let handleEnabled: (e: ChangeEvent<HTMLInputElement>) => void = (e) => {
-        onChange([
-            {
-                id: "modifies",
-                value: e.target.checked,
-            },
-        ]);
-    };
-
-
-
-    return (
-        <Grid container direction={"row"}><Grid item
-                                                xs={3}>
-            <FormControlLabel labelPlacement={"start"}
-                              control={<Switch
-                                  disabled={!editable}
-                                  checked={false}
-                                  onChange={handleEnabled}
-                                  id={"item-protects"}
-                                  name="item-protects"/>}
-                              label={"Modifier"}/>
-        </Grid>
-            <Grid item
-                  xs={9}>
-                <FormGroup row><FormControl disabled={!editable}
-                                            className={classes.selectControl}>
-                    <Select variant={"outlined"}
-                            id={"protection"}
-                            value={selected ?? 0}
-                            name={"protection"}
-                            onChange={()=>{}}>
-                        {selectOptions.map((item, index) =>
-                            <MenuItem key={`select-protection-${selected}-${index}`}
-                                      value={-index}>{`${item}`}</MenuItem>)}
-                        <MenuItem value={1}>Custom</MenuItem>
-                    </Select>
-                </FormControl>
-                    <TextField disabled={false}
-                               error={isTooHigh}
-                               variant={"outlined"}
-                               label={isTooHigh ? "Negative Values Only" : "Damage Reduction"}
-                               type={"number"}
-                               value={0}
-                               onChange={()=>{}}/>
-                </FormGroup>
-            </Grid></Grid>);
+    return (<Grid container spacing={2} direction={"column"}>
+        {modifiers.map(modifier => <ModifierRow key={modifier} modifier={modifier}/>)}
+        <Button onClick={createModifier}>Add Modifier</Button>
+        </Grid>);
 };
 
 export default ModifierSection;
+

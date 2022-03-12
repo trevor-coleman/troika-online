@@ -33,10 +33,11 @@ const CharacterSkills: FunctionComponent<CharacterSkillsProps> = () => {
     const auth = useAuth();
     const {character, editable} = useContext(CharacterContext);
 
+
     useFirebaseConnect([
         {
             path: `/characters/${character}/skillList`,
-            storeAs: `characterSkills/${character}/skillList`,
+            storeAs: `characters/${character}/skillList`,
         },
     ]);
     const skillList = useTypedSelector(state => state.firebase.data?.characters?.[character]?.skillList) ??
