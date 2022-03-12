@@ -93,18 +93,18 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
         const modifierDeltas = Object
             .values(skillModifiers)
             .filter((modifier) => {
-                console.log(modifier);
+
                 const {skill: modifierSkill, onlyWhenEquipped, parent} = modifier
-                console.log(onlyWhenEquipped)
+
                 if (onlyWhenEquipped && !equippedItems[parent]) {
-                    console.log("not equipped");
+
                     return 0;
                 }
                 return skill ===
                        modifierSkill;
             }).map(
                 ({onlyWhenEquipped, parent, delta}) => {
-                    console.log({onlyWhenEquipped, parent, delta});
+
                     return onlyWhenEquipped && !equippedItems[parent] ? 0 : delta;
                 });
         const newDelta = modifierDeltas.reduce((prev, curr) => prev + curr, 0)
@@ -113,16 +113,6 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
     })
 
     const [delta, setDelta] = useState(0);
-
-
-    if (Object.keys(skillModifiers).length) {
-        console.log("skillModifiers", skillModifiers);
-        console.log(Object.values(skillModifiers));
-    }
-
-
-
-
 
     useEffect(() => {
         // const modifierDeltas = Object
@@ -184,8 +174,6 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
         });
 
     }
-
-    console.log({delta});
 
     return (
         <SkillContext.Provider value={skill}>

@@ -52,6 +52,12 @@ export function ModifierRow({modifier}: ModifierRowProps) {
 
     const [amount, setAmount] = useState(delta);
 
+    useEffect(() => {
+        if (amount !== delta) {
+            setAmount(delta)
+        }
+    }, [delta, amount])
+
 
     const [selected, setSelected] = useState(skill ?? "");
 

@@ -63,10 +63,6 @@ const SkillValueBoxes: FunctionComponent<IValueBoxesProps> = (props: IValueBoxes
     const modifierString = delta === 0 ? "" : `${delta > 0 ? '+' : ""}${delta}`
     const totalString = totalValue.toString();
 
-    useEffect(()=>{
-        console.log("deltaChanged: " + delta)
-    }, [delta])
-
     return (
         <Grid container className={classes.root} alignItems={"center"} justify={"center"}>
             <Grid
