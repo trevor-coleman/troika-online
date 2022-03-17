@@ -32,8 +32,6 @@ const ModifierSection: FunctionComponent<IModifierSectionProps> = ({onChange, se
 
     const modifiers = useItemModifiers(item);
 
-    console.log({modifiers});
-
     const createModifier = ()=>{
         const blankModifier:Modifier = {delta: 0, onlyWhenEquipped: true, parent: item, skill: "", character}
         const modifiersRef = firebase.ref(`/modifiers/${character}`);

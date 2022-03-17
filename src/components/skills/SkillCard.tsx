@@ -167,8 +167,6 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
             return;
         }
 
-        console.log({rank, total: skillStat});
-
         await roll({
             type: 'skill',
             dice: [6, 6],
@@ -176,6 +174,7 @@ const SkillCard: FunctionComponent<ISkillCardProps> = (props: ISkillCardProps) =
             rollerKey: character,
             rollerName: characterName,
             target: rank + skillStat,
+            delta,
         });
 
     }, [delta, name, character, characterName, rank, skillStat, isSpell, stamina, staminaCost ])
